@@ -1178,20 +1178,20 @@ theorem pair_case2 (hI : IrrStNe) (hL : LatSt) {B : Base F E} (hBg : B.IsGood σ
     obtain ⟨b, hb⟩ := exists_isSplitBasis t X.L hBg.cm
     obtain ⟨c, hc⟩ := exists_isSplitBasis t W.L hBg.cm
     obtain ⟨δ, hδ⟩ := SplitDict.exists_cond hBg.std v
-    obtain ⟨ι, hι, hv, hg, hh⟩ := SplitDict.model_Bar hBg hX hW (hM.vac v) hom hb hc hδ (b' := δ • b) rfl
+    obtain ⟨ι, hι, hv, hg, hh⟩ := PositivityTheory.ThKG.StdDict.model_Bar hBg hX hW (hM.vac v) hom hb hc hδ (b' := δ • b) rfl
     rw [h1] at hg hh
     refine sphAt_of (α := chrW χX t) hL hι.bij (hM.vac v).1 hv (fun g₀ => ?_) (fun h₀ => ?_)
     · obtain ⟨g, hg', e⟩ := s1 ((δ • b) * g₀ * (δ • b)⁻¹)
       refine ⟨g, hg', ?_⟩
       have := hg g hg'
-      rwa [show SplitDict.inB t (δ • b) g = g₀ by
-        rw [SplitDict.inB, show Matrix.GeneralLinearGroup.map (piW t) g.1 = (δ • b) * g₀ * (δ • b)⁻¹ from Units.ext e]
+      rwa [show PositivityTheory.ThKG.StdDict.inB t (δ • b) g = g₀ by
+        rw [PositivityTheory.ThKG.StdDict.inB, show Matrix.GeneralLinearGroup.map (piW t) g.1 = (δ • b) * g₀ * (δ • b)⁻¹ from Units.ext e]
         group] at this
     · obtain ⟨h, hh', e⟩ := s2 (c * h₀ * c⁻¹)
       refine ⟨h, hh', ?_⟩
       have := hh h hh'
-      rwa [show SplitDict.inB t c h = h₀ by
-        rw [SplitDict.inB, show Matrix.GeneralLinearGroup.map (piW t) h.1 = c * h₀ * c⁻¹ from Units.ext e]
+      rwa [show PositivityTheory.ThKG.StdDict.inB t c h = h₀ by
+        rw [PositivityTheory.ThKG.StdDict.inB, show Matrix.GeneralLinearGroup.map (piW t) h.1 = c * h₀ * c⁻¹ from Units.ext e]
         group] at this
   · right
     refine irrAt_ne surjectivity_statement hI hnd hι₀.bij ⟨fun g hg => ⟨_, (k ι₀ hι₀).1 g hg
