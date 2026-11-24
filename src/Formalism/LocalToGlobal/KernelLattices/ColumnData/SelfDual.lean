@@ -4,6 +4,7 @@ public import Formalism.LocalToGlobal.KernelLattices.ColumnData.IopNorm
 public import Development.AutomorphicArithmetic.IntegralCasts.CapelliIdentities.ExportFamilies
 public import Formalism.LocalToGlobal.KernelLattices.ColumnData.HfTrace
 public import Formalism.LocalToGlobal.KernelLattices.ColumnData.LinkThIndep
+public import Formalism.LocalToGlobal.GlobalTheory.GL3.PSelfDual
 import Mathlib.Algebra.Order.Floor.Extended
 import Mathlib.Algebra.Order.Floor.Semifield
 import Mathlib.Algebra.Order.Interval.Basic
@@ -457,64 +458,6 @@ open NumberField Formalism.BasicNotions Formalism.FrobeniusOrbits Polynomial
 open Formalism.L2.Ker.Cd.TaylorLogMetric
 open Formalism.MainNotions.TaylorLogMetric hiding admitted AdmittedStatements AllSplit CoefIn DataIn DualB EqAt EqAway FamE Hf IdE InProd Iop IsChi IsComb IsCurveIdeal IsDiscriminantTwelfthRootOfIdealLattice IsFrobC IsIdem JetsInt La LocBasis LocBasisW Mono N1 NNBasis OrthoBasisW Orthonormal Pos Qd QdB Stmt TVar TVarB Th ThSp Tor TorsPrime U VC Wop XiF YYl adm1 al atLog chK chg chgB coordV der detId logDerivativeAtOne ellT embT embV eq22 fF fnConj hYY hh homL int22 jet kap lamOf letterOf liftY logOmVal meanLogNormSq meanLogOm mmM mom22 LargerSupportMomentCondition mono normSq pSer pairN per22 posEmb posG aux₃ pull qH sE sgm str22 tauEmb tauSg taylor th22 tor0 torConj vec22 vecN wPh zB
 
-theorem im_comb (w1 w2 : ℂ) (m1 n1 m2 n2 : ℤ) :
-    (starRingEnd ℂ ((m1 : ℂ) * w1 + (n1 : ℂ) * w2) * ((m2 : ℂ) * w1 + (n2 : ℂ) * w2)).im =
-      ((m1 * n2 - n1 * m2 : ℤ) : ℝ) * (starRingEnd ℂ w1 * w2).im := by
-  simp only [map_add (f := _), map_mul, map_intCast, Complex.mul_im, Complex.mul_re,
-    Complex.add_im, Complex.add_re, Complex.intCast_re, Complex.intCast_im, Complex.conj_re,
-    Complex.conj_im]
-  push_cast
-  ring
-
-theorem area_of_basis (Λ : AddSubgroup ℂ) {w1 w2 : ℂ} (h1 : w1 ∈ Λ) (h2 : w2 ∈ Λ)
-    (hb : ∀ w ∈ Λ, ∃ m n : ℤ, w = (m : ℂ) * w1 + (n : ℂ) * w2)
-    (hD : (starRingEnd ℂ w1 * w2).im ≠ 0) :
-    area Λ = |(starRingEnd ℂ w1 * w2).im| := by
-  unfold area
-  apply IsLeast.csInf_eq
-  refine ⟨⟨abs_pos.mpr hD, w1, h1, w2, h2, rfl⟩, ?_⟩
-  rintro a ⟨ha, u, hu, v, hv, rfl⟩
-  obtain ⟨m1, n1, rfl⟩ := hb u hu
-  obtain ⟨m2, n2, rfl⟩ := hb v hv
-  rw [im_comb, abs_mul] at ha ⊢
-  have hk : (m1 * n2 - n1 * m2 : ℤ) ≠ 0 := by
-    intro h; rw [h] at ha; simp at ha
-  have : (1 : ℝ) ≤ |((m1 * n2 - n1 * m2 : ℤ) : ℝ)| := by
-    rw [← Int.cast_abs]; exact_mod_cast Int.one_le_abs hk
-  nlinarith [abs_nonneg (starRingEnd ℂ w1 * w2).im]
-
-theorem cramer (x w1 w2 : ℂ) :
-    x * ((starRingEnd ℂ w1 * w2).im : ℂ) =
-      ((x * starRingEnd ℂ w1).im : ℂ) * w2 - ((x * starRingEnd ℂ w2).im : ℂ) * w1 := by
-  apply Complex.ext <;>
-    simp only [Complex.mul_re, Complex.mul_im, Complex.sub_re, Complex.sub_im, Complex.ofReal_re,
-      Complex.ofReal_im, Complex.conj_re, Complex.conj_im] <;> ring
-
-theorem dual_of_basis (Λ : AddSubgroup ℂ) {w1 w2 : ℂ} (h1 : w1 ∈ Λ) (h2 : w2 ∈ Λ)
-    (hD : (starRingEnd ℂ w1 * w2).im ≠ 0) (harea : area Λ = |(starRingEnd ℂ w1 * w2).im|)
-    (x : ℂ) (hx : ∀ w ∈ Λ, ∃ b : ℤ, (x * starRingEnd ℂ w / (area Λ : ℂ)).im = b) : x ∈ Λ := by
-  obtain ⟨b1, hb1⟩ := hx w1 h1
-  obtain ⟨b2, hb2⟩ := hx w2 h2
-  rw [Complex.div_ofReal_im, harea] at hb1 hb2
-  set D := (starRingEnd ℂ w1 * w2).im with hDdef
-  have hA : |D| ≠ 0 := abs_ne_zero.mpr hD
-  have e1 : (x * starRingEnd ℂ w1).im = b1 * |D| := (div_eq_iff hA).mp hb1
-  have e2 : (x * starRingEnd ℂ w2).im = b2 * |D| := (div_eq_iff hA).mp hb2
-  have hc := cramer x w1 w2
-  rw [← hDdef, e1, e2] at hc
-  have hD' : (D : ℂ) ≠ 0 := by exact_mod_cast hD
-  have m1 : (b1 : ℂ) * w2 ∈ Λ := by rw [← zsmul_eq_mul]; exact Λ.zsmul_mem h2 b1
-  have m2 : (b2 : ℂ) * w1 ∈ Λ := by rw [← zsmul_eq_mul]; exact Λ.zsmul_mem h1 b2
-  rcases abs_cases D with ⟨hDa, -⟩ | ⟨hDa, -⟩
-  · have : x = (b1 : ℂ) * w2 - (b2 : ℂ) * w1 := by
-      apply mul_right_cancel₀ hD'
-      rw [hc, hDa]; push_cast; ring
-    rw [this]; exact Λ.sub_mem m1 m2
-  · have : x = -((b1 : ℂ) * w2 - (b2 : ℂ) * w1) := by
-      apply mul_right_cancel₀ hD'
-      rw [hc, hDa]; push_cast; ring
-    rw [this]; exact Λ.neg_mem (Λ.sub_mem m1 m2)
-
 variable (D : Car)
 
 theorem s_sq : (D.host.sqd) ^ 2 = -(D.host.d : D.host.E) :=
@@ -617,12 +560,6 @@ theorem CS.coe_intO (D : Car) (n : ℤ) :
     map_intCast (algebraMap (𝓞 D.host.K) D.host.K) n
   rw [h1]; exact map_intCast D.host.K.val n
 
-theorem CS.im_conj_mul (δ a b : ℂ) :
-    (starRingEnd ℂ (δ * a) * (δ * b)).im = Complex.normSq δ * (starRingEnd ℂ a * b).im := by
-  have : starRingEnd ℂ (δ * a) * (δ * b) = (starRingEnd ℂ δ * δ) * (starRingEnd ℂ a * b) := by
-    rw [map_mul]; ring
-  rw [this, ← Complex.normSq_eq_conj_mul_self, Complex.im_ofReal_mul]
-
 theorem curve_lattice_self_dual : CurveSelfDualRec := by
   intro D cc hcc δ hδ x hx
   obtain ⟨c1, hc1, c2, hc2, hspan, hind⟩ := CS.cc_basis D cc hcc.1
@@ -652,7 +589,7 @@ theorem curve_lattice_self_dual : CurveSelfDualRec := by
       rw [e2, map_add (f := _), map_mul, map_ratCast, map_ratCast, CS.embedding_sqrt_neg_d]
     have him : (starRingEnd ℂ w1 * w2).im =
         Complex.normSq δ * (((p1 * q2 - q1 * p2 : ℚ) : ℝ) * Real.sqrt D.host.d) := by
-      rw [hw1, hw2, CS.im_conj_mul, hφ1, hφ2]
+      rw [hw1, hw2, Formalism.L2.GlobalTheoryTheory.IntegralLatticeDensity.CS.im_conj_mul, hφ1, hφ2]
       congr 1
       simp only [map_add (f := _), map_mul, Complex.conj_ofReal, Complex.conj_I, Complex.mul_im,
         Complex.mul_re, Complex.add_im, Complex.add_re, Complex.ratCast_re, Complex.ratCast_im,
@@ -682,7 +619,7 @@ theorem curve_lattice_self_dual : CurveSelfDualRec := by
       exact one_ne_zero r2.1
     · have r := hind q2 (-q1) (by rw [e1, e2]; push_cast; linear_combination hpqE)
       exact hq ⟨by linarith [r.2], r.1⟩
-  exact CS.dual_of_basis _ h1 h2 hD (CS.area_of_basis _ h1 h2 hb hD) x hx
+  exact Formalism.L2.GlobalTheoryTheory.IntegralLatticeDensity.CS.dual_of_basis _ h1 h2 hD (Formalism.L2.GlobalTheoryTheory.IntegralLatticeDensity.CS.area_of_basis _ h1 h2 hb hD) x hx
 
 theorem self_dual_lattice : SelfDualRec := SelfDualRec_of_curve curve_lattice_self_dual
 
