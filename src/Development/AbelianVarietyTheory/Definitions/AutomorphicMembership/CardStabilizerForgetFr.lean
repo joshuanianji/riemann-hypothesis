@@ -416,16 +416,6 @@ theorem forgetFr_eq_iff (hd : Disjoint SG Q) (p q : DecoF E n ST SG Q) :
     rw [redGQ_eq_one hc]
     exact (one_smul (UF E n × GLG (E := E) (n := n) (SG := uSG SG Q)) _).symm
 
-theorem forgetFr_base [NeZero n] : forgetFr (DecoF.base E n ST SG Q) = DecoSet.base E n ST (uSG SG Q) := by
-  apply Subtype.ext
-  ext1
-  · rfl
-  · rfl
-  · funext w
-    by_cases h : w.1 ∈ SG
-    · exact forgetDeco_be_of_mem _ w h
-    · exact forgetDeco_be_of_not _ w h
-
 end Forget
 
 section Groups
@@ -619,17 +609,6 @@ theorem tilFr_deco (p : DecoF E n ∅ SG Q) : (tilFr (ST := ST) hN pi p).deco = 
 
 theorem tilFr_fr (p : DecoF E n ∅ SG Q) (P : Q) : (tilFr (ST := ST) hN pi p).fr P = sumE hN (p.fr P) (unitOf pi) := by
   exact congrArg (fun x => DecoF.fr x P) (tilFr_eq hN hT hG hQ p)
-
-theorem tilFr_fr_last (p : DecoF E n ∅ SG Q) (P : Q) :
-    (tilFr (ST := ST) hN pi p).fr P (Pi.single (Br.iL hN) 1) = Pi.single (Br.iL hN) (pi : E) := by
-  have h0 : ∀ t : E, prH E hN (Pi.single (Br.iL hN) t) = 0 := fun t => funext fun i => by
-    have h : Br.iC hN i ≠ Br.iL hN := fun h => absurd (congrArg Fin.val h) i.2.ne
-    rw [prH_apply, Pi.single_eq_of_ne h]
-    rfl
-  rw [tilFr_fr hN hT hG hQ]
-  refine ext_prH hN ?_ ?_
-  · rw [prH_sumE, h0, h0, map_zero]
-  · rw [sumE_last, unitOf_val (hQ P), Pi.single_eq_same, Pi.single_eq_same, mul_one]
 
 theorem tilFr_smul (a : UF E n × GLG (E := E) (n := n) (SG := SG) × GLQ E n Q) (p : DecoF E n ∅ SG Q) :
     tilFr (ST := ST) hN pi (a • p) =

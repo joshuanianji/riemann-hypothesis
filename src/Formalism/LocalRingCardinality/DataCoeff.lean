@@ -116,11 +116,6 @@ def FactSqHighestWeight : Prop := ∀ (R : Type) [CommRing R] (N : ℕ) (lam : D
 def bridge_normFock_extremal : Prop := ∀ (N : ℕ) (lam : DomWeight N),
   normFock lam (extremal ℂ N lam) (extremal ℂ N lam) = 1
 
-def FactNormFockUnitary : Prop := ∀ (N : ℕ) (lam : DomWeight N) (g : GL (Fin N) ℂ),
-  (g : Matrix (Fin N) (Fin N) ℂ) ∈ Matrix.unitaryGroup (Fin N) ℂ →
-  ∀ f h : MvPolynomial (Fin N × Fin N) ℂ,
-    normFock lam (roundAct ℂ N lam g f) (roundAct ℂ N lam g h) = normFock lam f h
-
 def FactDelDualNabla : Prop := ∀ (N : ℕ) (lam : DomWeight N) (f : MvPolynomial (Fin N × Fin N) ℚ),
   f ∈ nablaSq ℚ N lam →
   ((∀ g ∈ nablaSq ℤ N lam, ∃ z : ℤ, normFockQ lam f (map (Int.castRingHom ℚ) g) = z) ↔

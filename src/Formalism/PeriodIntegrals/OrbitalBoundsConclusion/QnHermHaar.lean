@@ -79,50 +79,6 @@ lemma tst_exp_mem {k r : ℕ} {i : Fin (r + 1)} {X : Mx k r} (hX : inLieLev k r 
     NormedSpace.exp ((t : ℂ) • X) ∈ Glev k r i :=
   _root_.QnRdSkewW.exp_mem_glev hX t
 
-lemma tst_H_zero {k r : ℕ} (i : Fin (r + 1)) (q : Fin (mdim k r i)) (a : Fin r) (ha : a.val < i.val) :
-    Hpk k r (posL k r i q) (eI k r a) = 0 ∧ Hpk k r (posL k r i q) (esI k r a) = 0 := by
-  have hq : q.val < 2 * (r - i.val) + k + 1 := q.isLt
-  have hi := i.isLt
-  have hp : (posL k r i q).val = q.val + i.val := rfl
-  have he : (eI k r a).val = a.val := rfl
-  have hs : (esI k r a).val = 2 * r + k - a.val := rfl
-  constructor
-  · simp only [Hpk, Fin.ext_iff, hp, he]
-    split_ifs <;> first | rfl | (exfalso; omega)
-  · simp only [Hpk, Fin.ext_iff, hp, hs]
-    split_ifs <;> first | rfl | (exfalso; omega)
-
-lemma tst_Z_fix {n : ℕ} (a' b' p : Fin n) (h : b' ≠ p) : Matrix.single a' b' (1 : ℂ) *ᵥ bvec p = 0 := by
-  ext x
-  simp [bvec, Matrix.mulVec, dotProduct, Matrix.single_apply, Pi.single_apply, h]
-
-lemma tst_ZH_fix {n : ℕ} (W H : Matrix (Fin n) (Fin n) ℂ) (a' b' p : Fin n) (h : H a' p = 0) :
-    (W * (Matrix.single a' b' (1 : ℂ))ᴴ * H) *ᵥ bvec p = 0 := by
-  rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-  have h0 : (Matrix.single a' b' (1 : ℂ))ᴴ *ᵥ (H *ᵥ bvec p) = 0 := by
-    ext x
-    simp [bvec, Matrix.mulVec, dotProduct, Matrix.conjTranspose_apply, Matrix.single_apply, Pi.single_apply]
-    by_cases hb : b' = x <;> simp [hb, h]
-  rw [h0, Matrix.mulVec_zero]
-
-lemma tst_core1 {n : ℕ} (H Z : Matrix (Fin n) (Fin n) ℂ) (hH : Hᴴ = H) (hH2 : H * H = 1) :
-    (Z - H * Zᴴ * H)ᴴ * H + H * (Z - H * Zᴴ * H) = 0 := by
-  have hHH : ∀ Y : Matrix (Fin n) (Fin n) ℂ, H * (H * Y) = Y := fun Y => by
-    rw [← Matrix.mul_assoc, hH2, Matrix.one_mul]
-  rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-    Matrix.conjTranspose_conjTranspose, hH]
-  simp only [Matrix.sub_mul, Matrix.mul_sub, Matrix.mul_assoc, hH2, hHH, Matrix.mul_one]
-  abel
-
-lemma tst_core2 {n : ℕ} (H Z : Matrix (Fin n) (Fin n) ℂ) (hH : Hᴴ = H) (hH2 : H * H = 1) :
-    (Z + H * Zᴴ * H)ᴴ * H = H * (Z + H * Zᴴ * H) := by
-  have hHH : ∀ Y : Matrix (Fin n) (Fin n) ℂ, H * (H * Y) = Y := fun Y => by
-    rw [← Matrix.mul_assoc, hH2, Matrix.one_mul]
-  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-    Matrix.conjTranspose_conjTranspose, hH]
-  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, hH2, hHH, Matrix.mul_one]
-  abel
-
 lemma tst_lie {k r : ℕ} (i : Fin (r + 1)) (a b : Fin (mdim k r i)) :
     inLieLev k r i (hpart1 (Hpk k r) (Matrix.single (posL k r i a) (posL k r i b) 1)) ∧
     inLieLev k r i (hpart2 (Hpk k r) (Matrix.single (posL k r i a) (posL k r i b) 1)) := by

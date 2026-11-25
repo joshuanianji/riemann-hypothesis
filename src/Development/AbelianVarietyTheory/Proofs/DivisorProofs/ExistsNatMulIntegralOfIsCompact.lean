@@ -292,22 +292,4 @@ def thetaLin (κ : Type) [Fintype κ] : schA F κ →ₗ[ℂ] ℂ where
 @[simp] theorem thetaLin_apply {κ : Type} [Fintype κ] (Φ : schA F κ) : thetaLin F κ Φ = thetaSum F Φ.1 := rfl
 
 
-open NumberField IsDedekindDomain in
-open scoped Classical in
-variable (F : Type) [Field F] [NumberField F] in
-theorem _root_.GlobalTheory.WeilM.thetaSum_summable_linear (κ : Type) [Fintype κ] :
-    (∀ Φ ∈ _root_.GlobalTheory.WeilM.schA F κ,
-      Summable fun ξ : κ → F => Φ (fun i => algebraMap F (AdeleRing (𝓞 F) F) (ξ i))) ∧
-    (∀ Φ ∈ _root_.GlobalTheory.WeilM.schA F κ,
-      Summable fun ξ : κ → F => ‖Φ (fun i => algebraMap F (AdeleRing (𝓞 F) F) (ξ i))‖) ∧
-    (∀ Φ ∈ _root_.GlobalTheory.WeilM.schA F κ, ∀ Ψ ∈ _root_.GlobalTheory.WeilM.schA F κ,
-      _root_.GlobalTheory.WeilM.thetaSum F (Φ + Ψ) =
-        _root_.GlobalTheory.WeilM.thetaSum F Φ + _root_.GlobalTheory.WeilM.thetaSum F Ψ) ∧
-    (∀ (c : ℂ), ∀ Φ ∈ _root_.GlobalTheory.WeilM.schA F κ,
-      _root_.GlobalTheory.WeilM.thetaSum F (c • Φ) = c * _root_.GlobalTheory.WeilM.thetaSum F Φ) :=
-  ⟨fun _ hΦ => _root_.GlobalTheory.WeilM.summable_of_mem_schA F hΦ,
-    fun _ hΦ => _root_.GlobalTheory.WeilM.summable_norm_of_mem_schA F hΦ,
-    fun _ hΦ _ hΨ => _root_.GlobalTheory.WeilM.thetaSum_add F hΦ hΨ,
-    fun c Φ _ => _root_.GlobalTheory.WeilM.thetaSum_smul F c Φ⟩
-
 end GlobalTheory.WeilM

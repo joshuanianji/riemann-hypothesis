@@ -186,8 +186,6 @@ noncomputable section
 namespace GlobalTheory.OneBasis.TabMap
 open GlobalTheory.FrameGen GlobalTheory.ConstFam GlobalTheory.FrameMove GlobalTheory.OneBasis.Calc
 
-alias gs_comp := _root_.GlobalTheory.OneBasis.ThMove.gs_comp
-
 section
 variable {S S' : Scheme.{0}} {f : S' ⟶ S} {A : Over S} {A' : Over S'} [GrpObj A] [GrpObj A']
   {φ : A'.left ⟶ A.left} {T : Over S} {T' : Over S'} {h : T'.left ⟶ T.left}

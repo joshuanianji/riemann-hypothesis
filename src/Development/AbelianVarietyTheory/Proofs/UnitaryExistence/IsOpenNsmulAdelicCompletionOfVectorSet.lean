@@ -206,17 +206,6 @@ variable (F : Type) [Field F] [NumberField F]
 
 alias isOpen_integral := _root_.GlobalTheory.IntegralOpen.isOpen_integral
 
-theorem exists_nsmul_adele (U : Set (FiniteAdeleRing (𝓞 F) F)) (hU : U ∈ 𝓝 (0 : FiniteAdeleRing (𝓞 F) F)) :
-    ∃ N : ℕ, 0 < N ∧ ∀ a : FiniteAdeleRing (𝓞 F) F, (∀ v, a v ∈ v.adicCompletionIntegers F) → N • a ∈ U := by
-  first
-  | (apply _root_.GlobalTheory.LocalNormBound.main <;> assumption)
-
-theorem nsmul_integral_mem_nhds (M : ℕ) (hM : 0 < M) :
-    {c : FiniteAdeleRing (𝓞 F) F | ∃ a : FiniteAdeleRing (𝓞 F) F,
-      (∀ v, a v ∈ v.adicCompletionIntegers F) ∧ c = M • a} ∈ 𝓝 (0 : FiniteAdeleRing (𝓞 F) F) := by
-  first
-  | (apply _root_.GlobalTheory.IntegralNeighbourhoodZero.nsmul_integral_mem_nhds_zero <;> assumption)
-
 variable {E : Type} [Field E] [NumberField E] [Algebra F E] {n : ℕ}
 
 

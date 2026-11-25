@@ -104,25 +104,6 @@ theorem gram_block_form : C2.GramBlocks := by
     rw [hpres]
     exact herm_ff hz'.1 a b
 
-theorem majorant_estimate : C2.Majorant := by
-  intro k r
-  have hH := GBasic.Hpk_herm k r
-  have hsq := GBasic.Hpk_sq k r
-  refine ⟨?_, hsq, fun v => ⟨?_, ?_⟩⟩
-  · show (Hpk k r)ᴴ * Hpk k r * Hpk k r = Hpk k r
-    rw [hH, hsq, Matrix.one_mul]
-  · simp only [herm]
-    rw [E_cast, E_unit _ hH hsq]
-  · have hcs := euclid_cs (Hpk k r *ᵥ v) v
-    rw [E_unit _ hH hsq] at hcs
-    set S := ∑ i, Complex.normSq (v i)
-    have hS : 0 ≤ S := Finset.sum_nonneg fun i _ => Complex.normSq_nonneg _
-    have h1 : ‖herm (Hpk k r) v v‖ ^ 2 ≤ S ^ 2 := by
-      rw [← Complex.normSq_eq_norm_sq, sq]
-      exact hcs
-    have h2 : ‖herm (Hpk k r) v v‖ ≤ S := (pow_le_pow_iff_left₀ (norm_nonneg _) hS two_ne_zero).mp h1
-    exact (Complex.re_le_norm _).trans h2
-
 theorem norm_of_inverse : C2.NormInv := by
   apply _root_.PI.PolynomialProperness.GN.polynomial_normInv <;> assumption
 

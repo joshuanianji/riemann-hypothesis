@@ -177,13 +177,6 @@ def ratioEval (i : ι) : MvPolynomial ι R →+* Γ(X, nonzeroLocus (x i)) :=
 @[simp] theorem ratioEval_X (i j : ι) :
     ratioEval R x i (MvPolynomial.X j) = secRatio (x i) (x j) := eval₂Hom_X' _ _ j
 
-theorem finite_ratioEval_iff (i : ι) : (ratioEval R x i).Finite ↔
-    Module.Finite (ratioEval R x i).range Γ(X, nonzeroLocus (x i)) :=
-  ⟨fun h => RingHom.Finite.of_comp_finite (f := (ratioEval R x i).rangeRestrict)
-      (g := (ratioEval R x i).range.subtype) h,
-    fun h => RingHom.Finite.comp (g := (ratioEval R x i).range.subtype) h
-      (RingHom.Finite.of_surjective _ (ratioEval R x i).rangeRestrict_surjective)⟩
-
 variable (F : X.Modules)
 
 theorem X_smul_gammaOf_secRatio_smul (i j : ι) (n : ℤ)
@@ -430,15 +423,6 @@ variable {R : Type} [CommRing R] {X : Scheme.{0}} [Algebra R Γ(X, ⊤)] {f : X 
   (hf : ∀ r, algebraMap R Γ(X, ⊤) r = f.appTop ((Scheme.ΓSpecIso (.of R)).inv r))
 include hf
 
-theorem ProjSpace.secPull_coord_of_isFinite {N : ℕ} (φ : X ⟶ PSpace R N) [IsFinite φ]
-    (hφ : φ ≫ PSpace.str R N = f) :
-    ⨆ i, nonzeroLocus (secPull (coord R N i) φ) = ⊤ ∧
-      ∀ i, IsAffineOpen (nonzeroLocus (secPull (coord R N i) φ)) ∧
-        (ratioEval R (fun j => secPull (coord R N j) φ) i).Finite := by
-  subst hφ
-  have hs := iSup_nonzeroLocus_secPull (iSup_nonzeroLocus_coord R N) φ
-  exact ⟨hs, (isFinite_toProj_iff _ _ hs hf).1 (by rwa [toProj_secPull_coord])⟩
-
 theorem Twist.finite_ratioEval_of_isProper [IsProper f] {L : LB X} {N : ℕ}
     (x : Fin (N + 1) → L.Sec) (hc : ⨆ i, nonzeroLocus (x i) = ⊤)
     (ha : ∀ i, IsAffineOpen (nonzeroLocus (x i))) (i : Fin (N + 1)) :
@@ -446,15 +430,6 @@ theorem Twist.finite_ratioEval_of_isProper [IsProper f] {L : LB X} {N : ℕ}
   ((isFinite_toProj_iff f x hc hf).1 (isFinite_toProj_of_isProper f x hc ha) i).2
 
 variable [IsNoetherianRing R] (F : X.Modules) [IsFiniteQC F]
-
-theorem serre_of_isFinite {N : ℕ} (φ : X ⟶ PSpace R N) [IsFinite φ]
-    (hφ : φ ≫ PSpace.str R N = f) :
-    (∀ (n : ℤ) (p : ℕ), Module.Finite R (coh (twistZ F ((O1 R N).pull φ) n) p)) ∧
-      ∀ᶠ n : ℤ in atTop, ∀ p, 0 < p → Subsingleton (coh (twistZ F ((O1 R N).pull φ) n) p) :=
-  have h := secPull_coord_of_isFinite hf φ hφ
-  have hL := Semi.LB.isLB_pull (O1_isLB R N) φ
-  ⟨finite_coh_twistZ R _ F hL h.1 (fun i => (h.2 i).1) fun i => (h.2 i).2,
-    eventually_subsingleton_coh_twistZ R _ F hL h.1 (fun i => (h.2 i).1) fun i => (h.2 i).2⟩
 
 theorem IsAmpleLB.finite_coh [IsProper f] {L : LB X} (h : IsAmpleLB L) (p : ℕ) :
     Module.Finite R (coh F p) := by
@@ -537,54 +512,6 @@ theorem finiteCohTwists_of_isProjOver (h : IsProjOver f) : FiniteCohTwists k F :
 
 end Field
 
-
-open QCoh Twist ProjSpace in
-theorem serre_finiteness_vanishing (R : Type) [CommRing R] [IsNoetherianRing R] (X : Scheme.{0})
-    [Algebra R Γ(X, ⊤)] (F : X.Modules) [IsFiniteQC F] :
-    (∀ (L : LB X) (ι : Type) [Finite ι] (x : ι → L.Sec), L.IsLB → ⨆ i, nonzeroLocus (x i) = ⊤ →
-      (∀ i, IsAffineOpen (nonzeroLocus (x i))) →
-      (∀ i, Module.Finite (ratioEval R x i).range Γ(X, nonzeroLocus (x i))) →
-      (∃ M : Submodule (MvPolynomial ι R) (GammaStar R x F ⊤), M.FG ∧
-        M.IsHomogeneous (gammaGrading R x F ⊤) ∧
-        (∀ s : Finset ι, s.Nonempty → ∀ n : ℤ, Function.Bijective
-          (homLocMap (isGradedMap_subtype (gammaGrading R x F ⊤) M) s n)) ∧
-        ∀ [LinearOrder ι] (n : ℤ),
-          Nonempty (cech R (twistZ F L n) ⊤ (fun j => nonzeroLocus (x j)) ≅
-            grCech ι (grSub (gammaGrading R x F ⊤) M) n)) ∧
-      (∀ (n : ℤ) (p : ℕ), Module.Finite R (coh (twistZ F L n) p)) ∧
-      ∀ᶠ n : ℤ in atTop, ∀ p, 0 < p → Subsingleton (coh (twistZ F L n) p)) ∧
-    ∀ f : X ⟶ Sp R,
-      (∀ r, algebraMap R Γ(X, ⊤) r = f.appTop ((Scheme.ΓSpecIso (.of R)).inv r)) →
-      (∀ (N : ℕ) (φ : X ⟶ PSpace R N), IsFinite φ ∨ IsClosedImmersion φ →
-        φ ≫ PSpace.str R N = f →
-        ⨆ i, nonzeroLocus (secPull (coord R N i) φ) = ⊤ ∧
-        (∀ i, IsAffineOpen (nonzeroLocus (secPull (coord R N i) φ))) ∧
-        (∀ i, Module.Finite (ratioEval R (fun j => secPull (coord R N j) φ) i).range
-          Γ(X, nonzeroLocus (secPull (coord R N i) φ))) ∧
-        (∀ (n : ℤ) (p : ℕ), Module.Finite R (coh (twistZ F ((O1 R N).pull φ) n) p)) ∧
-        ∀ᶠ n : ℤ in atTop, ∀ p, 0 < p → Subsingleton (coh (twistZ F ((O1 R N).pull φ) n) p)) ∧
-      (IsProjOver f ∨ (IsProper f ∧ ∃ A : LB X, IsAmpleLB A) →
-        (∀ p, Module.Finite R (coh F p)) ∧
-        (∀ M : LB X, M.IsLB → ∀ p, Module.Finite R (coh (twist F M) p)) ∧
-        ∀ L : LB X, IsAmpleLB L →
-          (∀ (n : ℤ) (p : ℕ), Module.Finite R (coh (twistZ F L n) p)) ∧
-          (∀ᶠ n : ℤ in atTop, ∀ p, 0 < p → Subsingleton (coh (twistZ F L n) p)) ∧
-          ∀ᶠ n : ℕ in atTop, ∀ p, 0 < p → Subsingleton (coh (twist F (lbPow L n)) p)) := by
-  refine ⟨fun L ι _ x hL hc ha h => ?_, fun f hf => ⟨fun N φ hφ e => ?_, fun h => ?_⟩⟩
-  · have h' := fun i => (finite_ratioEval_iff R x i).2 (h i)
-    exact ⟨exists_fg_cech_iso_grCech R x F hL hc ha h', finite_coh_twistZ R x F hL hc ha h',
-      eventually_subsingleton_coh_twistZ R x F hL hc ha h'⟩
-  · have : IsFinite φ := hφ.elim id fun _ => inferInstance
-    have h := secPull_coord_of_isFinite hf φ e
-    exact ⟨h.1, fun i => (h.2 i).1, fun i =>
-      (finite_ratioEval_iff R (fun j => secPull (coord R N j) φ) i).1 (h.2 i).2,
-      serre_of_isFinite hf F φ e⟩
-  · obtain ⟨_, A, hA⟩ := h.elim isProper_and_exists_isAmpleLB_of_isProjOver id
-    have H (M : LB X) (hM : M.IsLB) (p : ℕ) : Module.Finite R (coh (twist F M) p) :=
-      have := isFiniteQC_twist (F := F) hM
-      hA.finite_coh hf _ p
-    exact ⟨hA.finite_coh hf F, H, fun L hL => ⟨fun n => H _ (isLB_lbZPow hL.isLB n),
-      hL.eventually_subsingleton_coh_twistZ hf F, hL.eventually_subsingleton_coh_twist hf F⟩⟩
 
 end GlobalTheory
 end -- clump:auto

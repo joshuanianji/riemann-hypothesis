@@ -236,17 +236,6 @@ lemma lev_mid (g : Mat k r') (i j : Fin (2 * r' + k + 1)) : ιLev k 1 r' g (levP
     dite_eq_left (show 1 ≤ j.val + 1 ∧ j.val + 1 < 2 * r' + k + 1 + 1 by omega)]
   congr 1
 
-lemma mid_or (p : Fin (2 * (1 + r') + k + 1)) : (∃ i, p = levPos k 1 r' i) ∨ ¬ (1 ≤ p.val ∧ p.val < 2 * r' + k + 1 + 1) := by
-  by_cases h : 1 ≤ p.val ∧ p.val < 2 * r' + k + 1 + 1
-  · left
-    exact ⟨⟨p.val - 1, by omega⟩, Fin.ext (show p.val = p.val - 1 + 1 by omega)⟩
-  · right; exact h
-
-lemma levPos_inj : Function.Injective (levPos k 1 r') := by
-  intro a b h
-  have h2 : a.val + 1 = b.val + 1 := congrArg Fin.val h
-  exact Fin.ext (by omega)
-
 lemma lev_mul (g h : Mat k r') : ιLev k 1 r' (g * h) = ιLev k 1 r' g * ιLev k 1 r' h := by
   apply ReciprocityTheory.ChartRestriction.DS.Xi.StepA.lev_mul
 

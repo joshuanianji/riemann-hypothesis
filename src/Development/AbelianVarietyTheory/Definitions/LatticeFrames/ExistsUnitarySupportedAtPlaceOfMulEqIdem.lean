@@ -276,8 +276,6 @@ def IsJacFrame {ρ : ℕ} (J : JacLev D ρ) (s hh : k) (F₀ : Frame k J.W₀.ra
 
 end Place
 
-def Frame.ofGL {N : ℕ} (g : GL (Fin N) k) : Frame k N (Fin N) := ⟨g.val, (g⁻¹).val, by simp, by simp⟩
-
 def Place.ofSplitPt (q : GlobalTheory.FinPl.SplitPt D k) : Place D k :=
   ⟨q.e, q.split, q.pr, q.sec, q.pr_sec, q.sec_pr, q.cont_pr, q.cont_sec⟩
 

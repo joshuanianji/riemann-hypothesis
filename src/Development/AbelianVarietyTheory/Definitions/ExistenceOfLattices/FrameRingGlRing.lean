@@ -75,13 +75,6 @@ theorem frBor_iff {S : Type} [CommRing S] [Algebra c.F S] (t : Ix Dw → Sˣ) (y
   · rintro ⟨g, hd, hl, hx, hu, hs⟩
     exact ⟨hx, fun τ i => ⟨g τ i, hd τ i, fun j hij => hl τ i j hij, hu τ i⟩, hs⟩
 
-theorem appLE_id_apply (X : Scheme.{0}) (U : X.Opens) (h : U ≤ 𝟙 X ⁻¹ᵁ U) (z : Γ(X, U)) :
-    (Scheme.Hom.appLE (𝟙 X) U U h).hom z = z := by
-  show ((𝟙 X : X ⟶ X).appLE U ((𝟙 X : X ⟶ X) ⁻¹ᵁ U) le_rfl).hom z = z
-  rw [Scheme.Hom.appLE_eq_app]
-  simp
-  rfl
-
 theorem secBC_id_iff {S : Type} [CommRing S] (x : Sp S ⟶ Xo.X) (a : S) (s s' : LB.Sec (PPx x)) :
     SecBC (RingHom.id S) a x x s s' ↔ ∀ i, s'.f i = scal x a i * s.f i := by
   apply GlobalTheory.Frames.ChgOf.secBC_id_iff

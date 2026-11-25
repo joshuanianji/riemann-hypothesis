@@ -219,19 +219,6 @@ end Om
 
 section Char
 
-def ratCircle : AddCircle (1 : ℚ) →+ AddCircle (1 : ℝ) :=
-  QuotientAddGroup.map _ _ (Rat.castHom ℝ).toAddMonoidHom (by
-    rintro _ ⟨n, rfl⟩
-    exact ⟨n, by simp⟩)
-
-theorem ratCircle_eq_zero {x : AddCircle (1 : ℚ)} (h : ratCircle x = 0) : x = 0 := by
-  induction x using QuotientAddGroup.induction_on with | H r => ?_
-  have h' : (((r : ℝ)) : AddCircle (1 : ℝ)) = 0 := h
-  obtain ⟨n, hn⟩ := (AddCircle.coe_eq_zero_iff _).1 h'
-  refine (AddCircle.coe_eq_zero_iff _).2 ⟨n, ?_⟩
-  rw [zsmul_eq_mul, mul_one] at hn ⊢
-  exact_mod_cast hn
-
 
 variable (k) in
 theorem exists_hasConductor_one : ∃ ψ : AddChar k Circle, HasConductor ψ 1 := by

@@ -97,13 +97,6 @@ include X₁ in
 theorem posW : PosW W := X₁.e8.1
 
 
-include X₁ in
-theorem diag_pos (a : Fin 8) : 0 < W a a := by
-  have := X₁.e8.1.diag_pos (i := a)
-  simp only [Matrix.map_apply, Matrix.add_apply, Matrix.transpose_apply] at this
-  have h2 : (0 : ℤ) < W a a + W a a := by exact_mod_cast this
-  omega
-
 theorem isProper_compactificationMap : IsProper X₁.z := ((isProjOver_iff_isProper_and_exists_isAmpleLB X₁.z).1 X₁.proj).1
 
 theorem s_comp : X₁.M.s ≫ spMap X₁.κ = X₁.π ≫ X₁.z := by
@@ -131,17 +124,6 @@ namespace CTrait
 
 variable {X₁ : Setup F W i} {p : ℕ} [Fact p.Prime] {z₁ : X₁.M.Z}
 
-def valInt (c : CTrait X₁ p z₁) : X₁.M.Z.presheaf.stalk z₁ →+* OO p :=
-  (RatModel.valLoc c.y z₁ (specializes_of_eq c.cen)).comp (X₁.M.stalkEquiv z₁).toRingHom
-
-theorem val_eq_valInt (c : CTrait X₁ p z₁) (a : X₁.M.Z.presheaf.stalk z₁) : c.val a = (c.valInt a : PadicAlgCl p) :=
-  RatModel.val_spMap_comp (OO p).subtype c.y (specializes_of_eq c.cen) (X₁.M.stalkEquiv z₁ a)
-
-theorem norm_val_le (c : CTrait X₁ p z₁) (a : X₁.M.Z.presheaf.stalk z₁) : ‖c.val a‖ ≤ 1 := by
-  rw [val_eq_valInt]
-  have h : Valued.v (c.valInt a : PadicAlgCl p) ≤ 1 := (c.valInt a).2
-  exact_mod_cast h
-
 theorem norm_uniformiser_pos (c : CTrait X₁ p z₁) : 0 < ‖c.ι (algebraMap c.T.V (FractionRing c.T.V) c.T.ϖ)‖ :=
   norm_pos_iff.2 ((map_ne_zero c.ι).2 fun h =>
     c.T.irr.ne_zero ((map_eq_zero_iff _ (IsFractionRing.injective _ _)).1 h))
@@ -159,21 +141,6 @@ theorem scale_pos (c : CTrait X₁ p z₁) : 0 < c.sc := by
     rw [map_mul, map_one, hv, ← hx, mul_inv_cancel₀ h0]
   exact neg_pos.2 (Real.log_neg h1 h2)
 
-theorem exp_neg_sc_mul (c : CTrait X₁ p z₁) (a : ℕ) :
-    Real.exp (-(c.sc * a)) = ‖c.ι (algebraMap c.T.V (FractionRing c.T.V) c.T.ϖ)‖ ^ a := by
-  rw [CTrait.sc, neg_mul, neg_neg, mul_comm, Real.exp_nat_mul, Real.exp_log c.norm_uniformiser_pos]
-
 end CTrait
-
-def FPre.Matches {X₁ : Setup F W i} {p : ℕ} [Fact p.Prime] {z₁ : X₁.M.Z} (Φ : FPre (id : ℤ → ℤ) g p (X₁.M.Z.presheaf.stalk z₁)) :
-    Prop :=
-  ∀ c : CTrait X₁ p z₁, ∃ y : Φ.Y, (∀ a, Φ.ev y a = c.val a) ∧ ∃ e : Φ.X y ≃ₗ[ℤ] c.T.D.toPre.X,
-    ∀ a b, Φ.sc y * Φ.β y a b = c.sc * c.T.β (e a) (e b)
-
-def ApproxAt (X₁ : Setup F W i) (φ : InvFun ℤ) (d : ℕ) : Prop :=
-  ∀ (p : ℕ) [Fact p.Prime] (z₁ : X₁.M.Z) (c₀ : CTrait X₁ p z₁) (e : ℕ), ∃ f : X₁.M.Z.presheaf.stalk z₁,
-    ‖c₀.val f‖ = Real.exp (-(c₀.sc * (d * φ.evalZ c₀.T.β))) ∧ ∀ c : CTrait X₁ p z₁,
-      ‖c.val f‖ ≤ Real.exp (-(c.sc * (d * φ.evalZ c.T.β))) ∨
-        ∃ h ∈ IsLocalRing.maximalIdeal (X₁.M.Z.presheaf.stalk z₁), ‖c.val f‖ ≤ ‖c.val h‖ ^ e
 
 end GlobalTheory.Poinc

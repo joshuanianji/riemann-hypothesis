@@ -260,12 +260,6 @@ theorem Iso.frameOK (I : Iso A B) (h : FrameOK A) : FrameOK B := by
   rw [Matrix.det_isEmpty]
   exact isUnit_one
 
-def Iso.withL (I : Iso A B) (L' : Submodule (𝓞 K) A.V) :
-    Iso (withL A L') (HLatOps.withL B (L'.map (I.e.toLinearMap.restrictScalars (𝓞 K)))) where
-  e := I.e
-  map_L := rfl
-  norm := I.norm
-
 theorem frame_free : FrameFree := by
   intro K V ι κ _ _ _ _ _ _ _ _ _ _ _ b X b' X' hX hX' hn L hL
   obtain ⟨h1, -, h3, h4, h5, -, -⟩ := rerealize K V ι V κ b X b' X' LinearMap.id hX hX'

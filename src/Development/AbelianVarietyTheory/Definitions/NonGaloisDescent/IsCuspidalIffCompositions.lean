@@ -291,8 +291,6 @@ theorem blockOf_stdEquiv_two {r t : ℕ} (hd : ∑ c, (![r, t] : Fin 2 → ℕ) 
 
 def IsTwoBlock (r : ℕ) (b : Fin N → ℕ) : Prop := ∀ i j, b i = b j ↔ ((i : ℕ) < r ↔ (j : ℕ) < r)
 
-def oppTwoBlocks (N r : ℕ) : Fin N → ℕ := fun i => if (i : ℕ) < r then 1 else 0
-
 variable {r t : ℕ}
 
 def twoEquiv (hN : r + t = N) : Fin r ⊕ Fin t ≃ Fin N := finSumFinEquiv.trans (finCongr hN)

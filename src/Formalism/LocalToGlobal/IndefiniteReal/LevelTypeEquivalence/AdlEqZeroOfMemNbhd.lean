@@ -40,62 +40,6 @@ theorem adl_exists_place_ge_one (r : 𝓞 F) (hr : r ≠ 0) :
 open scoped AdeleRing
 
 
-variable (F) in
-def adlNbhd (F : Type) [Field F] [NumberField F] : Set (AdeleRing (𝓞 F) F) :=
-  {x | (∀ w, ‖x.1 w‖ < 1) ∧ ∀ v, x.2 v ∈ v.adicCompletionIntegers F}
-
-theorem adl_isOpen_nbhd : IsOpen (adlNbhd F) := by
-  have h1 : IsOpen {y : InfiniteAdeleRing F | ∀ w, ‖y w‖ < 1} := by
-    have e : {y : InfiniteAdeleRing F | ∀ w, ‖y w‖ < 1} = Set.pi Set.univ (fun _ => Metric.ball 0 1) := by
-      ext y
-      constructor
-      · intro h w _
-        simpa [mem_ball_zero_iff] using h w
-      · intro h w
-        simpa [mem_ball_zero_iff] using h w (Set.mem_univ w)
-    rw [e]
-    exact isOpen_set_pi Set.finite_univ (fun w _ => Metric.isOpen_ball)
-  have h2 : IsOpen {y : FiniteAdeleRing (𝓞 F) F | ∀ v, y v ∈ v.adicCompletionIntegers F} := by
-    apply RestrictedProduct.isOpen_forall_mem
-    intro v
-    first
-      | exact Valued.isOpen_integer _
-  exact h1.prod h2
-
-theorem adl_zero_mem_nbhd : (0 : AdeleRing (𝓞 F) F) ∈ adlNbhd F := by
-  refine ⟨fun w => ?_, fun v => ?_⟩
-  · have h0 : (0 : AdeleRing (𝓞 F) F).1 w = 0 := rfl
-    rw [h0, norm_zero]
-    exact one_pos
-  · first | exact zero_mem _
-
-theorem adl_norm_algebraMap (x : F) (w : InfinitePlace F) :
-    ‖(algebraMap F (InfiniteAdeleRing F) x) w‖ = w x := by
-  rw [InfiniteAdeleRing.algebraMap_apply]
-  exact AbsoluteValue.Completion.norm_coe (WithAbs.toAbs w.1 x)
-
-theorem adl_eq_zero_of_mem_nbhd (a : F) (ha : algebraMap F (AdeleRing (𝓞 F) F) a ∈ adlNbhd F) : a = 0 := by
-  obtain ⟨hinf, hfin⟩ := ha
-  obtain ⟨r, hr⟩ : ∃ r : 𝓞 F, algebraMap (𝓞 F) F r = a := by
-    apply IsDedekindDomain.HeightOneSpectrum.mem_integers_of_valuation_le_one
-    intro v
-    have hv := hfin v
-    rw [IsDedekindDomain.HeightOneSpectrum.mem_adicCompletionIntegers] at hv
-    have e : (algebraMap F (AdeleRing (𝓞 F) F) a).2 v = (a : v.adicCompletion F) := rfl
-    rw [e, IsDedekindDomain.HeightOneSpectrum.valuedAdicCompletion_eq_valuation'] at hv
-    exact hv
-  by_contra ha0
-  have hr0 : r ≠ 0 := by
-    rintro rfl
-    apply ha0
-    rw [← hr, map_zero]
-  obtain ⟨w, hw⟩ := adl_exists_place_ge_one r hr0
-  have h1 := hinf w
-  have e1 : (algebraMap F (AdeleRing (𝓞 F) F) a).1 w = (algebraMap F (InfiniteAdeleRing F) a) w := rfl
-  rw [e1, adl_norm_algebraMap, ← hr] at h1
-  have h2 : w (r : F) < 1 := h1
-  linarith
-
 theorem adl_inf_cocompact : ∃ C : Set (InfiniteAdeleRing F), IsCompact C ∧
     ∀ y, ∃ r : 𝓞 F, y - algebraMap F _ (r : F) ∈ C := by
   apply GlobalTheory.AdeleCocompact.exists_compact_infinite

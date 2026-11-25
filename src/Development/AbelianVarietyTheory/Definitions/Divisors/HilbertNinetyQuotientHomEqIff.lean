@@ -22,8 +22,6 @@ def SB (X : Type) [TopologicalSpace X] : Submodule ℂ (X → ℂ) where
   add_mem' := fun hf hg => ⟨hf.1.add hg.1, hf.2.add hg.2⟩
   smul_mem' := fun c f hf => ⟨hf.1.comp (fun z => c • z), hf.2.comp_left (g := fun z => c • z) (smul_zero c)⟩
 
-theorem SB_eq (X : Type) [TopologicalSpace X] : SB X = GlobalTheory.SplitWeil.SB X := rfl
-
 structure TestClass (R : Type) [CommRing R] where
 
   sp : ∀ (κ : Type) [Fintype κ], Submodule ℂ ((κ → R) → ℂ)
@@ -170,8 +168,6 @@ structure IsQuad (ξ : E) : Prop where
 def h90 : Eˣ →* Eˣ := MonoidHom.id Eˣ / Units.map (c : E →* E)
 
 def normOne : Subgroup Eˣ := (MonoidHom.id Eˣ * Units.map (c : E →* E)).ker
-
-def IsTilde (χ : Eˣ →* Circle) (u : Eˣ) (t : Circle) : Prop := ∃ z : Eˣ, (u : E) * c z = z ∧ t = χ z
 
 variable {c}
 

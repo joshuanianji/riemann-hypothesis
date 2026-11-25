@@ -13,9 +13,6 @@ namespace Formalism.MainNotions.UnusedSlot33
 open NumberField Formalism.FrobeniusOrbits Formalism.BasicNotions Formalism.MainNotions.GlobalTheoryTheory Ideal
 open scoped Pointwise
 
-def rdVal (D : D7) : ℝ :=
-  (2 : ℝ) ^ ((D.R.e : ℝ) + 1 - (2 : ℝ) ^ (-(D.R.e : ℝ))) * Real.sqrt ((D.host.q : ℝ) * D.host.d)
-
 def Conclusion1 (D : D7) : Prop :=
   IsCMField D.host.E ∧ Module.finrank ℚ D.host.E = 2 * D.R.f ∧
   (∀ p : ℕ, p.Prime →
@@ -91,20 +88,6 @@ def TorusPairsWithVariant (D : D7) : Prop :=
 def bern {α : Type*} [Fintype α] (δ : ℝ) (T : Finset α) : ℝ :=
   δ ^ T.card * (1 - δ) ^ (Fintype.card α - T.card)
 
-
-open Classical in
-def Conclusion6 (D : D7) (sc : Scale) : Prop :=
-  ∀ δ : ℝ, 0 < δ → δ ≤ 1 → 16 ≤ δ * D.R.n →
-  ∀ β : ℝ, ∀ BAD : HH D → HH D → Finset (HH D) → Prop,
-    (∀ (h t : HH D) (T T' : Finset (HH D)), (∀ x ∈ coset t h, (x ∈ T ↔ x ∈ T')) →
-      (BAD h t T ↔ BAD h t T')) →
-    (∀ h : HH D, sc.x ^ (sc.eps / 4) ≤ (addOrderOf h : ℝ) → ∀ t : HH D,
-      (∑ T : Finset (HH D), if t ∈ T ∧ BAD h t T then bern δ T else 0) ≤ β * δ) →
-    ∀ (P : Finset ℕ) (hp : ℕ → HH D) (ω : ℕ → ℝ),
-      (∀ p ∈ P, sc.x ^ (sc.eps / 4) ≤ (addOrderOf (hp p) : ℝ)) → (∀ p ∈ P, 0 ≤ ω p) →
-      ∃ T : Finset (HH D), δ * D.R.n / 2 ≤ T.card ∧ (T.card : ℝ) ≤ 2 * δ * D.R.n ∧
-        ∑ p ∈ P, ω p * ((T.filter (fun t => BAD (hp p) t T)).card : ℝ) ≤
-          4 * β * δ * D.R.n * ∑ p ∈ P, ω p
 
 section UnitaryGroups
 
@@ -216,30 +199,6 @@ def division_rows_rational_lattice (D : D7) : Prop :=
     IsProG g Uw → (∀ u ∈ U, bc (prV v) u ∈ Uw) →
   ∀ y ∈ UPts σ J (FiniteAdeleRing (𝓞 D.host.F) D.host.F),
     ratPts σ J (FiniteAdeleRing (𝓞 D.host.F) D.host.F) ⊓ U.map (MulAut.conj y).toMonoidHom = ⊥
-
-def Conclusion8 (D : D7) : Prop :=
-  ∃ aa aab : FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E,
-    (∀ x : D.host.E, x ∈ aab ↔ D.host.conj x ∈ aa) ∧
-    ((differentIdeal (𝓞 D.host.K) (𝓞 D.host.E) : Ideal (𝓞 D.host.E)) :
-      FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E)⁻¹ = aa * aab ∧
-    (∀ cc : Ideal (𝓞 D.host.K), cc ≠ ⊥ →
-      (∀ x : D.host.E,
-        (∀ y ∈ ((Ideal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) cc : Ideal (𝓞 D.host.E)) :
-            FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E) * aa,
-          x * y ∈ ((Ideal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) cc : Ideal (𝓞 D.host.E)) :
-            FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E) * aa) ↔ IsIntegral ℤ x) ∧
-      ∃ ξ : D.host.E, ξ ∈ D.host.K ∧ D.host.conj ξ = -ξ ∧ (∀ φ ∈ PhiEmb D, 0 < (φ ξ).im) ∧
-        ∀ y : D.host.E,
-          y ∈ ((Ideal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) cc : Ideal (𝓞 D.host.E)) :
-            FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E) * aa ↔
-          ∀ x ∈ ((Ideal.map (algebraMap (𝓞 D.host.K) (𝓞 D.host.E)) cc : Ideal (𝓞 D.host.E)) :
-            FractionalIdeal (nonZeroDivisors (𝓞 D.host.E)) D.host.E) * aa,
-            Algebra.trace ℚ D.host.E (ξ * D.host.conj x * y) ∈ (algebraMap ℤ ℚ).range) ∧
-    (∀ p : ℕ, p.Prime → (primesOver (span {(p : ℤ)}) (𝓞 D.host.K)).ncard = 2 →
-      ∀ P : Ideal (𝓞 D.host.E), P.IsPrime → P.LiesOver (span {(p : ℤ)}) →
-        ∀ σ τ : D.host.E ≃ₐ[ℚ] D.host.E, τ ∈ MulAction.stabilizer (D.host.E ≃ₐ[ℚ] D.host.E) P →
-          (D.host.galE (σ * τ) ∈ D.R.Psi ↔
-            D.host.galE σ ∈ D.R.Psi))
 
 end Formalism.MainNotions.UnusedSlot33
 

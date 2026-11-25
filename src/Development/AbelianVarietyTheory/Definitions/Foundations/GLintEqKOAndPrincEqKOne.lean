@@ -324,11 +324,6 @@ def splitEquiv (h : IsCMExt F E σ) (hJ : IsHermND σ J) (τ : E →ₐ[F] Fv F 
 
 variable (h : IsCMExt F E σ) (hJ : IsHermND σ J) (τ : E →ₐ[F] Fv F v)
 
-theorem splitEquiv_apply (g : GLoc σ J v) : splitEquiv h hJ τ g = splitHom σ J τ g := rfl
-
-theorem splitEquiv_comp (g : GLoc σ J v) :
-    splitEquiv h hJ (τ.comp σ) g = dualConj (splitGram hJ τ) (splitEquiv h hJ τ g) := splitHom_comp hJ τ g
-
 theorem splitEquiv_ratLoc (γ : GRat σ J) : (splitEquiv h hJ τ (ratLoc σ J v γ)).1 = γ.1.1.map τ :=
   Matrix.ext fun i j => splitProj_inclR τ (γ.1.1 i j)
 
@@ -832,12 +827,6 @@ theorem exists_split_place (h : IsCMExt F E σ) : ∃ v : HeightOneSpectrum (�
 omit [NumberField F] [NumberField E] in
 theorem isHermND_one (σ : E →ₐ[F] E) (n : ℕ) : IsHermND σ (1 : Matrix (Fin n) (Fin n) E) :=
   ⟨fun i j => by by_cases e : i = j <;> simp [Matrix.one_apply, e, eq_comm], by simp⟩
-
-theorem exists_split_data (h : IsCMExt F E σ) (n : ℕ) :
-    ∃ (v : HeightOneSpectrum (𝓞 F)) (τ : E →ₐ[F] Fv F v), IsHermND σ (1 : Matrix (Fin n) (Fin n) E) ∧
-      IsSelfDualAt σ 1 (stdLattice E n) v ∧ IsSplitBasis τ (stdLattice E n) 1 := by
-  obtain ⟨v, ⟨τ⟩⟩ := exists_split_place h
-  exact ⟨v, τ, isHermND_one σ n, isSelfDualAt_stdLattice_one σ v, isSplitBasis_stdLattice τ h⟩
 
 end Inhab
 

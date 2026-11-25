@@ -25,9 +25,6 @@ def phi (H u : ℝ) : ℝ := u * Real.log (1 + H / u)
 def ErrF (del u HH η e : ℝ) : ℝ :=
   (1 - del)⁻¹ * (4 * phi HH u + (η + 4 * Real.sqrt e) * HH)
 
-def ConclF (s mu logI del u HH η e : ℝ) : Prop :=
-  s - logI - ErrF del u HH η e ≤ mu
-
 
 section SizeData₂
 
@@ -180,11 +177,6 @@ def FrameDeviationFinEquiv : Prop :=
   ∀ (I α : Type) [Fintype I] [Fintype α] (ι : I → Type) [∀ i, Fintype (ι i)]
     [∀ i, DecidableEq (ι i)] (B : ∀ i, Matrix α (ι i) ℂ) (ga : I → ℝ) (e : ℝ), (∀ i, 0 ≤ ga i) →
     (HilbertSchmidtNormSquare.F2 (toFin B) ga e ↔ FrameDeviationLinear B ga e)
-
-def BridgeConcl : Prop :=
-  ∀ s mu logI δ u HH η e : ℝ,
-    (s - logI - (1 - δ)⁻¹ * (4 * u * Real.log (1 + HH / u) + (η + 4 * Real.sqrt e) * HH) ≤ mu) ↔
-      PhiMonotonicityLemmas.ConclF s mu logI δ u HH η e
 
 def CorLin : Prop :=
   ∀ (I α : Type) [Fintype I] [Fintype α] (ι : I → Type) [∀ i, Fintype (ι i)]

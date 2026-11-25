@@ -18,13 +18,6 @@ open Matrix
 
 noncomputable section
 
-def hermPair {ι : Type*} [Fintype ι] (A : Matrix ι ι ℝ) (v w : ι → ℂ) : ℝ :=
-  (star v ⬝ᵥ ((A.map fun x : ℝ => (x : ℂ)) *ᵥ w)).re
-
-def covolume {ι : Type*} [Fintype ι] [DecidableEq ι] (Y : Matrix ι ι ℝ) {k : ℕ}
-    (v : Fin k → ι → ℂ) : ℝ :=
-  Real.sqrt (Matrix.det (Matrix.of fun j l => hermPair Y⁻¹ (v j) (v l)))
-
 def logDetGram {g rk : ℕ} (Y : Matrix (Fin g) (Fin g) ℝ) (F : Matrix (Fin g) (Fin rk) ℂ) : ℝ :=
   Real.log (Fᴴ * (Y⁻¹).map (fun x : ℝ => (x : ℂ)) * F).det.re
 

@@ -608,9 +608,6 @@ variable (L : LocE F E)
 theorem tr_ex (x : E) : ∃ a : F, algebraMap F E a = x + L.cj x := by
   exact (L.cj_fix _).mp (by rw [map_add (f := _), L.cj_cj, add_comm])
 
-theorem nm_ex (x : E) : ∃ a : F, algebraMap F E a = x * L.cj x := by
-  exact (L.cj_fix _).mp (by rw [map_mul, L.cj_cj, mul_comm])
-
 theorem nontrivial_E (L : LocE F E) : Nontrivial E := by
   exact Module.nontrivial_of_finrank_pos (R := F) (by rw [L.rank]; norm_num)
 

@@ -29,9 +29,6 @@ theorem classSetAssembly_trace_int {K : Type*} [Field K] [NumberField K] [StarRi
 section Sesq
 variable {K V : Type*} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
   (h : V →ₗ⋆[K] V →ₗ[K] K)
-theorem classSetAssembly_tr_add_left (x y z : V) :
-    trQ K (h (x + y) z) = trQ K (h x z) + trQ K (h y z) := by
-  simp only [map_add (f := _), LinearMap.add_apply]
 theorem classSetAssembly_tr_sub_left (x y z : V) :
     trQ K (h (x - y) z) = trQ K (h x z) - trQ K (h y z) := by
   simp only [map_sub, LinearMap.sub_apply]
@@ -243,10 +240,6 @@ theorem classSetAssembly_finite_between (hE : FinIntermediate) {K W : Type} [Fie
 end Finite
 
 section Main
-theorem classSetAssembly_mem_zmap {K V : Type} [Field K] [NumberField K] [StarRing K]
-    [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] {n : ℕ}
-    (ι : V →+ Euc (Fin n)) (M : Submodule (𝓞 K) V) (v : Euc (Fin n)) :
-    v ∈ zmap ι M ↔ ∃ x ∈ M, ι x = v := Iff.rfl
 theorem classSetAssembly_min {K V : Type} [Field K] [NumberField K] [StarRing K]
     [AddCommGroup V] [Module K V] [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V] {n : ℕ}
     (h : V →ₗ⋆[K] V →ₗ[K] K) (hpos : ∀ x : V, x ≠ 0 → 0 < trQ K (h x x)) (ι : V →+ Euc (Fin n))
@@ -263,10 +256,6 @@ theorem classSetAssembly_min {K V : Type} [Field K] [NumberField K] [StarRing K]
     rw [mul_pow, ← e]; ring
   rw [div_le_iff₀ hdR]
   nlinarith [(by exact_mod_cast hd : (1 : ℝ) ≤ d), mul_nonneg (norm_nonneg (ι x)) hdR.le]
-theorem classSetAssembly_w_mem {K : Type} [Field K] [NumberField K] [StarRing K]
-    (o : Option (Free.ChooseBasisIndex ℤ (𝓞 K))) :
-    ∃ r : 𝓞 K, o.elim (1 : K) (integralBasis K) = algebraMap _ K r :=
-  o.casesOn ⟨1, (map_one _).symm⟩ fun i => ⟨_, integralBasis_apply K i⟩
 
 variable {K V : Type} [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
   [Module (𝓞 K) V] [IsScalarTower (𝓞 K) K V]

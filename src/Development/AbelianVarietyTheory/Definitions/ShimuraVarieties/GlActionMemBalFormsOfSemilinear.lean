@@ -73,15 +73,10 @@ def symForms : Submodule S (Bil Y A) where
 
 variable {S Y A}
 
-theorem mem_symForms {b : Bil Y A} : b ∈ symForms S Y A ↔ ∀ y y', b y y' = b y' y := Iff.rfl
-
 theorem mem_symForms_iff_flip {b : Bil Y A} : b ∈ symForms S Y A ↔ b.flip = b :=
   ⟨fun h => by ext y y'; exact h y' y, fun h y y' => by
     conv_lhs => rw [← h]
     rfl⟩
-
-variable (Y) in
-abbrev SymLattice : Type _ := symForms ℤ Y ℤ
 
 instance [Module.Finite ℤ Y] [Module.Free ℤ Y] (L : Submodule ℤ (Bil Y ℤ)) : Module.Finite ℤ L :=
   Module.Finite.of_injective L.subtype L.injective_subtype
@@ -209,11 +204,6 @@ theorem finrank_eq [Module.Finite ℤ Y] [Module.Free ℤ Y] :
 
 
 end SymSq
-
-theorem finrank_symLattice [Module.Finite ℤ Y] [Module.Free ℤ Y] :
-    Module.finrank ℤ (SymLattice Y) = (Module.finrank ℤ Y + 1).choose 2 := by
-  rw [(SymSq.lift ℤ Y ℤ).finrank_eq, ← SymSq.finrank_eq]
-  exact Module.finrank_linearMap_self ℤ ℤ _
 
 end SymSq
 

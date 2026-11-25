@@ -405,22 +405,6 @@ theorem comp_conjUnit_eq_inv {μ : (AE D)ˣ →* Circle} {k : ℕ} (h : ResEta D
 
 end Record
 
-theorem exists_leviH {R : Type} [CommRing R] [Algebra F R] {σ : E →ₐ[F] E} (hσ : ∀ x, σ (σ x) = x)
-    {Q : Matrix (Fin (n + n)) (Fin (n + n)) E} (h : Q = dblGram finSumFinEquiv J) (hJ : IsHermND σ J)
-    (α : GL (Fin n) (R ⊗[F] E)) : ∃ p : siegelH R σ Q, (p : HA R σ Q) ∈ leviH R σ Q ∧
-      leviOf finSumFinEquiv (matHom R σ Q) p = α ∧ aH R σ Q p = Matrix.GeneralLinearGroup.det α := by
-  let : Invertible (2 : F) := invertibleOfNonzero two_ne_zero
-  let : Invertible (2 : R ⊗[F] E) := (Invertible.map (algebraMap F (R ⊗[F] E)) 2).copy _ (map_ofNat _ 2).symm
-  obtain ⟨β, hβ⟩ := exists_leviElt_mem_UJ finSumFinEquiv (σ := Formalism.MainNotions.GlobalTheoryTheory.GenusMassVolumes.sigR R σ) (sigR_invol hσ)
-    (J := JR R J) (by ext i j; exact congrArg (fun x => (1 : R) ⊗ₜ[F] x) (hJ.1 i j)) (isUnit_det_JR hJ.2) α
-  rw [← JR_dblGram, ← h] at hβ
-  obtain ⟨g, hg⟩ : ∃ g : HA R σ Q, matHom R σ Q g = leviElt finSumFinEquiv (α, β) := ⟨⟨_, hβ⟩, rfl⟩
-  have h1 : g ∈ siegelH R σ Q := Subgroup.mem_comap.2 (hg ▸ leviElt_mem_diag finSumFinEquiv (α, β))
-  have e : leviOf finSumFinEquiv (matHom R σ Q) ⟨g, h1⟩ = α :=
-    Units.ext (by rw [val_leviOf, hg, leviMat_leviElt])
-  exact ⟨⟨g, h1⟩, ⟨h1, Subgroup.mem_comap.2 (hg ▸ leviElt_mem_anti finSumFinEquiv (α, β))⟩, e,
-    by rw [aH, aOf, MonoidHom.comp_apply, e]⟩
-
 end GlobalTheory.Doubling
 
 end

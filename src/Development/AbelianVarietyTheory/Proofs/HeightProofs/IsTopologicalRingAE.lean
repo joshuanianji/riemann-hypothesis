@@ -62,9 +62,6 @@ def hD (ι : R →+ G) (π : G →+ R) (om : R →ₗ[ℝ] R →ₗ[ℝ] ℝ) (u
   fun w => deriv (fun t : ℝ =>
     Complex.exp (-(Real.pi * Complex.I) * (om (π w) (t • u) : ℝ)) * f (w + ι (t • u))) 0
 
-def Killed {I M : Type} [AddCommGroup M] [Module ℂ M] (a : I → Module.End ℂ M) (N : ℕ) (m : M) : Prop :=
-  ∀ l : List I, l.length = N → l.foldr (fun i x => a i x) m = 0
-
 end Abstract
 
 variable {D : D7}
@@ -242,9 +239,6 @@ theorem comp_cA (hθ : IsInfFam θ) (τ : D.what₂.Tau) (z : AE D) :
     have e2 : infPart D (cA D (a ⊗ₜ[D.host.F] x)) = fstA D.host.F a ⊗ₜ[D.host.F] (star x) := rfl
     have e3 : infPart D (a ⊗ₜ[D.host.F] x) = fstA D.host.F a ⊗ₜ[D.host.F] x := rfl
     rw [e2, e3, e (star x), e x, map_mul, map_mul, map_mul, conj_tmul_one hθ, (hθ τ).1, (hθ τ).1, tauE_star]
-
-def IsCart {n : ℕ} (G t : Matrix (Fin n) (Fin n) ℂ) : Prop :=
-  t * t = 1 ∧ tᴴ * G * t = G ∧ (G * t).PosDef
 
 def Rel (V : HSp D) (τ : D.what₂.Tau) (A : Matrix (Fin (V.sig (tauE D τ)).1 ⊕ Fin (V.sig (tauE D τ)).2) (Fin V.rank) ℂ)
     (s : Module.End D.host.E V.V) : Prop :=

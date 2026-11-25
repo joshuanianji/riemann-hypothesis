@@ -349,10 +349,6 @@ section Growth
 
 variable {E : Type*} {n : ℕ}
 
-theorem growth_mv (q : MvPolynomial (Fin n) ℂ) :
-    ∃ (C : ℝ) (m : ℕ), 0 ≤ C ∧ ∀ x : Fin n → ℂ, ‖MvPolynomial.eval x q‖ ≤ C * (1 + ‖x‖) ^ m := by
-  apply GlobalTheory.SimpleRoots.exists_norm_eval_le
-
 theorem growth_finite {ι : Type*} [Fintype ι] (x : E → ℝ) (hx : ∀ e, 1 ≤ x e) (u : ι → E → ℂ)
     (hu : ∀ c, ∃ (C : ℝ) (m : ℕ), 0 ≤ C ∧ ∀ e, ‖u c e‖ ≤ C * x e ^ m) :
     ∃ (C : ℝ) (m : ℕ), 0 ≤ C ∧ ∀ e c, ‖u c e‖ ≤ C * x e ^ m := by

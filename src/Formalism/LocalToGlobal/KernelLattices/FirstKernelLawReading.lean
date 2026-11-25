@@ -266,11 +266,6 @@ def UnfCFormula : Prop :=
     ∀ (Θ : TaylorLogMetric.VC D (D.R.N i) (D.R.N (i + 1)) → ℂ) (Q : MvPolynomial (GL3Theta.FrV D (D.R.N i)) ℂ) (y' : C.Y (i + 1)),
       unfC O i Θ (fun y => GL3Theta.evFr D Q (O.frm i y)) y' = GL3Theta.applyAt0 D (GL3Theta.polD D O.dgen Q (O.frm (i + 1) y')) Θ
 
-def UnfIsIff : Prop :=
-  ∀ (D : D7) (u : D.what₂.Word) (C : ColumnChain D.R D.what₂.Tau (D.hcW u)) (O : GL3Theta.LiftObj D C) (i : ℕ), i ≤ D.R.m →
-    ∀ ν : D.what₂.Tau → Fin (D.R.N i) → ℕ, (UnfIs O i ν ↔ ∀ c c', ∀ Q ∈ WtPol ℂ ν, ∀ y' : C.Y (i + 1),
-      C.unf i c c' (fun y => GL3Theta.evFr D Q (O.frm i y)) y' = GL3Theta.applyAt0 D (GL3Theta.polD D O.dgen Q (O.frm (i + 1) y')) (O.Th i c c'))
-
 def ChainCEv : Prop :=
   ∀ (D : D7) (u : D.what₂.Word) (C : ColumnChain D.R D.what₂.Tau (D.hcW u)) (O : GL3Theta.LiftObj D C) (i : ℕ), i < D.R.m →
     ∀ (K : Type) [Field K] (σ : K →+* ℂ) (c : C.cls i) (c' : C.cls (i + 1)) (J : (DVar D.what₂.Tau (D.R.N i) (D.R.N (i + 1)) →₀ ℕ) → K) (z : ℂ),

@@ -102,11 +102,6 @@ theorem precomplete_pi {R : Type*} [CommRing R] (π : R) [IsPrecomplete (Ideal.s
   simpa [SModEq.sub_mem, Ideal.smul_eq_mul, Ideal.mul_top] using hL i k
 
 omit [NeZero n] in
-theorem jW_coeff (x : WQ p n) (k : ℕ) :
-    (jW p n x).coeff k = algebraMap (F1 p n) (F2 p n) (x.coeff k) :=
-  WittVector.map_coeff _ _ _
-
-omit [NeZero n] in
 theorem jW_injective : Function.Injective (jW p n) :=
   WittVector.map_injective _ (RingHom.injective _)
 

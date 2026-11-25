@@ -312,19 +312,6 @@ end Indep
 theorem deg_bot (N : (K →+* ℂ) → V → ℝ) : deg N (⊥ : Submodule (𝓞 K) V) = 0 := by
   simp [deg, Formalism.HN.rkK]
 
-theorem slope_sq_line [_root_.NumberField.IsTotallyComplex K] (x : K) (hx : x ≠ 0) :
-    slope_sq (fun (σ : K →+* ℂ) (y : K) => ‖σ y‖) (Submodule.span (𝓞 K) {x}) =
-      -((1 / (Formalism.HN.nPl K : ℝ)) * ∑ v : InfinitePlace K, 2 * Real.log (v x)) := by
-  let : StarRing K := starRingOfComm
-  have hn : ∀ v y, Formalism.HermitianLatticesTheory.normAt (Basis.singleton Unit K) (fun _ : InfinitePlace K => (1 : Matrix Unit Unit ℂ)) v y =
-      ‖v.embedding y‖ := fun v y => by
-    simp [Formalism.HermitianLatticesTheory.normAt, Formalism.HermitianLatticesTheory.cnorm, Formalism.HermitianLatticesTheory.fcoord, Formalism.HermitianLatticesTheory.vecAt]
-  have h : IsGram (Basis.singleton Unit K) (fun _ : InfinitePlace K => (1 : Matrix Unit Unit ℂ))
-      (fun (σ : K →+* ℂ) (y : K) => ‖σ y‖) := fun v => ⟨by simp, hn v⟩
-  rw [slope_sq_eq h (Submodule.fg_span (Set.finite_singleton x)),
-    Formalism.ExtensionFiltration.muDef_line_eq _ _ (fun v => (h v).1) x hx]
-  simp [hn, InfinitePlace.norm_embedding_eq]
-
 end Gram
 
 open AlgebraicGeometry CategoryTheory Limits ReciprocityTheory.ChartRestriction.G.Geo.Tor ReciprocityTheory.ChartRestriction.G.FD Formalism.L2.Pj Formalism.BasicNotions Formalism.BasicNotions.TH

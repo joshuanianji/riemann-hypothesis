@@ -69,15 +69,6 @@ theorem embV_smul (h : GL3Theta.InducedCMType D) (k : D.host.K) (B : Matrix (Fin
   change embT D τ ((k : D.host.E) * B i j) = D.host.φ₀ (k : D.host.E) * embT D τ (B i j)
   rw [map_mul, h τ k]
 
-theorem embV_add (B B' : Matrix (Fin N') (Fin N) D.host.E) :
-    embV D (tor0 D cc δ) (B + B') = embV D (tor0 D cc δ) B + embV D (tor0 D cc δ) B' := by
-  funext τ i j
-  exact map_add (embT D τ) _ _
-
-theorem embV_zero : embV D (tor0 D cc δ) (0 : Matrix (Fin N') (Fin N) D.host.E) = 0 := by
-  funext τ i j
-  exact map_zero (embT D τ)
-
 theorem klat_rat (h : GL3Theta.InducedCMType D) {A : AddSubgroup (VC D N N')} (hA : KLat D (tor0 D cc δ) A)
     {x : VC D N N'} (hx : x ∈ A) : ∃ B, x = δ • embV D (tor0 D cc δ) B := by
   apply _root_.GlobalTheory.ConjNorm.Inter.klat_rat <;> assumption

@@ -19,12 +19,6 @@ open NumberField IsDedekindDomain Formalism.HermitianLatticesTheory Module
 
 section GaussProd
 
-theorem hcnt_prod_succ (q : ℤ) (a i : ℕ) :
-    ∏ j ∈ Finset.range (i + 1), (q ^ (a + 1) - q ^ j) =
-      (q ^ (a + 1) - 1) * q ^ i * ∏ j ∈ Finset.range i, (q ^ a - q ^ j) := by
-  rw [Finset.prod_range_succ', Finset.prod_congr rfl (fun j (_ : j ∈ Finset.range i) => show q ^ (a + 1) - q ^ (j + 1) = q * (q ^ a - q ^ j) by ring), Finset.prod_mul_distrib, Finset.prod_const, Finset.card_range]
-  ring
-
 theorem gaussBin_mul_prod (q n i : ℕ) :
     (gaussBin q n i : ℤ) * ∏ j ∈ Finset.range i, ((q : ℤ) ^ i - (q : ℤ) ^ j) =
       ∏ j ∈ Finset.range i, ((q : ℤ) ^ n - (q : ℤ) ^ j) := by

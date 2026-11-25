@@ -97,11 +97,6 @@ def DetNonzero : Prop :=
   ∀ (k r : ℕ) (z z' : Fin (2 * r + k + 1) → ℂ), StdZ k r z → StdZ k r z' → ∀ g : B.Mat k r,
     0 < Gf k r z z' g → (Zhat k r z z' g).det ≠ 0
 
-def Majorant : Prop :=
-  ∀ k r : ℕ, Hpk k r ∈ B.GV k r ∧ Hpk k r * Hpk k r = 1 ∧
-    ∀ v : Fin (2 * r + k + 1) → ℂ, herm (Hpk k r) v (Hpk k r *ᵥ v) = ((∑ i, Complex.normSq (v i) : ℝ) : ℂ) ∧
-      (herm (Hpk k r) v v).re ≤ ∑ i, Complex.normSq (v i)
-
 def NormInv : Prop := ∀ (k r : ℕ), ∀ g ∈ B.GV k r, B.gN g⁻¹ = B.gN g ∧ 1 ≤ B.gN g
 
 def TwoSided : Prop :=

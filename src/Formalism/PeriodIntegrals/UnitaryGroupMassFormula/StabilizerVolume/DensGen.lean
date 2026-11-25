@@ -27,14 +27,6 @@ theorem ae_fib (hfib : IsFibreFamily μ f ι U ν B fib) {f' : V → X}
   intro hmem
   exact hv (hι (by rw [← hff']; exact hmem.1))
 
-theorem fib_set_nonneg [IsFiniteMeasureOnCompacts ν]
-    (hfib : IsFibreFamily μ f ι U ν B fib) {f' : V → X} (hf' : Continuous f')
-    (hff' : ∀ v, f v = ι (f' v)) (hι : Function.Injective ι)
-    (ρ : V → ℝ) (hρc : Continuous ρ) (hρs : HasCompactSupport ρ) (hρU : tsupport ρ ⊆ U)
-    (hρ0 : ∀ v, 0 ≤ ρ v) (S : Set X) (hS : IsCompact S) (hSB : S ⊆ B) :
-    ∫ v in f' ⁻¹' S, ρ v ∂μ = ∫ b in S, (∫ v, ρ v ∂(fib b)) ∂ν := by
-  apply PI.AprimeInfW.DG.fib_set_nonneg <;> assumption
-
 theorem fib_set [IsFiniteMeasureOnCompacts μ] [IsFiniteMeasureOnCompacts ν]
     (hfib : IsFibreFamily μ f ι U ν B fib) {f' : V → X} (hf' : Continuous f')
     (hff' : ∀ v, f v = ι (f' v)) (hι : Function.Injective ι)

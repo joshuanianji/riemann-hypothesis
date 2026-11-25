@@ -24,11 +24,6 @@ namespace GlobalTheory.TraceRealEmbeddingSum
 
 open NumberField
 
-theorem re_embedding_mk {F : Type} [Field F] (φ : F →+* ℂ) (x : F) :
-    ((InfinitePlace.mk φ).embedding x).re = (φ x).re := by
-  rcases InfinitePlace.embedding_mk_eq φ with h | h <;>
-    simp [h, ComplexEmbedding.conjugate_coe_eq]
-
 theorem trace_eq_sum_mult_mul_re {F : Type} [Field F] [NumberField F] (x : F) :
     ((Algebra.trace ℚ F x : ℚ) : ℝ) =
       ∑ w : InfinitePlace F, (w.mult : ℝ) * (w.embedding x).re := by

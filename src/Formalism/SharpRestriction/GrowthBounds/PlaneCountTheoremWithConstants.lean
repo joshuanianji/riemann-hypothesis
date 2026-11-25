@@ -467,8 +467,6 @@ variable {A K : Type} [CommRing A] [IsDedekindDomain A] [Field K] [Algebra A K] 
   {O Kf Fn : Type} [CommRing O] [Field Kf] [Algebra O Kf] [AddCommGroup Fn] [Module Kf Fn] [Module O Fn]
   [IsScalarTower O Kf Fn] (φ : K →+* Kf) (cmp : V →+ Fn)
 
-abbrev locW : Subalgebra A K := Localization.subalgebra.ofField K _ w.asIdeal.primeCompl_le_nonZeroDivisors
-
 include b in
 theorem cmp_expand (hs : ∀ a x, cmp (a • x) = φ a • cmp x) (x : V) :
     cmp x = ∑ a, φ (b.repr x a) • cmp (b a) := by

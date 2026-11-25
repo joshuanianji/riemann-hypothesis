@@ -217,13 +217,6 @@ def IsDualPair (A B : AbVar K) (P : LB (A.X ⊗ B.X).left) : Prop :=
   AbDual.IsDual A.X B.X P ∧ AbDual.IsDual B.X A.X (AbDual.swap P)
 
 
-open GlobalTheory.WeierstrassCurve in
-def ell (W : WeierstrassCurve K) [W.IsElliptic] : AbVar K where
-  X := (ellPolAV W).A
-  ab := (ellPolAV W).isAb
-  dim := 1
-  smooth := (ellPolAV W).smoothDim
-
 
 
 theorem lam_eq {A : AbVar K} (c : Pic A.X.left) {Y : Over (Sp K)} (x y : Y ⟶ A.X) :

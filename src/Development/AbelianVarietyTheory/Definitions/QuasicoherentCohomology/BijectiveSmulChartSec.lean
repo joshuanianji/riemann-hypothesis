@@ -810,40 +810,6 @@ theorem twoChart_isLB {U₀ U₁ : X.Opens} (h : U₀ ⊔ U₁ = ⊤) (u : Γ(X,
     · exact (congrArg (· * _) (map_one _)).trans (one_mul _)
     · exact (congrArg (· * _) (map_one _)).trans (one_mul _)
 
-theorem mem_secOn_twoChart {U₀ U₁ : X.Opens} (u : Γ(X, U₀ ⊓ U₁)ˣ) (V : X.Opens)
-    (a : Γ(X, V ⊓ U₀)) (b : Γ(X, V ⊓ U₁)) :
-    (fun i : Bool => match i with | true => a | false => b) ∈ secOn (twoChart U₀ U₁ u) V ↔
-      resG X (inf_le_left : V ⊓ U₀ ⊓ U₁ ≤ V ⊓ U₀) a =
-        resG X (inf_le_inf_right _ inf_le_right) (u : Γ(X, U₀ ⊓ U₁)) *
-          resG X (inf_le_inf_right _ inf_le_left) b := by
-  refine ⟨fun h => h true false, fun h => ?_⟩
-  rintro (_ | _) (_ | _)
-  · change resG X _ b = resG X _ 1 * resG X _ b
-    rw [map_one, one_mul]
-  · have l : V ⊓ U₁ ⊓ U₀ ≤ V ⊓ U₀ ⊓ U₁ := (inf_right_comm _ _ _).le
-    have e := congrArg (resG X l) h
-    simp only [map_mul, resG_resG] at e
-    change resG X (inf_le_left : V ⊓ U₁ ⊓ U₀ ≤ V ⊓ U₁) b =
-      (res (inf_le_inf_right _ inf_le_right : V ⊓ U₁ ⊓ U₀ ≤ U₁ ⊓ U₀)
-        (res (le_inf inf_le_right inf_le_left) u)⁻¹).val *
-          resG X (inf_le_inf_right _ inf_le_left : V ⊓ U₁ ⊓ U₀ ≤ V ⊓ U₀) a
-    rw [e, map_inv, Semi.LB.res_res, ← val_res, Units.inv_mul_cancel_left]
-  · exact h
-  · change resG X _ a = resG X _ 1 * resG X _ a
-    rw [map_one, one_mul]
-
-theorem twoChart_isGen {U₀ U₁ : X.Opens} (u : Γ(X, U₀ ⊓ U₁)ˣ) (a : Γ(X, U₀)ˣ) (b : Γ(X, U₁)ˣ)
-    (h : res inf_le_left a = u * res inf_le_right b) :
-    LB.Gen.IsGen (L := twoChart U₀ U₁ u)
-      ⟨fun i : Bool => match i with | true => a | false => b⟩ := by
-  rintro (_ | _) (_ | _)
-  · exact (one_mul _).symm
-  · have e := congrArg (res (le_inf inf_le_right inf_le_left : U₁ ⊓ U₀ ≤ U₀ ⊓ U₁)) h
-    rw [map_mul, Semi.LB.res_res, Semi.LB.res_res] at e
-    exact eq_inv_mul_of_mul_eq e.symm
-  · exact h
-  · exact (one_mul _).symm
-
 end LB
 
 end GlobalTheory

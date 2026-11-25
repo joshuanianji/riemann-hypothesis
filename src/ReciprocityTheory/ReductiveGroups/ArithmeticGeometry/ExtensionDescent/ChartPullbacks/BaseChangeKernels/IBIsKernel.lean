@@ -98,9 +98,6 @@ lemma qB_flat (h : Flat q.left) : Flat (qB f q).left :=
 lemma qB_surj (h : Surjective q.left) : Surjective (qB f q).left :=
   MorphismProperty.of_isPullback (P := @Surjective) (qB_sq f q) h
 
-lemma qB_affine (h : IsAffineHom q.left) : IsAffineHom (qB f q).left :=
-  MorphismProperty.of_isPullback (P := @IsAffineHom) (qB_sq f q) h
-
 variable (i : splitTorus S X ⟶ G)
 
 def iB : splitTorus S' X ⟶ (Over.pullback f).obj G :=

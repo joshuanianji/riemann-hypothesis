@@ -194,52 +194,11 @@ noncomputable def PtilCol (φ : C.cls 0 → C.Y 0 → ℂ) (F : P.Mt) : ℂ := P
 
 end PeriodMap
 
-def FactWtPos : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc) i c,
-    0 < Nat.card (C.stab i c)
-
 def ColumnChain.StabZero {R : Ranks} {ι : Type} [Fintype ι] {hc : ι → HCParam R} (C : ColumnChain R ι hc) : Prop :=
   ∀ c, Subsingleton (C.stab 0 c)
 
 def FactWtZero : Prop :=
   ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc), C.StabZero → ∀ c,
     C.wt 0 c = 1
-
-def FactWtInt : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc) i, i ≤ R.m →
-    ∀ c, ∃ z : ℤ, (C.DGam : ℂ) * C.wt i c = z
-
-def bridge_KD_succ : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc)
-    (j : ℕ) (φ : C.cls j → C.Y j → ℂ), C.KD (j + 1) φ = C.K j φ
-
-def bridge_thl_index : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc)
-    (φ : C.cls 0 → C.Y 0 → ℂ) (i : ℕ),
-    Formalism.ThetaLiftIndependence.chainOpM C.wt C.Kmap (i + 1) φ = C.K i (Formalism.ThetaLiftIndependence.chainOpM C.wt C.Kmap i φ)
-
-def FactSDivSharp : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc)
-    (i : ℕ), i < R.m → ∀ τ, ((C.sDiv i τ - C.sSharp i τ : ℤ) : ℚ) = ((R.t : ℚ) + 1) / 2
-
-def FactEInt : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (_C : ColumnChain R ι hc)
-    (j : Fin R.m) (τ : ι), ((hc τ).e j).den = 1
-
-def FactDuLe : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc)
-    (A : ColumnsAtT R C), A.du ≤ (haveI := A.Mu0_fd; Module.finrank ℂ A.Mu0)
-
-def FactGaussRam : Prop :=
-  ∀ (R : Ranks) (ι : Type) [Fintype ι] (hc : ι → HCParam R) (C : ColumnChain R ι hc)
-    (A : ColumnsAtT R C) (v : A.vT) (x : C.cls 0 → C.Y 0 → ℂ), A.Nm v x = 0 →
-    Formalism.ThetaLiftIndependence.gaussOp (A.psiT v) (A.rhoT v) (Formalism.ThetaLiftIndependence.gaussOpDual (A.psiT v) (A.rhoT v) x) =
-      (Fintype.card (A.Fv v) : ℂ) • x
-
-def bridge_autL_not_column : Prop :=
-  ∀ (K V : Type) [Field K] [NumberField K] [StarRing K] [AddCommGroup V] [Module K V]
-    [Module (NumberField.RingOfIntegers K) V] [IsScalarTower (NumberField.RingOfIntegers K) K V]
-    (h : V →ₗ⋆[K] V →ₗ[K] K) (L : Submodule (NumberField.RingOfIntegers K) V),
-    (LinearEquiv.neg K : V ≃ₗ[K] V) ∈ Formalism.ThetaLiftIndependence.autL h L
 
 end Formalism.BasicNotions

@@ -206,12 +206,6 @@ def hhS {n' r0 r1 : ℕ} (K' : Type) [Field K'] (u : Fin n' → K') :
   ∑ s : Fin n', MvPowerSeries.C (u s) *
     ∑ a : Fin r0, ∑ b : Fin r1, (sSer p K' s a b) ^ p * sSer p K' (posAdd s 1) a b
 
-def InClass {n' r0 r1 : ℕ} {K' : Type} [Field K'] (R' : Subring K')
-    (f hh : MvPowerSeries (Zidx n' r0 r1) K') : Prop :=
-  ∃ g : ℕ → MvPowerSeries (Zidx n' r0 r1) K', (∀ i, IntR R' (g i)) ∧ ∀ n : Zidx n' r0 r1 →₀ ℕ,
-    MvPowerSeries.coeff n f = ∑ i ∈ range (n.degree + 1),
-      (((p : K') ^ i)⁻¹ * MvPowerSeries.coeff n (hh ^ i * g i))
-
 def DworkLemma : Prop :=
   p ≠ 2 → ∀ (n : ℕ) (Ps : MvPowerSeries (Fin n) (K0 p)), MvPowerSeries.constantCoeff Ps = 0 →
     (IntS p (expS p Ps) ↔ ∃ Q : MvPowerSeries (Fin n) (WW p),

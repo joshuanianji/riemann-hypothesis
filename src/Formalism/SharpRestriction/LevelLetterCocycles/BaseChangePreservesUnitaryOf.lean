@@ -4101,14 +4101,4 @@ namespace Formalism.MainNotions.CrystallineLiftingBounds
 
 open Formalism.BasicNotions Formalism.BasicNotions.Loc Formalism.WeaklyAdmissibleFiltrations
 
-theorem admitted_iff_base_admitted (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : admitted D HW F Cm) : Formalism.MainNotions.LiftingTheory.admitted D HW F Cm := h
-
-theorem lifting_theorem_of_admitted (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : admitted D HW F Cm) : Conclusion2 D HW F 23 32 32 :=
-  Formalism.MainNotions.LiftingTheory.lifting_all_parts_of_admitted D HW F Cm (admitted_iff_base_admitted D HW F Cm h)
-
-theorem local_theory_of_admitted (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) (h : admitted D HW F Cm) : aux₃ D HW F 23 32 32 :=
-  ⟨wach_lemma_of_admitted D HW F Cm h, lifting_theorem_of_admitted D HW F Cm h⟩
-
-theorem frobenius_lifting (D : D7) (HW : HWOf D.loc) (F : FonOf D.loc D.locA HW) (Cm : CmpOf D.loc D.locA HW F) : Stmt D HW F Cm 23 32 32 := fun h => local_theory_of_admitted D HW F Cm h
-
 end Formalism.MainNotions.CrystallineLiftingBounds

@@ -394,24 +394,4 @@ theorem existsUnique_lift_of_etale_of_henselian {X S : Scheme.{u}} (f : X ⟶ S)
   · rw [← Spec.map_comp_assoc, e₂]
   · rw [Category.assoc, ← hU.SpecMap_appLE_fromSpec f hV hVU, ← Spec.map_comp_assoc, e₁]
 
-def restrictPoints {X S T₀ T : Scheme.{u}} (f : X ⟶ S) (h : T ⟶ S) (i : T₀ ⟶ T) :
-    {l : T ⟶ X // l ≫ f = h} → {g : T₀ ⟶ X // g ≫ f = i ≫ h} :=
-  fun l ↦ ⟨i ≫ l.1, by rw [Category.assoc, l.2]⟩
-
-theorem bijective_restrictPoints_of_existsUnique {X S T₀ T : Scheme.{u}} (f : X ⟶ S) (h : T ⟶ S)
-    (i : T₀ ⟶ T)
-    (H : ∀ g : T₀ ⟶ X, g ≫ f = i ≫ h → ∃! l : T ⟶ X, i ≫ l = g ∧ l ≫ f = h) :
-    Function.Bijective (restrictPoints f h i) := by
-  rw [Function.bijective_iff_existsUnique]
-  rintro ⟨g, hg⟩
-  obtain ⟨l, ⟨h₁, h₂⟩, h₃⟩ := H g hg
-  exact ⟨⟨l, h₂⟩, Subtype.ext h₁, fun y hy ↦ Subtype.ext (h₃ _ ⟨congr(($hy).1), y.2⟩)⟩
-
-theorem bijective_restrictPoints_of_etale_of_henselian {X S : Scheme.{u}} (f : X ⟶ S) [Etale f]
-    (R : Type u) [CommRing R] [HenselianLocalRing R] (h : Spec (.of R) ⟶ S) :
-    Function.Bijective (restrictPoints f h
-      (Spec.map (CommRingCat.ofHom (IsLocalRing.residue R)))) :=
-  bijective_restrictPoints_of_existsUnique f h _ fun g w ↦
-    existsUnique_lift_of_etale_of_henselian f _ IsLocalRing.residue_surjective g h w
-
 end GlobalTheory

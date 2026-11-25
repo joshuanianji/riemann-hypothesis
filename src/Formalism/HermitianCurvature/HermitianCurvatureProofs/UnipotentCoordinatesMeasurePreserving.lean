@@ -6558,14 +6558,8 @@ namespace Formalism.FourierDecayAlt.P
 
 theorem nilpotent_measure_is_haar : Formalism.FourierDecayAlt.D.MuNHaar := fun k r => Dx2.MN.haar (k := k) r
 
-theorem unipotent_dual_lattice_covolume : Formalism.FourierDecayAlt.D.NhatCovol := Dx2.NH.nhat
-
-theorem exists_level_tower : Formalism.FourierDecayAlt.D.TowerExists := Dx2.Tower.towerExists
-
 theorem exists_isotropic_frame : Formalism.FourierDecayAlt.D.DFrameExists := Dx2.dFrameExists
 
 theorem radial_measure_is_haar : Formalism.FourierDecayAlt.D.MuRHaar := Dx2.Rad.muRHaar
-
-theorem slice_measure_identity : Formalism.FourierDecayAlt.D.SliceOm := Dx2.SL.sliceOm
 
 end Formalism.FourierDecayAlt.P

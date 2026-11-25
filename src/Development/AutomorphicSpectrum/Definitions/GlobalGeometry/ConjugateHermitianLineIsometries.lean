@@ -15,22 +15,6 @@ variable {K : Type} [Fintype K] {ι : K → Type} [∀ k, Fintype (ι k)]
 
 def evC (z : (Σ k, ι k) → ℂ) (f : MRing ι) : ℂ := eval z (map (Int.castRingHom ℂ) f)
 
-def conjPt (z : (Σ k, ι k) → ℂ) : (Σ k, ι k) → ℂ := fun p => starRingEnd ℂ (z p)
-
-def conjLine (A : HermLine ι) : HermLine ι where
-  a := A.a
-  h z := A.h (conjPt z)
-  pos z hz := A.pos _ fun k => by
-    obtain ⟨i, hi⟩ := hz k
-    exact ⟨i, by simpa [conjPt] using hi⟩
-  smul c z hc := by
-    have h := A.smul (fun k => starRingEnd ℂ (c k)) (conjPt z) (fun k => by simpa using hc k)
-    have e : conjPt (fun p => c p.1 * z p) = fun p => starRingEnd ℂ (c p.1) * conjPt z p := by
-      funext p
-      simp [conjPt]
-    rw [e, h]
-    simp
-
 def UnitRatio (P : Ideal (MRing ι)) (f g : MRing ι) : Prop :=
   f ∉ P ∧ g ∉ P ∧ ∀ W : Ideal (MRing ι), W.IsPrime → P ≤ W → IsRelevant W →
     ∃ u v : MRing ι, u ∉ W ∧ v ∉ W ∧ u * f - v * g ∈ P

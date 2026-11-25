@@ -139,18 +139,6 @@ def AdmissibleClosure : Prop :=
       (∀ g ∈ UJset ε, ∀ w ∈ V.topologicalClosure, σ g w ∈ V.topologicalClosure) ∧
         ∀ w ∈ V.topologicalClosure, IsKFin ε σ w → w ∈ V
 
-def InfinitesimalEquivalence : Prop :=
-  ∀ (n : ℕ) (ε : Fin n → Bool)
-    (H₁ : Type) [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁] [Nontrivial H₁]
-    (H₂ : Type) [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂] [Nontrivial H₂]
-    (σ₁ : Matrix (Fin n) (Fin n) ℂ → (H₁ →L[ℂ] H₁)) (σ₂ : Matrix (Fin n) (Fin n) ℂ → (H₂ →L[ℂ] H₂)),
-    IsURepOn (UJset ε) σ₁ → IsIrredOn (UJset ε) σ₁ → IsURepOn (UJset ε) σ₂ → IsIrredOn (UJset ε) σ₂ →
-    ∀ e : kFinVec ε σ₁ ≃ₗ[ℂ] kFinVec ε σ₂, IsGKHom ε σ₁ σ₂ e.toLinearMap →
-      ∃ (U : H₁ ≃ₗᵢ[ℂ] H₂) (c : ℝ), 0 < c ∧ (∀ g ∈ UJset ε, ∀ x, U (σ₁ g x) = σ₂ g (U x)) ∧
-        ∀ v : kFinVec ε σ₁, U v = (c : ℂ) • (e v : H₂)
-
-def GKGlobalisation : Prop := AdmissibleClosure ∧ InfinitesimalEquivalence
-
 section Consequences
 
 variable {n : ℕ} {ε : Fin n → Bool}

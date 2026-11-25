@@ -2778,14 +2778,6 @@ theorem fa_sub_mul {n : ℕ} (A r : Matrix (Fin n) (Fin n) K) :
   ext i j
   simp [Matrix.mul_apply]
 
-theorem fa_sUp {m : ℕ} (u : Matrix (Fin (m + 1)) (Fin (m + 1)) K) :
-    sUp u = ∑ i : Fin m, u i.castSucc i.succ := by
-  unfold sUp
-  rw [Fin.sum_univ_castSucc]
-  simp only [Fin.val_last, lt_self_iff_false, dite_false, add_zero, Fin.val_castSucc,
-    add_lt_add_iff_right, Fin.is_lt, dite_true]
-  rfl
-
 theorem fa_smul_EE {n : ℕ} (z : K) (N : Pr n → K) :
     z • (1 + EE N) = HH 0 (fun _ => z) (z • N) := by
   ext i j

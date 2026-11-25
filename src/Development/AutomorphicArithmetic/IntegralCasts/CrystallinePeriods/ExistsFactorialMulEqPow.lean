@@ -280,11 +280,6 @@ theorem map_map (f : R →+* S) (g : S →+* U) (x : BcrisPlus p R) :
   RingHom.congr_fun (hom_ext (f := (map p g).comp (map p f)) (g := map p (g.comp f))
     (by simp [Acris.map_map])) x
 
-theorem map_frob (f : R →+* S) (x : BcrisPlus p R) :
-    map p f (frob p R x) = frob p S (map p f x) :=
-  RingHom.congr_fun (hom_ext (f := (map p f).comp (frob p R)) (g := (frob p S).comp (map p f))
-    (by simp [Acris.map_frob])) x
-
 end BcrisPlus
 
 namespace Bcris
@@ -350,11 +345,6 @@ theorem map_map (f : R →+* S) (hf : Function.Injective f) (g : S →+* U)
 
 theorem map_congr {f g : R →+* S} (hf : Function.Injective f) (hg : Function.Injective g)
     (h : f = g) : map p f hf = map p g hg := by subst h; rfl
-
-theorem map_frob (f : R →+* S) (hf : Function.Injective f) (x : Bcris p R) :
-    map p f hf (frob p R x) = frob p S (map p f hf x) :=
-  RingHom.congr_fun (hom_ext (f := (map p f hf).comp (frob p R))
-    (g := (frob p S).comp (map p f hf)) (by simp [BcrisPlus.map_frob])) x
 
 @[simp] theorem map_logTeich (f : R →+* S) (hf : Function.Injective f) (η : tateModule p R) :
     map p f hf (logTeich η) = logTeich (tateModule.map p f η) := by

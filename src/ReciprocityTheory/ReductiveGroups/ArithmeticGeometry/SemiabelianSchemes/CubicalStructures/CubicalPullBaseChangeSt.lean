@@ -157,12 +157,6 @@ def CubeMap.ofHom (f : G'' ⟶ G₀) [IsMonHom f] : CubeMap G'' G₀ where
 
 end OfHom
 
-def RigPullIsGenSt : Prop :=
-  ∀ {S S' : Scheme.{u}} {G' : Over S'} {G : Over S} [GrpObj G'] [IsCommMonObj G'] [GrpObj G]
-    [IsCommMonObj G] (F : G'.left ⟶ G.left) (e : (𝟙_ (Over S')).left ⟶ (𝟙_ (Over S)).left)
-    (he : eSec G' ≫ F = e ≫ eSec G) (L : LB G.left) (r : LB.Gen (L.pull (eSec G))),
-    L.IsLB → r.IsGen → (rigPullOf F e he L r).IsGen
-
 
 end Group
 

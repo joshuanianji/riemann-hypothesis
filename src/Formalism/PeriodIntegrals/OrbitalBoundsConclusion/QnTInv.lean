@@ -71,22 +71,6 @@ lemma exp_mem_glev (i : Fin (r + 1)) (X : Mx k r) (hX : Xᴴ = -(Hpk k r * X * H
   · rw [Matrix.smul_apply, (hc a ha x).1, smul_zero]
   · rw [Matrix.smul_apply, (hc a ha x).2, smul_zero]
 
-lemma unit_col (i : Fin (r + 1)) (p q : Fin (mdim k r i)) (c : Fin (2 * r + k + 1))
-    (hcq : c ≠ posL k r i q) (hHc : Hpk k r (posL k r i p) c = 0) (x : Fin (2 * r + k + 1)) :
-    (Matrix.single (posL k r i p) (posL k r i q) (1 : ℂ)) x c = 0 ∧
-    (Hpk k r * (Matrix.single (posL k r i p) (posL k r i q) (1 : ℂ))ᴴ * Hpk k r) x c = 0 := by
-  constructor
-  · simp [Ne.symm hcq]
-  · rw [Matrix.mul_apply]
-    refine Finset.sum_eq_zero fun l _ => ?_
-    by_cases hl : l = posL k r i p
-    · rw [hl, hHc, mul_zero]
-    · have h0 : (Hpk k r * (Matrix.single (posL k r i p) (posL k r i q) (1 : ℂ))ᴴ) x l = 0 := by
-        rw [Matrix.mul_apply]
-        refine Finset.sum_eq_zero fun m _ => ?_
-        simp [Matrix.conjTranspose_apply, Ne.symm hl]
-      rw [h0, zero_mul]
-
 lemma hpart_cols (i : Fin (r + 1)) (p q : Fin (mdim k r i)) :
     (∀ a : Fin r, a.val < i.val → ∀ x,
       hpart1 (Hpk k r) (Matrix.single (posL k r i p) (posL k r i q) 1) x (eI k r a) = 0 ∧

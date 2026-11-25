@@ -28,12 +28,6 @@ theorem swp_val (k r : ℕ) (p : Fin (2 * r + k + 1)) :
   unfold swp
   split_ifs <;> rfl
 
-theorem swp_swp (k r : ℕ) (p : Fin (2 * r + k + 1)) : swp k r (swp k r p) = p := by
-  have hp := p.isLt
-  apply Fin.ext
-  rw [swp_val, swp_val]
-  split_ifs <;> omega
-
 noncomputable def cf (k r : ℕ) (c : Fin r → ℂ) (p : Fin (2 * r + k + 1)) : ℂ :=
   if p.val < r then (star (cN r c p.val))⁻¹
   else if p.val ≤ r + k then 1 else cN r c (2 * r + k - p.val)
@@ -138,12 +132,6 @@ theorem Wm_range_apply (k r : ℕ) (c : Fin r → ℂ) (p x : Fin (2 * r + k + 1
   have hx := x.isLt
   simp only [Wm, Finset.mem_range, cf, Fin.ext_iff, swp_val]
   split_ifs <;> first | rfl | (exfalso; omega) | (congr 1 <;> omega) | (congr 1 <;> congr 1 <;> congr 1 <;> omega)
-
-theorem Wm_mul_apply (k r : ℕ) (c : Fin r → ℂ) (M : Mx k r) (p q : Fin (2 * r + k + 1)) :
-    (Wm k r (Finset.range r) c * M) p q = cf k r c p * M (swp k r p) q := by
-  rw [Matrix.mul_apply]
-  simp_rw [Wm_range_apply]
-  simp [ite_mul]
 
 def μE {k : ℕ} (μ : Matrix (Fin (k + 1)) (Fin (k + 1)) ℂ) (i j : ℕ) : ℂ :=
   if h : i < k + 1 ∧ j < k + 1 then μ ⟨i, h.1⟩ ⟨j, h.2⟩ else 0

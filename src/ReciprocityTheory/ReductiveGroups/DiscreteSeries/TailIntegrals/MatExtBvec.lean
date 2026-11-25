@@ -30,16 +30,6 @@ theorem hpk_conjT (k r : ℕ) : (Hpk k r)ᴴ = Hpk k r := by
   rw [conjTranspose_apply, hpk_symm, hpk_apply]
   split_ifs <;> simp
 
-theorem sg_lt {k r i : ℕ} (h : i < 2 * r + k + 1) : sg k r i < 2 * r + k + 1 := by
-  unfold sg; split_ifs <;> omega
-
-theorem sg_rk {k r i : ℕ} (h : i < 2 * r + k + 1) : sg k r i = r + k ↔ i = r + k := by
-  unfold sg; split_ifs <;> omega
-
-theorem hpk_apply' (k r i : ℕ) (hi : i < 2 * r + k + 1) (j : Fin (2 * r + k + 1)) :
-    Hpk k r ⟨i, hi⟩ j = if j.val = sg k r i then (if i = r + k then -1 else 1) else 0 :=
-  hpk_apply k r ⟨i, hi⟩ j
-
 theorem hpk_mul (k r : ℕ) : Hpk k r * Hpk k r = 1 := by
   apply ReciprocityTheory.ChartRestriction.DS.Lap.S0.DecA.hpk_mul
 
