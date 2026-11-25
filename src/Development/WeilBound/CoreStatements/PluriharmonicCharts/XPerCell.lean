@@ -64,7 +64,7 @@ theorem inv_an {E : Type} [NormedAddCommGroup E] [NormedSpace ℂ E] [FiniteDime
     (L : E →L[ℂ] E) (hF : AnalyticAt ℂ F a) (hL : HasFDerivAt F L a) (hi : Function.Injective L) :
     ∃ ψ : E → E, AnalyticAt ℂ ψ (F a) ∧ ψ (F a) = a ∧ (∀ᶠ y in 𝓝 (F a), F (ψ y) = y) ∧
       ∀ w, L (fderiv ℂ ψ (F a) w) = w := by
-  have : CompleteSpace E := FiniteDimensional.complete ℂ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℂ E
   let L' : E ≃L[ℂ] E := (LinearEquiv.ofInjectiveEndo (L : E →ₗ[ℂ] E) hi).toContinuousLinearEquiv
   have hL' : HasFDerivAt F (L' : E →L[ℂ] E) a := by
     have : (L' : E →L[ℂ] E) = L := by ext w; rfl
@@ -149,7 +149,7 @@ noncomputable def up : (Fin N → Fin N → ℂ) →L[ℂ] (Fin N → Fin N → 
 theorem up_apply (M : Fin N → Fin N → ℂ) (a b : Fin N) : up M a b = if b < a then 0 else M a b := rfl
 
 theorem up_tri (M : Fin N → Fin N → ℂ) : (Matrix.of (up M)).BlockTriangular id := fun a b h => by
-  rw [Matrix.of_apply, up_apply, if_pos (show b < a from h)]
+  rw [Matrix.of_apply, up_apply, ite_eq_left (show b < a from h)]
 
 theorem key (b₀ U : Matrix (Fin N) (Fin N) ℂ) (hb : b₀.BlockTriangular id) (hd : IsUnit b₀.det)
     (hU : U.BlockTriangular id) (z : Pairs N → ℂ) :
@@ -236,7 +236,7 @@ theorem inj_LL {b₀ : Matrix (Fin N) (Fin N) ℂ} (hb : b₀.BlockTriangular id
   by_cases hab : b < a
   · exact congrFun h0 ⟨(b, a), hab⟩
   · have := congrFun (congrFun h a) b
-    rw [Matrix.of_apply, Matrix.of_apply, up_apply, if_neg hab] at this
+    rw [Matrix.of_apply, Matrix.of_apply, up_apply, ite_eq_right hab] at this
     exact this.symm
 
 end PositivityTheory.Xgp.per_cell
