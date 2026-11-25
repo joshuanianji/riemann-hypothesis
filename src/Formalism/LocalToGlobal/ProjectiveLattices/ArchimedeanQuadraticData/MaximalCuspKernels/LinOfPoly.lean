@@ -73,9 +73,4 @@ open NumberField IsDedekindDomain ReciprocityTheory.ChartRestriction.G.Geo.Tor F
 
 variable {D : D7} {T : Core D}
 
-theorem hcomp (j : ℕ) (K₁ : Type) [Field K₁] [Algebra T.Q.c.F K₁] (a : T.Q.c.F) :
-    algebraMap T.Q.c.F (ArcS (T.Q.Dw j) K₁) a =
-      algebraMap (MvPolynomial (ArcLt (T.Q.Dw j)) (LaurentSeries K₁)) (ArcS (T.Q.Dw j) K₁)
-        (algebraMap T.Q.c.F (MvPolynomial (ArcLt (T.Q.Dw j)) (LaurentSeries K₁)) a) := rfl
-
 end Formalism.L2.Pj.QAt

@@ -128,39 +128,6 @@ noncomputable section
 namespace PositivityTheory.HtPt.Ge.Fargues
 open GlobalTheory.CompanionTheory
 
-theorem lie_free_finite (S : Scheme.{0}) (G : Over S) [GrpObj G] (hG : Smooth G.hom) (R : Type) [CommRing R]
-    [IsLocalRing R] (x : Spec (CommRingCat.of R) ⟶ S) (E : Type) [AddCommGroup E] [Module R E]
-    (M : LieModel G x E) : Module.Free R E ∧ Module.Finite R E := by
-  obtain ⟨n, ⟨b⟩⟩ := _root_.GlobalTheory.CompanionTheory.Ar.LieFreeSmooth.lieModel_free_of_smooth S G hG R x E M
-  exact ⟨Module.Free.of_basis b, Module.Finite.of_basis b⟩
-
-def ordTower (p : ℕ) [Fact p.Prime] (C : Type) [Field C] [IsAlgClosed C] [CharZero C] (v : Valuation C NNReal)
-    (O : Type) [CommRing O] [IsDomain O] [Algebra O C] (hv : v.Integers O) (hp : v (p : C) < 1)
-    (hO : IsAdicComplete (Ideal.span {(p : O)}) O) (S : Scheme.{0}) [IsLocallyNoetherian S] (G : Over S) [GrpObj G]
-    [IsCommMonObj G] (hG : IsSemiAbelian G) (y : Spec (CommRingCat.of O) ⟶ S) (La : Type) [AddCommGroup La]
-    [Module.Free ℤ La] [Module.Finite ℤ La] (X : TorsTower p G y La) (L : Type) [AddCommGroup L] [Module O L]
-    (M : LieModel G y L) : OrdTower p O La L :=
-  haveI : IsLocalRing O := (_root_.GlobalTheory.CompanionTheory.Ar.HT.padicComplete_integers_structure p C v O hv hp hO).2.1.toIsLocalRing
-  have h3 := _root_.GlobalTheory.CompanionTheory.Ar.HT.tw_hopf_main p C v O hv hp hO S G hG y La X
-  have h4 := _root_.GlobalTheory.CompanionTheory.Ar.HT.btOrder_restriction p C v O hv hp hO S G hG y La X
-  have h5 := TwDer.der_main p C v O hv hp hO S G hG y La X L M
-  have h6 := (GlobalTheory.T.semiabelian_adic_torsion_four p C v O hv hp hO S G hG y La X L M).1
-  { A := fun n => (X.Γ n).btOrder ⊤
-    hopf := by
-      obtain ⟨U, H, -, -, -, h, -⟩ := h3
-      exact h
-    res_iff := fun n => (h4 n).1
-    ker_res := fun n => (h4 n).2
-    der := X.IsDer M
-    der_ex := fun n => (h5 n).1
-    der_unique := fun n => (h5 n).2.1
-    der_onto := fun n => (h5 n).2.2.1
-    der_add := fun n f g w w' hf hg => ((h5 n).2.2.2.1 f g w w' hf hg).1
-    der_mul := fun n f g w w' hf hg => ((h5 n).2.2.2.1 f g w w' hf hg).2
-    der_const := fun n => (h5 n).2.2.2.2.1
-    der_zero := fun n => (h5 n).2.2.2.2.2
-    der_res := h6 }
-
 theorem pointHT (hF : FarguesHodgeTate) : PointHT :=
   _root_.GlobalTheory.CompanionTheory.Ar.HT.Fargues.pointHT hF
 

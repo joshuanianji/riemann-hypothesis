@@ -544,9 +544,6 @@ abbrev pn (fn : ∀ σ : c.F →+* ℂ, FrPt Xo c (CAt σ) → Ix Dw → ℝ) (�
     (g : Rul Xo c) (y : FrPt Xo c (CAt σ)) : ℝ :=
   GlobalTheory.HeightDefinite.Generic.pn fn σ a n g y
 
-alias evR_of_frMap := GlobalTheory.HeightDefinite.Generic.evR_of_frMap
-alias pn_generic := GlobalTheory.HeightDefinite.Generic.pn_generic
-
 end GlobalTheory.HeightTop.Generic
 
 namespace GlobalTheory.HeightTop.Generic
@@ -554,7 +551,6 @@ namespace GlobalTheory.HeightTop.Generic
 open Formalism.BasicNotions Formalism.MainNotions
 
 alias supPTGe_of_fnPin := GlobalTheory.HeightDefinite.Generic.supPTGe_of_fnPin
-alias exists_frame := GlobalTheory.HeightDefinite.Generic.exists_frame
 
 theorem nrmTieU_of_fnPin (D : D7) (T : Core D) (h : LawsCore T) (j : ℕ) (hj : InR D j)
     (fn : ∀ σ : T.Q.c.F →+* ℂ, FrPt (T.Q.Xo j) T.Q.c (CAt σ) → Ix (T.Q.Dw j) → ℝ)

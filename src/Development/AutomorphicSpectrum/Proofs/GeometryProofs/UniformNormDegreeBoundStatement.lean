@@ -905,7 +905,6 @@ end GlobalTheory.CompanionTheory.Ar.Plug.IndependentCountBound
 
 
 
-alias _root_.GlobalTheory.CompanionTheory.Relay.uniform_norm_height_count := _root_.GlobalTheory.CompanionTheory.Ar.Plug.IndependentCountBound.vol_mul_flagDeg_le_growthOn
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto

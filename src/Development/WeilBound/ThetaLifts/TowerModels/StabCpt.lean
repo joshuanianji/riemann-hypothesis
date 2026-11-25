@@ -84,23 +84,6 @@ theorem ae_smul : ContinuousSMul (AF F) (AE F E) := IsModuleTopology.toContinuou
 
 attribute [local instance] ae_ring ae_t2 ae_smul
 
-theorem evI_eq_zero {a : AF F} : evI F a = 0 ↔ a.1 = 0 := map_eq_zero_iff _ (RingEquiv.injective _)
-
-variable (F) in
-def intF : AddSubgroup (AF F) where
-  carrier := {a | evI F a = 0 ∧ ∀ v, evFin F v a ∈ v.adicCompletionIntegers F}
-  zero_mem' := ⟨evI_eq_zero.2 rfl, fun v => by rw [map_zero]; exact zero_mem _⟩
-  add_mem' := fun {a b} ha hb => ⟨evI_eq_zero.2 (by
-      change a.1 + b.1 = 0
-      rw [evI_eq_zero.1 ha.1, evI_eq_zero.1 hb.1, add_zero]),
-    fun v => by
-      rw [map_add]
-      exact add_mem (ha.2 v) (hb.2 v)⟩
-  neg_mem' := fun {a} ha => ⟨evI_eq_zero.2 (by
-      change -a.1 = 0
-      rw [evI_eq_zero.1 ha.1, neg_zero]),
-    fun v => by rw [map_neg]; exact neg_mem (ha.2 v)⟩
-
 theorem isCompact_latHat (X : Spc F E n) (hX : X.L.FG) : IsCompact (latHat X : Set (Fin n → AE F E)) := by
   apply GlobalTheory.ThK.Dbl.St.isCompact_latHat <;> assumption
 

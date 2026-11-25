@@ -72,18 +72,10 @@ open TensorProduct Formalism.BasicNotions.Rows
 
 section OForm
 
-def OForm {O : Type} [CommRing O] {φ : O →+* ℂ} {W : Type} [AddCommGroup W] [Module ℂ W] (M : OLat O φ W) : Prop :=
-  letI : Algebra O ℂ := φ.toAlgebra
-  letI : Module O W := Module.compHom W φ
-  haveI : IsScalarTower O ℂ W := ⟨fun a b w => mul_smul (φ a) b w⟩
-  Function.Injective ((Submodule.span O (M.gen : Set W)).subtype.liftBaseChange ℂ)
-
 end OForm
 
 section CutRec
 
-
-theorem restRowsFiniteGroupCard_pos (D : Formalism.BasicNotions.D7) : 0 < D.what₂.restRowsFiniteGroupCard := D.what₂.restRowsFiniteGroupCard_pos
 
 end CutRec
 

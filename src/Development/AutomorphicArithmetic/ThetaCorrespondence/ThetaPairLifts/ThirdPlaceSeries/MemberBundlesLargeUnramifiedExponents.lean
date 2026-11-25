@@ -1705,8 +1705,6 @@ theorem member_bundles_large_unramified_exponents_alt : _root_.GlobalTheory.Fc.S
 end GlobalTheory.Fc.StageOneU
 end
 
-alias GlobalTheory.T.large_unramified_exponent_bundles_exist_alt :=
-  GlobalTheory.Fc.StageOneU.member_bundles_large_unramified_exponents_alt
 end
 end -- clump:auto
 end -- clump:auto

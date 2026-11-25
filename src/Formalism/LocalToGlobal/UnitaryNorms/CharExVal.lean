@@ -45,8 +45,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-theorem algValsFin (L : Type) [Field L] [NumberField L] : PI.AlgValsFin.AlgValsFin L :=
-  _root_.PI.AlgValsFin.W.algValsFin_main L
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Formalism.PeriodIntegrals.OrbitalBoundsConclusion.AlgValsFin =====

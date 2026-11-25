@@ -122,12 +122,7 @@ variable [FiniteDimensional E V]
 def IsRegularSemisimple (γ : V ≃ₗ[E] V) : Prop :=
   (γ.toLinearMap).charpoly.Separable
 
-def torusE (γ : V ≃ₗ[E] V) : Subgroup (V ≃ₗ[E] V) :=
-  Subgroup.centralizer {γ}
 
-
-
-def TorusE (γ : V ≃ₗ[E] V) : Type _ := torusE γ
 
 namespace TorusE
 

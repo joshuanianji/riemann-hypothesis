@@ -1330,23 +1330,6 @@ open TensorProduct
 
 namespace GlobalTheory.FinProjComplete
 
-theorem mem_span_pow_smul_top_iff (p : ℕ) {R M : Type} [CommRing R] [AddCommGroup M] [Module R M]
-    (n : ℕ) (x : M) :
-    x ∈ (Ideal.span {(p : R)}) ^ n • (⊤ : Submodule R M) ↔ ∃ m : M, x = (p ^ n : ℕ) • m := by
-  rw [Ideal.span_singleton_pow, Submodule.ideal_span_singleton_smul,
-    Submodule.mem_smul_pointwise_iff_exists]
-  constructor
-  · rintro ⟨m, -, rfl⟩
-    exact ⟨m, by rw [← Nat.cast_pow, Nat.cast_smul_eq_nsmul]⟩
-  · rintro ⟨m, rfl⟩
-    exact ⟨m, Submodule.mem_top, by rw [← Nat.cast_pow, Nat.cast_smul_eq_nsmul]⟩
-
-theorem smodEq_iff (p : ℕ) {R M : Type} [CommRing R] [AddCommGroup M] [Module R M]
-    (n : ℕ) (x y : M) :
-    x ≡ y [SMOD ((Ideal.span {(p : R)}) ^ n • (⊤ : Submodule R M))] ↔
-      ∃ m : M, x - y = (p ^ n : ℕ) • m := by
-  rw [SModEq.sub_mem, mem_span_pow_smul_top_iff]
-
 end GlobalTheory.FinProjComplete
 
 open GlobalTheory.FinProjComplete in

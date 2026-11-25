@@ -60,10 +60,6 @@ theorem p_cancel {b c : F.B} (h : (p : F.B) * b = p * c) : b = c := by
   simp only [map_mul, map_natCast] at h1
   exact F.frame.inj (F.frame.unit_p.mul_left_cancel h1)
 
-theorem frob_teich (x : PreTilt O p) :
-    WittVector.frobenius (WittVector.teichmuller p x) = WittVector.teichmuller p x ^ p := by
-  rw [WittVector.frobenius_eq_map_frobenius, WittVector.map_teichmuller, frobenius_def, map_pow]
-
 theorem sigma_tau : F.σ F.τ = p * F.τ := by
   apply GlobalTheory.WindowIso.σ_τ
 

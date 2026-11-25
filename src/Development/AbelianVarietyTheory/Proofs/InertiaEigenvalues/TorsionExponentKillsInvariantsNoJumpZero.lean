@@ -1132,10 +1132,6 @@ variable {r : ℕ} {U : GQ l → Matrix (Fin r) (Fin r) (PadicComplex l)}
 
 open scoped Matrix in
 variable {l : ℕ} [Fact l.Prime] in
-private alias continuous_algebraMap_padicComplex_lemma_7 := _root_.GlobalTheory.Cyc.FrameTorsion.continuous_algMap
-
-open scoped Matrix in
-variable {l : ℕ} [Fact l.Prime] in
 variable (act : _root_.Formalism.BasicNotions.Loc.GQ l →* ℂ_[l] ≃+* ℂ_[l]) (χ : _root_.Formalism.BasicNotions.Loc.GQ l →* ℚ_[l]ˣ) (i : ℤ) {r : ℕ}
   (U : _root_.Formalism.BasicNotions.Loc.GQ l → Matrix (Fin r) (Fin r) ℂ_[l]) in
 private theorem continuousOn_twistedAction_lemma (hact : _root_.GlobalTheory.Cyc.IsActC act)

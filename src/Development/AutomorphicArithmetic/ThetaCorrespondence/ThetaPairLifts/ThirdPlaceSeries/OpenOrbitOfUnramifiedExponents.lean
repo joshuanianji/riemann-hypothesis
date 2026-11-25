@@ -614,8 +614,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-alias GlobalTheory.T.local_level_character_pin_of_witness :=
-  GlobalTheory.Mem.Top.Bl.locPin_level_character_of_bWit
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicArithmetic.ThetaCorrespondence.ThetaPairLifts.ThirdPlaceSeries.RowLocPinTwArgsStatement =====

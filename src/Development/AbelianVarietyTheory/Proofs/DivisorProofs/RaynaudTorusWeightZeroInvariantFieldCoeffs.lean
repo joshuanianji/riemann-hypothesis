@@ -79,7 +79,6 @@ section Group
 variable {R : Type} [CommRing R] {G : Over (Sp R)} [GrpObj G] [IsCommMonObj G] {n : ℕ}
 
 alias exists_isLieBasis := _root_.GlobalTheory.Heat.TangentTranslation.exists_isLieBasis
-alias top_le_of_fst := _root_.GlobalTheory.Heat.TangentTranslation.top_le_of_fst
 alias valR_translate := _root_.GlobalTheory.Heat.TangentTranslation.valR_translate
 
 variable {B : Type} [CommRing B] [Algebra R B]

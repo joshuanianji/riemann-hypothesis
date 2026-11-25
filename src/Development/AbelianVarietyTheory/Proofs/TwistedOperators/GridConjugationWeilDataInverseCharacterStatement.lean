@@ -64,7 +64,6 @@ open GlobalTheory.IndefiniteRowSideFullHecke.ConjugateAdjointDagger GlobalTheory
 variable {D : D7}
 
 alias cjOm_apply := _root_.GlobalTheory.ConjDict.cjOm_apply
-alias negGA_mem_GQ := _root_.GlobalTheory.ConjDict.negGA_mem_GQ
 alias weil_cjOm := _root_.GlobalTheory.ConjDict.weil_cjOm
 alias vac_star := _root_.GlobalTheory.ConjDict.vac_star
 

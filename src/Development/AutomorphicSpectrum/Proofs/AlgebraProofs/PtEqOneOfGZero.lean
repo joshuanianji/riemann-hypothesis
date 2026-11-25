@@ -559,7 +559,6 @@ open ReciprocityTheory.ChartRestriction.G.Chart (sp spMap)
 attribute [local instance] Over.cartesianMonoidalCategory
 open GlobalTheory.CompanionTheory.Ar.GR
 
-alias _root_.GlobalTheory.CompanionTheory.Relay.dual_tower_hodge_tate_datum := _root_.PositivityTheory.HtPt.Rf.htd_tie
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AutomorphicSpectrum.Proofs.AlgebraProofs.DualTowerHodgeTateDatum =====

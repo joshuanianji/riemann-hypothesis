@@ -129,20 +129,6 @@ theorem isVBOn_of_eqOn {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommR
   obtain ⟨U, hU, b, hb, hf⟩ := h p trivial
   exact ⟨U, hU, b, hb, fun q hq hqU => ⟨(hf q trivial hqU).1, (he q hq).trans (hf q trivial hqU).2⟩⟩
 
-theorem genMap_germ {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X} (p : Cpt ξ)
-    {U : X.Opens} (hpU : p.1 ∈ U) (heU : genPt ξ ∈ U) (s : Γ(X, U)) :
-    genMap ξ p ((X.presheaf.germ U p.1 hpU).hom s) =
-      (Scheme.stalkClosedPointTo ξ).hom ((X.presheaf.germ U (genPt ξ) heU).hom s) := by
-  have e : (X.presheaf.stalkSpecializes p.2).hom ((X.presheaf.germ U p.1 hpU).hom s) =
-      (X.presheaf.germ U (genPt ξ) heU).hom s :=
-    ConcreteCategory.congr_hom (X.presheaf.germ_stalkSpecializes hpU p.2) s
-  exact congrArg (fun t : X.presheaf.stalk (genPt ξ) => (Scheme.stalkClosedPointTo ξ).hom t) e
-
-theorem exists_eq_div_genMap {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X}
-    (hξ : IsCptGen ξ) (p : Cpt ξ) (a : Ω) :
-    ∃ u v : X.presheaf.stalk p.1, genMap ξ p v ≠ 0 ∧ a = genMap ξ p u / genMap ξ p v := by
-  apply _root_.GlobalTheory.CompanionTheory.Ar.XR.exists_eq_div_genMap <;> assumption
-
 theorem normalCpt_of_isCptGen {X : Scheme.{0}} {Ω : Type} [Field Ω] {ξ : Spec (CommRingCat.of Ω) ⟶ X}
     (hξ : IsCptGen ξ)
     (hX : ∀ x : X, IsDomain (X.presheaf.stalk x) ∧ IsIntegrallyClosed (X.presheaf.stalk x)) : Flat.NormalCpt ξ := by

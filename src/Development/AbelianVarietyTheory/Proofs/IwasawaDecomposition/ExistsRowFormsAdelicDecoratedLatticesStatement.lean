@@ -490,7 +490,6 @@ noncomputable section
 namespace GlobalTheory.Mem.R3.RowHk
 
 alias isDC_map := _root_.GlobalTheory.Mem.R3.SplitDoubleCoset.isDC_map
-alias rep_mem_dc := _root_.GlobalTheory.Mem.R3.SplitDoubleCoset.rep_mem_dc
 alias isDC_of_reps := _root_.GlobalTheory.Mem.R3.SplitDoubleCoset.isDC_of_reps
 alias reps_off := _root_.GlobalTheory.Mem.R3.SplitDoubleCoset.reps_off
 alias reps_bij := _root_.GlobalTheory.Mem.R3.SplitDoubleCoset.reps_bij

@@ -116,7 +116,6 @@ theorem etale_tensor_acyclic_cone_of_flat : LateralTheory.EtaleFoundations.tqis.
   apply LateralTheory.EtaleFoundations.tqis.acyc_of <;> first | exact _root_.LateralTheory.EtaleFoundations.acyc.acycIff_of | exact _root_.LateralTheory.EtaleFoundations.acyc.column_of | exact etale_tensor_acyclic_of_staircase_lifting
 theorem etale_tensor_quasiIso_of_acyclic_cone : LateralTheory.EtaleFoundations.EtaleTensorPairQuasiIsoOfFlatQuasiIso := by
   apply LateralTheory.EtaleFoundations.etale_tensor_preserves_quasiIso_of_acyclic_and_cone <;> first | exact etale_tensor_acyclic_cone_of_flat | exact _root_.LateralTheory.EtaleFoundations.tqis.cone_of
-alias intersectionNumber_baseChange := _root_.LateralTheory.Fin.EtaleTensorPairQuasiIsoOfFlatQuasiIso.etale_tensor_quasiIso_of_acyclic_cone
 end LateralTheory.Fin.EtaleTensorPairQuasiIsoOfFlatQuasiIso
 end -- clump:auto
 end -- clump:auto

@@ -437,10 +437,6 @@ open NumberField IsDedekindDomain Formalism Formalism.ConjugateSelfDual Reciproc
 open scoped Formalism.Per NNReal
 open UpperTheory.Gal.ClosedPhiFromClosedTrace
 
-private theorem map_smul_ringHom {S T : Type} [CommRing S] [CommRing T] (f : S →+* T) {d : ℕ} (c : S)
-    (M : Matrix (Fin d) (Fin d) S) : (c • M).map f = f c • M.map f := by
-  ext i j; simp
-
 private theorem dvd_mul_entries_left {T : Type} [CommRing T] {a b e : ℕ} (c : T) (A : Matrix (Fin a) (Fin b) T)
     (B : Matrix (Fin b) (Fin e) T) (h : ∀ i j, c ∣ B i j) (i : Fin a) (j : Fin e) : c ∣ (A * B) i j := by
   rw [Matrix.mul_apply]

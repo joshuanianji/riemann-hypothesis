@@ -103,14 +103,6 @@ theorem const (G : AddSubgroup V) (hG : ∀ (a : Ω), ∀ v ∈ G, a • v ∈ G
     IsLatFamily o x fun _ => G :=
   ⟨fun _ _ a _ v hv => hG a v hv, fun _ _ _ _ v hv => ⟨0, by simpa using hv⟩⟩
 
-theorem top : IsLatFamily o x fun _ => (⊤ : AddSubgroup V) :=
-  const o _ fun _ _ _ => AddSubgroup.mem_top _
-
-theorem bot : IsLatFamily o x fun _ => (⊥ : AddSubgroup V) :=
-  const o _ fun a v hv => by
-    rw [AddSubgroup.mem_bot] at hv ⊢
-    rw [hv, smul_zero]
-
 theorem sub (U : Submodule Ω V) : IsLatFamily o x fun _ => U.toAddSubgroup :=
   const o _ fun a _ hv => U.smul_mem a hv
 

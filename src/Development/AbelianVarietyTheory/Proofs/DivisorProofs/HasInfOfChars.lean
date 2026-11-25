@@ -65,8 +65,6 @@ namespace GlobalTheory.Mem.Chr.TieModel
 
 open Formalism.BasicNotions Formalism.FrobeniusOrbits
 
-alias emb_mul_indep := _root_.GlobalTheory.HalfIntChars.emb_mul_indep
-alias unit_sq := _root_.GlobalTheory.HalfIntChars.unit_sq
 alias hasInf_unique := _root_.GlobalTheory.HalfIntChars.hasInf_unique
 
 theorem inf_eq_one_of_order {L : Type} [Field L] [NumberField L] [_root_.NumberField.IsTotallyComplex L] {χ : HChar L} {n : ℕ} (hn : 0 < n)

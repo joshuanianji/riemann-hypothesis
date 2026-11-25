@@ -728,11 +728,6 @@ alias red_nm := _root_.GlobalTheory.CompanionTheory.RedNat.red_nm
 
 alias red_tr := _root_.GlobalTheory.CompanionTheory.RedTrans.red_trans
 
-theorem nmHM_redM : ∀ {O A A' : Type} [CommRing O] [CommRing A] [CommRing A'] [Algebra O A] [Algebra O A'] {I : Ideal A} {I' : Ideal A'}
-    {γ : DividedPowers I} {γ' : DividedPowers I'} {X X' : Scheme.{0}} {q : X ⟶ Spec (CommRingCat.of O)} {q' : X' ⟶ Spec (CommRingCat.of O)}
-    {σ : A →+* A'} (m : NMor γ q (κA O I) γ' q' (κA O I') σ) (l s : ℕ) (r : Option ℤ) (n j : ℕ) (z : HO (TS γ q l s {⊤}) j),
-    nmHM m l s r n j (redM (TS γ q l s {⊤}) r ((l : A) ^ n) j z) = redM (TS γ' q' l s {⊤}) r ((l : A') ^ n) j (nmHO m l s j z) := @GlobalTheory.CompanionTheory.RedPull.nmHM_redM
-
 end CrystallineSemistableComparison.Pb
 end -- clump:auto
 end -- clump:auto

@@ -191,8 +191,6 @@ section -- clump:auto
 
 namespace GlobalTheory.T
 
-alias divisionLocalData_preserved_divisionLatticeChange := GlobalTheory.Mem.Top.Bl.WitTr.divT_setDiv
-
 end GlobalTheory.T
 end -- clump:auto
 end -- clump:auto
@@ -378,8 +376,6 @@ end -- clump:auto
 section -- clump:auto
 @[expose] public section
 
-alias GlobalTheory.T.thetaAutomorphicWeilData_preserved_divisionLatticeChange :=
-  GlobalTheory.Mem.Top.Bl.ThTTr.thT_setDiv
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.IwasawaDecomposition.ThetaAutomorphicWeilDataPreservedDivisionLatticeStatement =====

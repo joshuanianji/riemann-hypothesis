@@ -640,10 +640,6 @@ theorem exists_approx_family {W : Type} [AddCommGroup W] [Module (𝓞 E) W] (S 
   rw [Finset.mem_singleton]
   exact (Finset.ne_of_mem_erase hQ).symm
 
-theorem full_of_span {n : ℕ} (N : Submodule (𝓞 E) (Sp E n)) (hN : Submodule.span E (N : Set (Sp E n)) = ⊤) : Full N := by
-  first
-  | (apply _root_.GlobalTheory.FullLatticeOfSpan.full_of_span_eq_top <;> assumption)
-
 theorem full_stdLat (n : ℕ) : Full (stdLat E n) := by
   refine _root_.GlobalTheory.FullLatticeOfSpan.full_of_span_eq_top _ (top_le_iff.1 fun x _ => ?_)
   rw [pi_eq_sum_univ x]
