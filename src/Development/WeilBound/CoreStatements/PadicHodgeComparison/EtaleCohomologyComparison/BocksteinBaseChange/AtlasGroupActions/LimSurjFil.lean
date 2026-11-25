@@ -52,11 +52,6 @@ namespace GlueBL
 
 variable {R : Type} [CommRing R]
 
-theorem lim_sq {A B C D : Sys.{1} R} {σ : R →+* R} (φ : Sys.Hom A B (RingHom.id R)) (ψ : Sys.Hom C D (RingHom.id R))
-    (g : Sys.Hom A C σ) (g' : Sys.Hom B D σ) (h : ∀ n x, ψ.f n (g.f n x) = g'.f n (φ.f n x)) (x : A.lim) :
-    ψ.lim (g.lim x) = g'.lim (φ.lim x) :=
-  Subtype.ext (funext fun n => h n (x.1 n))
-
 variable {Γ Γ' : Type} {S S' : ℕ → Sys.{1} R} {σ : Γ → R →+* R} {σ' : Γ' → R →+* R}
   {act : ∀ j g, Sys.Hom (S j) (S j) (σ g)} {act' : ∀ j g, Sys.Hom (S' j) (S' j) (σ' g)}
   {one : ∀ n, (S 0).M n} {one' : ∀ n, (S' 0).M n}
@@ -68,11 +63,6 @@ theorem lim_cup (φ : ∀ j, Sys.Hom (S j) (S' j) (RingHom.id R))
     (hz : (limAlg S act one cup).cup x y z) :
     (limAlg S' act' one' cup').cup ((φ i).lim x) ((φ j).lim y) ((φ (i + j)).lim z) := fun n =>
   (congrArg ((φ (i + j)).f n) (hz n)).trans (hc n i j _ _)
-
-theorem lim_one (φ : ∀ j, Sys.Hom (S j) (S' j) (RingHom.id R)) (ho : ∀ n, (φ 0).f n (one n) = one' n)
-    (x : (limAlg S act one cup).N 0) (hx : (limAlg S act one cup).one x) :
-    (limAlg S' act' one' cup').one ((φ 0).lim x) := fun n =>
-  (congrArg ((φ 0).f n) (hx n)).trans (ho n)
 
 variable {A B : Sys.{1} R}
 

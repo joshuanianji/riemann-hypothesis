@@ -62,12 +62,6 @@ section iter
 variable {P : M.Par} {Wp Wq : Type} [NormedAddCommGroup Wp] [InnerProductSpace ℂ Wp] [NormedAddCommGroup Wq]
   [InnerProductSpace ℂ Wq] [FiniteDimensional ℂ Wp] [FiniteDimensional ℂ Wq]
 
-theorem normC_one (w : List C.Letter) : TBB.normC (fun _ => 1) w = 1 := by
-  unfold TBB.normC
-  induction w with
-  | nil => rfl
-  | cons a w ih => simp
-
 end iter
 
 section iter2

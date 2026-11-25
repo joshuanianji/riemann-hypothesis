@@ -72,10 +72,6 @@ theorem tsum_three (l : ℕ) (hl : 11 ≤ l) (f : ℕ → ℝ) (x₀ x₁ X : �
       x₀ + x₁ / ((l : ℝ) - 1) + X / (((l : ℝ) - 1) * ((l : ℝ) - 2)) := by
   apply Formalism.MainNotions.N.FrobeniusPowerSeries.tsum_three <;> assumption
 
-theorem cW_le (l : ℕ) (hl : 11 ≤ l) (h η H : ℕ) (hη : η + 1 ≤ h) (hH : H ≤ h + η) :
-    (cW l H : ℝ) ≤ 2 + Real.logb l (2 * (h : ℝ)) :=
-  Formalism.MainNotions.N.FrobeniusPowerSeries.cW_le l hl h η H hη hH
-
 theorem rr_le (l : ℕ) (hl : 11 ≤ l) (h w S η H H₁ : ℕ) (hη : η + 1 ≤ h)
     (hH : H ≤ h + η) (hH₁ : H₁ ≤ w + S + η) (s r : ℝ)
     (hs : s ≤ ((H₁ : ℝ) + cW l H + 3) + ((H : ℝ) + cW l H + 3) / ((l : ℝ) - 2))

@@ -73,14 +73,6 @@ def semiMor {R R' : Type} [CommRing R] [CommRing R'] (σ : R →+* R') {C : Type
   τ X := semilinearOfAdditive σ (τ X.1) (hσ X.1)
   nat φ x := hn φ.1 x
 
-theorem d_aug_zero {R : Type} [CommRing R] {C : Type u} [Category.{v} C] (F : C ⥤ ModuleCat.{w} R)
-    {M : Type w₁} [AddCommGroup M] [Module R M] (e : ∀ T : C, M →ₗ[R] F.obj T)
-    (he : ∀ {T T' : C} (φ : T ⟶ T') x, (F.map φ).hom (e T x) = e T' x) (x : M) :
-    CH.d F 0 (CH.aug F e x) = 0 := by
-  funext s
-  simp only [CH.d, LinearMap.coe_mk, AddHom.coe_mk, CH.aug, LinearMap.pi_apply, he]
-  simp
-
 theorem des_semi {R R' : Type} [CommRing R] [CommRing R'] (σ : R →+* R') {C : Type u} [Category.{v} C] {T : Type u'} [Category.{v'} T] (j : T ⥤ C)
     (F : C ⥤ ModuleCat.{w} R) (F' : C ⥤ ModuleCat.{w} R') (τ : ∀ A : C, F.obj A →+ F'.obj A)
     (hσ : ∀ A (a : R) x, τ A (a • x) = σ a • τ A x) (hb : ∀ A, Function.Bijective (τ A))

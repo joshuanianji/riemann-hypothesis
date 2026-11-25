@@ -86,15 +86,6 @@ open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.O
 
 variable {S : Scheme.{0}} {A : Over S} [GrpObj A] {L : LB A.left} {k : ℤ} {T : Over S}
 
-theorem weilIs_unique_of_local (p : T.left) (hp : ∀ V : T.left.Opens, p ∈ V → V = ⊤) (hL : L.IsLB) {x y : T ⟶ A}
-    {c c' : Γ(T.left, ⊤)ˣ} (h : WeilIs A L k x y c) (h' : WeilIs A L k x y c') :
-    unitRes (T := T) ⊤ c = unitRes (T := T) ⊤ c' := by
-  obtain ⟨V, hV, ⟨θx, θy, hx, hy⟩, H⟩ := h p
-  obtain ⟨V', hV', -, H'⟩ := h' p
-  obtain rfl := hp V hV
-  obtain rfl := hp V' hV'
-  exact commIsOf_unique hL θx θy _ _ (H θx θy hx hy) (H' θx θy hx hy)
-
 end GlobalTheory.ThetaGroupTest
 end -- clump:auto
 end -- clump:auto

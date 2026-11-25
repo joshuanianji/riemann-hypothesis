@@ -654,13 +654,6 @@ theorem ar4 {n x g d nx y : ℕ} (hx : x < n) (hd : d < n) (hg : g ≤ d) (h1 : 
   rcases mod2 (a := x + g) (n := n) (by omega) with ⟨c1, c2⟩ | ⟨c1, c2⟩ <;>
   rcases mod2 (a := nx + (d - g)) (n := n) (by omega) with ⟨b1, b2⟩ | ⟨b1, b2⟩ <;> omega
 
-theorem cd_le {n a b : ℕ} (hb : b < n) (hab : a ≤ b) : (b + n - a) % n = b - a := by
-  have e : b + n - a = (b - a) + n := by omega
-  rw [e, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
-
-theorem cd_gt {n a b : ℕ} (ha : a < n) (hab : b < a) : (b + n - a) % n = b + n - a :=
-  Nat.mod_eq_of_lt (by omega)
-
 section
 
 variable {n' : ℕ}

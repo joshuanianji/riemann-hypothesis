@@ -170,6 +170,4 @@ theorem leafPoly : LateralTheory.CohomologicalPurity.ChartCut.LeafPoly := by
   rw [key]
   exact RingHom.Etale.respectsIso.2 _ σ (RingHom.Etale.respectsIso.1 _ E hb)
 
-theorem LeafPoly_of : LateralTheory.CohomologicalPurity.ChartCut.LeafPoly := leafPoly
-
 end LateralTheory.CohomologicalPurity.LeafPolyPf

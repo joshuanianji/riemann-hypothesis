@@ -66,10 +66,6 @@ private theorem eq_mul_of_mul_eq {M : Type*} [CommMonoid M] {x T L W Ti Li : M} 
 
 variable {F : Type*} [Field F]
 
-theorem eq_mul_inv_pow {x T L W : F} {n m : ℕ} (hT : T ≠ 0) (hL : L ≠ 0) (h : x * (T ^ n * L ^ m) = W) :
-    x = W * T⁻¹ ^ n * L⁻¹ ^ m :=
-  eq_mul_of_mul_eq (mul_inv_cancel₀ hT) (mul_inv_cancel₀ hL) h
-
 end Abstract
 
 private theorem closure_range_pair_eq {A R F : Type*} [CommRing A] [CommRing R] [CommRing F]

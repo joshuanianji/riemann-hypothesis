@@ -190,9 +190,6 @@ noncomputable section
 
 namespace PositivityTheory.Xgf
 
-theorem complexEmbedding_conjugate_conjugate {E : Type} [Field E] (τ : E →+* ℂ) :
-    ComplexEmbedding.conjugate (ComplexEmbedding.conjugate τ) = τ := star_star τ
-
 private theorem eventually_posDef_add_mul_conjTranspose {I J : Type} [Fintype I] [Fintype J] [DecidableEq I]
     (C : Matrix I J ℂ) (M : Matrix J J ℂ) (hM : M.IsHermitian) (h : (C * M * Cᴴ).PosDef) :
     ∀ᶠ D in nhds (0 : Matrix I J ℂ), ((C + D) * M * (C + D)ᴴ).PosDef := by
@@ -1285,15 +1282,6 @@ theorem hermForm_tyPart {g n : ℕ} (ty : Fin g → (E →+* ℂ)) (σ : E →+*
   rw [sum_type ty σ e _ h2]
   refine Finset.sum_congr rfl fun b _ => ?_
   simp [tyPart, (e a).2, (e b).2]
-
-theorem star_hermForm {g : ℕ} {M : Matrix (Fin g) (Fin g) ℂ} (hM : M.IsHermitian) (z w : Fin g → ℂ) :
-    star (hermForm M z w) = hermForm M w z := by
-  rw [hermForm_eq_sum, hermForm_eq_sum]
-  simp only [star_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun k _ => ?_
-  rw [star_mul', star_mul', star_star, hM.apply]
-  ring
 
 theorem posDef_of_hermForm {g : ℕ} {M : Matrix (Fin g) (Fin g) ℂ} (hM : M.IsHermitian)
     (hpos : ∀ z : Fin g → ℂ, z ≠ 0 → 0 < (hermForm M z z).re) : M.PosDef := by

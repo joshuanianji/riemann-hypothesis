@@ -1319,19 +1319,6 @@ theorem coeff_formPoly_sym {σ : Type} [Fintype σ] [DecidableEq σ] (n : ℕ) (
     AddMonoidAlgebra.coeff (PB.formPoly n a) m * ∏ p, ((m p).factorial : ℝ) = (n.factorial : ℝ) * a w₀ :=
   _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.CoeffSym.coeff_formPoly_mul σ n a hsym w₀ m hm
 
-theorem toWt_injective (Ψ : Type) (N : ℕ) :
-    Function.Injective (PB.toWt : MvPolynomial (Ψ × Fin N) ℝ →ₐ[ℝ] MvPolynomial (Ψ × Fin N) ℝ) := _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.toWt_leftInverse_injective Ψ N
-
-theorem toWt_gapDelta (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) :
-    PB.toWt (gapDelta Ψ N) = GroundTheory.Heights₂.Heights.antisymDelta Ψ N := _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.toWt_gapDelta_eq_antisymDelta Ψ N
-
-theorem coeff_gapDelta (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) : AddMonoidAlgebra.coeff (gapDelta Ψ N) (rhoM Ψ N) = 1 :=
-  _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.coeff_rhoM_gapDelta Ψ N
-
-theorem prod_rhoM (Ψ : Type) [Fintype Ψ] [DecidableEq Ψ] (N : ℕ) :
-    ∏ p, (((rhoM Ψ N) p).factorial : ℝ) =
-      ∏ _τ : Ψ, ∏ i : Fin N, ∏ k : Fin N, (if i < k then ((k : ℝ) - (i : ℝ)) else 1) := _root_.GlobalTheory.CompanionTheory.Ar.Top.FlDeg.prod_rhoM_factorial Ψ N
-
 theorem fsHerm_smooth {K : Type} [Fintype K] (ι : K → Type) [∀ k, Fintype (ι k)] (a : K → ℤ) :
     IsSmoothHerm (fsHerm ι a) := by
   refine ContDiffOn.congr (GroundTheory.Heights₂.Heights.Targets.LiftGraphFactor.isSmoothHerm_fsLineZ (ι := ι) a) ?_

@@ -1105,10 +1105,6 @@ noncomputable section
 
 namespace UpperTheory.Kum1
 
-abbrev II (q : ℕ) [NeZero q] : Cx (ZMod q) := res _ (tw q 1)
-
-abbrev JJ : Cx ℤ := res ℤ Gm
-
 end UpperTheory.Kum1
 
 theorem UpperTheory.Cb.exists_unit_kummer_eq_of_picard_torsionFree :

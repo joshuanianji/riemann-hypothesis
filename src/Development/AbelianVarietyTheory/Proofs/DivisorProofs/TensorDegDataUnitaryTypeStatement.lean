@@ -1190,9 +1190,6 @@ theorem form_smul_left (S : Matrix (Fin r) (Fin r) ℤ) (b : 𝓞 E → 𝓞 E) 
     exact Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun l _ => by ring
   rw [hL, hR, hb]
 
-theorem form_bijective (S : Matrix (Fin r) (Fin r) ℤ) (hS : IsUnit S.det) : Function.Bijective (form ρ g S) :=
-  _root_.GlobalTheory.UnitaryStd.form_bijective_of_unimodular ρ g S hS
-
 theorem trace_act (a : 𝓞 E) : LinearMap.trace ℤ (Lat ρ g) (act ρ g a) = 2 * g * (ρ a).trace := by
   rw [LinearMap.trace_eq_matrix_trace ℤ (basis ρ g)]
   simp only [Matrix.trace, Matrix.diag, LinearMap.toMatrix_apply, basis_repr, act_apply, smul_apply]
@@ -1414,10 +1411,6 @@ theorem finrank_int_eq (E : Type) [Field E] [NumberField E] (N : Type) [AddCommG
     [Module (𝓞 E) N] [Module.Free ℤ N] [Module.Finite ℤ N] :
     Module.finrank ℤ N = Module.finrank (𝓞 E) N * Module.finrank ℚ E :=
   _root_.GlobalTheory.finrank_int_eq_finrank_ringOfIntegers_mul E N
-
-theorem isTorsionFree_of_int (E : Type) [Field E] [NumberField E] (N : Type) [AddCommGroup N]
-    [Module (𝓞 E) N] [Module.IsTorsionFree ℤ N] : Module.IsTorsionFree (𝓞 E) N :=
-  _root_.GlobalTheory.isTorsionFree_ringOfIntegers_of_isTorsionFree_int E N
 
 variable {E : Type} [Field E] [NumberField E] {r : ℕ}
 

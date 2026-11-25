@@ -186,14 +186,6 @@ theorem hd {X : CommRingCat.{0}} (f : C ⟶ X) (fs : J → (D ⟶ X)) (w : ∀ j
 theorem ar (j : J) : g ≫ WidePushout.ι (fun _ : J => g) j = WidePushout.head (fun _ : J => g) :=
   WidePushout.arrow_ι (arrows := fun _ : J => g) j
 
-theorem ιd_assoc (j : J) {X Y : CommRingCat.{0}} (f : C ⟶ X) (fs : J → (D ⟶ X)) (w : ∀ j, g ≫ fs j = f) (h : X ⟶ Y) :
-    WidePushout.ι (fun _ : J => g) j ≫ WidePushout.desc f fs w ≫ h = fs j ≫ h := by
-  rw [← Category.assoc, ιd]
-
-theorem hd_assoc {X Y : CommRingCat.{0}} (f : C ⟶ X) (fs : J → (D ⟶ X)) (w : ∀ j, g ≫ fs j = f) (h : X ⟶ Y) :
-    WidePushout.head (fun _ : J => g) ≫ WidePushout.desc f fs w ≫ h = f ≫ h := by
-  rw [← Category.assoc, hd]
-
 end helpers
 
 abbrev up {C D : CommRingCat.{0}} (g : C ⟶ D) (k : ℕ) :
