@@ -643,38 +643,6 @@ theorem hermitian_form_column_vanishes (j y : Fin (2 * r + k + 1)) (hj : j.val �
 
 variable {z' : Fin (2 * r + k + 1) → ℂ} {w m : B.Mat k r}
 
-theorem w_colA (hw : w ∈ UWset k r z') (q : Fin (2 * r + k + 1)) (hq : q.val < r) (y : Fin (2 * r + k + 1)) :
-    w y q = if y = q then 1 else 0 := by
-  have h1 := congrFun (hw.2.1 ⟨q.val, hq⟩).1 y
-  have e : eI k r ⟨q.val, hq⟩ = q := Fin.ext rfl
-  rw [e] at h1
-  simpa [bvec, Matrix.mulVec, dotProduct, Pi.single_apply] using h1
-
-theorem m_colA (hm : m ∈ Nset k r) (q i : Fin (2 * r + k + 1)) (hq : q.val < r) (hi : q.val ≤ i.val) :
-    m i q = if i = q then 1 else 0 := by
-  have := hm.2.1 ⟨q.val, hq⟩ i hi
-  have e : eI k r ⟨q.val, hq⟩ = q := Fin.ext rfl
-  rwa [e] at this
-
-theorem mw_colXA (hw : w ∈ UWset k r z') (i q : Fin (2 * r + k + 1)) (hq : q.val < r) : (m * w) i q = m i q := by
-  rw [Matrix.mul_apply]
-  simp only [w_colA hw q hq, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-
-theorem mw_XA (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) (i q : Fin (2 * r + k + 1)) (hi : r ≤ i.val)
-    (hq : q.val < r) : (m * w) i q = 0 := by
-  rw [mw_colXA hw i q hq, m_colA hm q i hq (by omega), ite_eq_right]
-  intro h; subst h; omega
-
-theorem mw_zA (hz' : inWb k r z') (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) (i : Fin (2 * r + k + 1))
-    (hi : r ≤ i.val) : ((m * w) *ᵥ z') i = z' i := by
-  rw [← Matrix.mulVec_mulVec, hw.2.2]
-  have e : ∀ j, m i j * z' j = (if i = j then 1 else 0) * z' j := by
-    intro j
-    by_cases hj : r ≤ j.val ∧ j.val ≤ r + k
-    · rw [hm.2.2 i j hj.1 hj.2 hi]
-    · rw [hz' j (by omega), mul_zero, mul_zero]
-  simp only [Matrix.mulVec, dotProduct, e, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
-
 theorem mw_GV (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) : m * w ∈ B.GV k r := WeylGroupFacts.uh_mul hm.1 hw.1
 
 theorem charpoly_eq_of_isIso (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) :
@@ -698,7 +666,7 @@ theorem inverse_product_block_zero (hw : w ∈ UWset k r z') (hm : m ∈ Nset k 
   refine Finset.sum_eq_zero (fun y _ => ?_)
   by_cases hy : y.val < r
   · rw [hermitian_form_column_vanishes j y hj hy, mul_zero]
-  · rw [mw_XA hw hm y _ (by omega) (by simp [eI]; omega), star_zero, zero_mul]
+  · rw [_root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.mw_X hw hm y _ (by omega) (by simp [eI]; omega), star_zero, zero_mul]
 
 theorem P_XX (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) (a b : Fin r) :
     ((m * w)⁻¹) (esI k r a) (esI k r b) = star ((m * w) (eI k r b) (eI k r a)) := by
@@ -726,8 +694,8 @@ theorem det_inverse_product_block (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r
       obtain ⟨i, hi⟩ := i
       have hi' : r + k < i.val := by omega
       show P i i = 1
-      rw [← esI_of i hi', hP, P_XX hw hm, mw_colXA hw _ _ (by simp [eI]; omega),
-        m_colA hm _ _ (by simp [eI]; omega) le_rfl, ite_eq_left rfl, star_one]
+      rw [← esI_of i hi', hP, P_XX hw hm, _root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.mw_colX hw _ _ (by simp [eI]; omega),
+        _root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.m_col_e hm _ _ (by simp [eI]; omega) le_rfl, ite_eq_left rfl, star_one]
     · intro i j hij
       obtain ⟨i, hi⟩ := i
       obtain ⟨j, hj⟩ := j
@@ -735,8 +703,8 @@ theorem det_inverse_product_block (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r
       have hj' : r + k < j.val := by omega
       have hlt : j.val < i.val := hij
       show P i j = 0
-      rw [← esI_of i hi', ← esI_of j hj', hP, P_XX hw hm, mw_colXA hw _ _ (by simp [eI]; omega),
-        m_colA hm _ _ (by simp [eI]; omega) (by simp [eI]; omega), ite_eq_right (by simp [eI, Fin.ext_iff]; omega),
+      rw [← esI_of i hi', ← esI_of j hj', hP, P_XX hw hm, _root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.mw_colX hw _ _ (by simp [eI]; omega),
+        _root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.m_col_e hm _ _ (by simp [eI]; omega) (by simp [eI]; omega), ite_eq_right (by simp [eI, Fin.ext_iff]; omega),
         star_zero]
   rw [e1, e2, mul_one]
 
@@ -753,7 +721,7 @@ theorem zeta_full (hz' : inWb k r z') (hw : w ∈ UWset k r z') (hm : m ∈ Nset
   refine Finset.sum_congr rfl (fun l _ => ?_)
   by_cases hl : l.val < r
   · rw [hermitian_form_column_vanishes j l hj hl, mul_zero, mul_zero]
-  · rw [Pi.star_apply, Pi.star_apply, mw_zA hz' hw hm l (by omega)]
+  · rw [Pi.star_apply, Pi.star_apply, _root_.Formalism.FourierDecayAlt.P.CutMP.InvEig.nilpotent_unitary_fixes_tail hz' hw hm l (by omega)]
 
 theorem zeta_fix (hz' : inWb k r z') (hw : w ∈ UWset k r z') (hm : m ∈ Nset k r) :
     (fun p => herm (Hpk k r) (bvec (e0A k r p)) z') ᵥ* (((m * w)⁻¹).submatrix (e0A k r) (e0A k r)) =

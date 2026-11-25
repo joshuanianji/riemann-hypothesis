@@ -66,13 +66,9 @@ theorem finPart_cA (x : AE D) : finPart D (cA D x) = sigR (Af D.host.F) D.sp.cm.
   | add x y hx hy => simp only [RingHom.map_add (f := _), hx, hy]
   | tmul a x => rfl
 
-theorem sigR_mem_intAE {z : Af D.host.F ⊗[D.host.F] D.host.E} (hz : z ∈ intAE D) :
-    sigR (Af D.host.F) D.sp.cm.sig z ∈ intAE D := by
-  apply _root_.GlobalTheory.SplitDualLat.sigR_mem_intAE <;> assumption
-
 theorem cA_int_iff (a : AE D) : finPart D (cA D a) ∈ intAE D ↔ finPart D a ∈ intAE D := by
-  refine ⟨fun h => ?_, fun h => by rw [finPart_cA]; exact sigR_mem_intAE h⟩
-  rw [← cA_cA a, finPart_cA]; exact sigR_mem_intAE h
+  refine ⟨fun h => ?_, fun h => by rw [finPart_cA]; exact _root_.GlobalTheory.SplitDualLat.sigR_mem_intAE h⟩
+  rw [← cA_cA a, finPart_cA]; exact _root_.GlobalTheory.SplitDualLat.sigR_mem_intAE h
 
 alias cA_incA := _root_.GlobalTheory.DualPairCheck.cA_incA
 

@@ -165,20 +165,6 @@ theorem loc_fns (hM : MA.IsModelLevel P (MA.DQ P) L) {f : MA.A P (MA.DQ P)} (hf 
     · rw [hg]; exact loc_fn _ _
     · rw [hgi]; exact loc_fn _ _
 
-theorem mat_prod_mem {A : Type} [Ring A] [Algebra ℂ A] (B : Subalgebra ℂ A) (l : List (Matrix (Fin 2) (Fin 2) A))
-    (h : ∀ X ∈ l, ∀ i j, X i j ∈ B) : ∀ i j, l.prod i j ∈ B := by
-  induction l with
-  | nil =>
-    intro i j
-    rw [List.prod_nil, Matrix.one_apply]
-    split_ifs
-    exacts [B.one_mem, B.zero_mem]
-  | cons X l ih =>
-    intro i j
-    rw [List.prod_cons, Matrix.mul_apply]
-    exact B.sum_mem fun k _ => B.mul_mem (h X List.mem_cons_self i k)
-      (ih (fun Y hY => h Y (List.mem_cons_of_mem _ hY)) k j)
-
 theorem loc_hat (hM : MA.IsModelLevel P (MA.DQ P) L) {X : MA.A P (MA.DQ P)} (hX : X ∈ hats L) : X ∈ locAlg P := by
   have hp : ∀ l, L.p l ∈ locAlg P := fun l => by rw [hM.1]; exact loc_ev _ _
   have hpb : ∀ l, L.pb l ∈ locAlg P := fun l => by rw [hM.2.1]; exact loc_ev _ _
@@ -191,14 +177,14 @@ theorem loc_hat (hM : MA.IsModelLevel P (MA.DQ P) L) {X : MA.A P (MA.DQ P)} (hX 
     rw [MA.sc, map_neg]
     exact neg_mem (loc_dz _ _ _)
   have F := fun {f} (hf : f ∈ Subring.closure L.fns) => loc_fns hM hf
-  have hT : ∀ Y i j, L.Tprod Y i j ∈ locAlg P := fun Y => mat_prod_mem _ _ fun X hX i j => by
+  have hT : ∀ Y i j, L.Tprod Y i j ∈ locAlg P := fun Y => _root_.Formalism.FourierDecayAlt.P.CutSE.rds_mat_prod_mem _ _ fun X hX i j => by
     obtain ⟨l, rfl⟩ := List.mem_ofFn.1 (List.mem_reverse.1 hX)
     fin_cases i <;> fin_cases j
     · exact add_mem (Subalgebra.algebraMap_mem _ _) (hp l)
     · exact neg_mem (F (clF L (RuleGD.m_c L l)))
     · exact F (clF L (RuleGD.m_ci L l))
     · exact zero_mem _
-  have hTv : ∀ Y i j, L.Tvprod Y i j ∈ locAlg P := fun Y => mat_prod_mem _ _ fun X hX i j => by
+  have hTv : ∀ Y i j, L.Tvprod Y i j ∈ locAlg P := fun Y => _root_.Formalism.FourierDecayAlt.P.CutSE.rds_mat_prod_mem _ _ fun X hX i j => by
     obtain ⟨l, rfl⟩ := List.mem_ofFn.1 (List.mem_reverse.1 hX)
     fin_cases i <;> fin_cases j
     · exact sub_mem (Subalgebra.algebraMap_mem _ _) (hpb l)
@@ -300,13 +286,6 @@ theorem qdom (p : KB.Pl P Wp Wq) {x : MA.E P.r} :
   obtain ⟨_, _, _, h1, h2, _, _⟩ := p.hP
   simp only [MA.Qset, JF.QDom, Set.mem_setOf_eq, M.Par.TT, h1, h2]
 
-theorem thrW_exists (k r m : ℕ) : ∃ A : ℝ, WeakThresholdClauses.WeakDominationThreshold k r A m := by
-  refine ⟨6 * r * m + |(r : ℝ) * (4 * r + 2 * k - 1) * (6 * r + 1)| + 1, ?_⟩
-  unfold WeakThresholdClauses.WeakDominationThreshold
-  have h1 := le_abs_self ((r : ℝ) * (4 * r + 2 * k - 1) * (6 * r + 1))
-  have h2 := abs_nonneg ((r : ℝ) * (4 * r + 2 * k - 1) * (6 * r + 1))
-  constructor <;> linarith
-
 
 attribute [local instance] Matrix.normedAddCommGroup Matrix.normedSpace in
 theorem tie_FF (hLL : LocLift) (p : KB.Pl P Wp Wq) {e : M.Ty P → ℂ → (Wq →L[ℂ] Wp)} (he : IsFrameB P p.T.base e)
@@ -326,7 +305,7 @@ theorem tie_FF (hLL : LocLift) (p : KB.Pl P Wp Wq) {e : M.Ty P → ℂ → (Wq �
   obtain ⟨F₁, hF₁, U, hU, hgU, hag⟩ := hLL P.k P.r Wp Wq p.T.base J _ _ hJ hJ0 (hom q) h0
     fun H hH => jf_cpt_FF p.T.base hH
   obtain ⟨⟨Φ, hΦ⟩, ht⟩ := tie_cpt p he hG hM hw a hF₁
-  obtain ⟨A, hA⟩ := thrW_exists P.k P.r (B.opOrder Dop)
+  obtain ⟨A, hA⟩ := _root_.Formalism.FourierDecayAlt.P.CutSE.thrW_exists P.k P.r (B.opOrder Dop)
   obtain ⟨ε, -, hn⟩ := TLB.nice_of_cpt hF₁
   have e1 : B.JF p.T.base (p.Θ.Θ w a F₁) (B.gq p.T.base q.1) = B.JF p.T.base H (B.gq p.T.base q.1) := by
     have hd : B.gq p.T.base q.1 ∈ C6.domL p.T.base ∅ := by

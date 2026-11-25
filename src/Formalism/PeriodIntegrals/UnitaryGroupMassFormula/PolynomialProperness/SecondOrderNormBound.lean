@@ -108,16 +108,6 @@ theorem lt_entry_bound {m : ℕ} {L U : Matrix (Fin m) (Fin m) ℂ} (hL : L ∈ 
   have h := ut_entry_bound hUt hLt j i
   rwa [← transpose_mul, mx_transpose, transpose_apply] at h
 
-theorem det_ut {m : ℕ} {U : Matrix (Fin m) (Fin m) ℂ} (hU : U ∈ UTset m) : U.det = 1 := by
-  have h : U.IsUpperTriangular := fun a b hab => hU.1 _ _ hab
-  rw [det_of_isUpperTriangular h]
-  exact Finset.prod_eq_one fun t _ => hU.2 t
-
-theorem det_lt {m : ℕ} {L : Matrix (Fin m) (Fin m) ℂ} (hL : L ∈ LTset m) : L.det = 1 := by
-  have h : L.IsLowerTriangular := fun a b hab => hL.1 _ _ hab
-  rw [det_of_isLowerTriangular _ h]
-  exact Finset.prod_eq_one fun t _ => hL.2 t
-
 theorem inv_entry_bound {n : ℕ} (M : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ) (hM : M.det = 1) {c : ℝ}
     (hc : ∀ i j, ‖M i j‖ ≤ c) (i j : Fin (n + 1)) : ‖M⁻¹ i j‖ ≤ n.factorial * c ^ n := by
   rw [inv_def, hM, Ring.inverse_one, one_smul, adjugate_fin_succ_eq_det_submatrix, norm_mul,
@@ -127,10 +117,6 @@ theorem inv_entry_bound {n : ℕ} (M : Matrix (Fin (n + 1)) (Fin (n + 1)) ℂ) (
 
 theorem mx_of_entry {m : ℕ} (M : Matrix (Fin m) (Fin m) ℂ) {c : ℝ} (hc : 0 ≤ c)
     (h : ∀ i j, ‖M i j‖ ≤ c) : mx M ≤ c := (GN.mx_le_iff M hc).2 h
-
-theorem isUnit_det_monomialMatrix' {m : ℕ} (w : Equiv.Perm (Fin m)) (d : Fin m → ℂ) (hd : ∀ a, d a ≠ 0) :
-    IsUnit (monoP w d).det := by
-  apply _root_.Formalism.FourierDecayAlt.P.C2x2.isUnit_det_monomialMatrix <;> assumption
 
 def kap (m : ℕ) (P : Matrix (Fin m) (Fin m) ℂ) : ℝ := 1 + m * mx P⁻¹
 
@@ -219,7 +205,7 @@ open CB in
 theorem second_order_norm_bound : MonomialFactorizationBound := open CB in by
   intro m P hP
   obtain ⟨w, d, hd, hPeq⟩ := hP
-  have hPu : IsUnit P.det := by rw [hPeq]; exact isUnit_det_monomialMatrix' w d hd
+  have hPu : IsUnit P.det := by rw [hPeq]; exact _root_.Formalism.FourierDecayAlt.P.C2x2.isUnit_det_monomialMatrix w d hd
   cases m with
   | zero =>
     refine ⟨0, fun l _ u' _ => ?_⟩
@@ -258,6 +244,6 @@ theorem second_order_norm_bound : MonomialFactorizationBound := open CB in by
       refine mx_of_entry _ (by positivity) fun i j => (inv_entry_bound M hdet hM i j).trans ?_
       rw [mul_pow, ← mul_assoc]
       exact mul_le_mul_of_nonneg_right (by linarith) (by positivity)
-    refine ⟨hmain l hbl, hmain u' hbu, hinv l (det_lt hl.1) hbl, hinv u' (det_ut hu') hbu⟩
+    refine ⟨hmain l hbl, hmain u' hbu, hinv l (_root_.Formalism.FourierDecayAlt.P.C2x2.lt_det hl.1) hbl, hinv u' (_root_.Formalism.FourierDecayAlt.P.C2x2.ut_det hu') hbu⟩
 
 end PI.PolynomialProperness

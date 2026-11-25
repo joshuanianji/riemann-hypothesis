@@ -252,8 +252,6 @@ instance nF_discrete {b : GL (Fin n ⊕ Fin n) E} : DiscreteTopology (nF σ Y b)
   DiscreteTopology.of_continuous_injective
     ((continuous_subtype_val.comp continuous_subtype_val).subtype_mk _) nFtoRat_injective
 
-instance nF_countable {b : GL (Fin n ⊕ Fin n) E} : Countable (nF σ Y b) := nFtoRat_injective.countable
-
 def prj (σ : E →ₐ[F] E) (ε : ℤˣ) (x : Matrix (Fin n) (Fin n) (AE F E)) : Matrix (Fin n) (Fin n) (AE F E) :=
   inclR (F := F) (AF F) (2⁻¹ : E) • (x - (((ε : ℤ) : AE F E)) • (x.map (cA σ))ᵀ)
 

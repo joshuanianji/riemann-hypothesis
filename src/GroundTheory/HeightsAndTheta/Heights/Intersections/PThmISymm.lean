@@ -31,21 +31,10 @@ namespace Choice
 
 variable {K : Type*} [Fintype K] {ι : K → Type*} [∀ k, Fintype (ι k)] {R : Type*} [CommRing R]
 
-theorem homog_mul {f g : MRingOver R ι} {a b : K → ℕ} (hf : IsMultiHomog f a)
-    (hg : IsMultiHomog g b) : IsMultiHomog (f * g) (a + b) :=
-  AvoidRing.isMultiHomog_mul hf hg
-
-theorem homog_one : IsMultiHomog (1 : MRingOver R ι) 0 :=
-  AvoidRing.isMultiHomog_one
-
 open Classical in
 theorem homog_X (k : K) (i : ι k) :
     IsMultiHomog (X ⟨k, i⟩ : MRingOver R ι) (Pi.single k 1) :=
   AvoidRing.isMultiHomog_X k i
-
-theorem homog_pow {f : MRingOver R ι} {a : K → ℕ} (hf : IsMultiHomog f a) (n : ℕ) :
-    IsMultiHomog (f ^ n) (n • a) :=
-  AvoidRing.isMultiHomog_pow hf n
 
 theorem homog_zero (a : K → ℕ) : IsMultiHomog (0 : MRingOver R ι) a := by
   intro m hm
@@ -58,23 +47,6 @@ theorem homog_add {f g : MRingOver R ι} {a : K → ℕ} (hf : IsMultiHomog f a)
   rcases Finset.mem_union.mp (MvPolynomial.support_add hm) with h | h
   · exact hf m h k
   · exact hg m h k
-
-theorem homog_sum {β : Type*} (s : Finset β) (f : β → MRingOver R ι) {a : K → ℕ}
-    (h : ∀ b ∈ s, IsMultiHomog (f b) a) : IsMultiHomog (∑ b ∈ s, f b) a :=
-  AvoidRing.isMultiHomog_sum s f h
-
-theorem homog_prod {β : Type*} (s : Finset β) (f : β → MRingOver R ι) (a : β → K → ℕ)
-    (h : ∀ b ∈ s, IsMultiHomog (f b) (a b)) : IsMultiHomog (∏ b ∈ s, f b) (∑ b ∈ s, a b) :=
-  AvoidRing.isMultiHomog_prod s f a h
-
-theorem homog_coordProd (c : ∀ k, ι k) (d : K → ℕ) :
-    IsMultiHomog (∏ k, (X ⟨k, c k⟩ : MRingOver R ι) ^ d k) d :=
-  AvoidRing.isMultiHomog_coordProd c d
-
-theorem coordProd_not_mem {V : Ideal (MRingOver R ι)} (hV : V.IsPrime) (c : ∀ k, ι k)
-    (hc : ∀ k, (X ⟨k, c k⟩ : MRingOver R ι) ∉ V) (d : K → ℕ) :
-    (∏ k, (X ⟨k, c k⟩ : MRingOver R ι) ^ d k) ∉ V :=
-  AvoidRing.coordProd_not_mem hV c hc d
 
 theorem exists_form_avoid (S : Set (Ideal (MRingOver R ι))) (hS : S.Finite)
     (hS' : ∀ W ∈ S, IsMultiProjPrime W) :

@@ -81,10 +81,6 @@ theorem star_inv_sqrt_two : star ((Real.sqrt 2)⁻¹ : ℂ) = ((Real.sqrt 2)⁻�
 section phi
 variable (k n : ℕ)
 
-theorem hpk_ww (j j' : Fin (k + 1)) :
-    Hpk k n (wI k n j) (wI k n j') = if j = j' then (if j.val = k then -1 else 1) else 0 := by
-  apply Formalism.L2.SG.Pf.WFL.Hpk_ww <;> assumption
-
 theorem phi_iso (hk : 1 ≤ k) (a b : Fin (n + 1)) : herm (Hpk k n) (phiV k n a) (phiV k n b) = 0 := by
   unfold phiV
   split_ifs with ha hb hb
@@ -99,7 +95,7 @@ theorem phi_iso (hk : 1 ≤ k) (a b : Fin (n + 1)) : herm (Hpk k n) (phiV k n a)
     have h0l : (0 : Fin (k + 1)) ≠ Fin.last k := fun h => by have := congrArg Fin.val h; simp at this; omega
     rw [herm_smul_l, herm_smul_r, herm_add_l, herm_add_r, herm_add_r, herm_bb, herm_bb, herm_bb, herm_bb]
     have hk0 : (0 : ℕ) ≠ k := by omega
-    simp [hpk_ww, h0l, h0l.symm, hk0]
+    simp [_root_.Formalism.L2.SG.Pf.WFL.Hpk_ww, h0l, h0l.symm, hk0]
 
 theorem eps_dot (hk : 1 ≤ k) : star (epsV k n) ⬝ᵥ epsV k n = 1 := by
   unfold epsV

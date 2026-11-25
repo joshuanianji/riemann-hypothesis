@@ -52,13 +52,6 @@ theorem z_mapLF' {T : E} (γ : S.V ≃ₗ[E] S.V) (hγ : γ ∈ Formalism.Hermit
   rw [dite_eq_left hγ]
   try rfl
 
-theorem isPair_quot' {T T' : E} (Λ Λ' : Submodule (𝓞 E) S.V) (g : ℕ) (F : LFlag S r T) (F' : LFlag S r T')
-    (γ₁ γ₂ : S.V ≃ₗ[E] S.V) (h₁ : γ₁ ∈ Formalism.HermitianLatticesTheory.isom S.hT) (h₂ : γ₂ ∈ Formalism.HermitianLatticesTheory.isom S.hT)
-    (hl₁ : Formalism.HermitianLatticesTheory.gmap γ₁ Λ' = Λ) (hl₂ : Formalism.HermitianLatticesTheory.gmap γ₂ Λ' = Λ)
-    (hι : IotaCompat Λ F (mapLF γ₁ F') (mapLF γ₂ F') (γ₂ * γ₁⁻¹) g) :
-    IsPair Λ F (mapLF γ₁ F') (mapLF γ₂ F') (γ₂ * γ₁⁻¹) g := by
-  apply +allowSynthFailures _root_.Formalism.L2.SG.Pf.RowForm.ScalT.isPair_quot <;> assumption
-
 end Gen
 
 section Pf
@@ -104,7 +97,7 @@ theorem pairOfRowC_of (h : LiftIotaEqC) : PairOfRowC := by
   have hl₂ : Formalism.HermitianLatticesTheory.gmap t₂.lin t₁.lam' = t₁.lam := by
     rw [lam'_eq Y u hr, lam_eq Y u hr]
     exact t₂.rep.2.2.2.1
-  exact isPair_quot' t₁.lam t₁.lam' (gS D) (lf D (X.Fu u)) (lf D (X.Fu u)) t₁.lin t₂.lin
+  exact _root_.Formalism.L2.SG.Pf.RowForm.ScalT.isPair_quot t₁.lam t₁.lam' (gS D) (lf D (X.Fu u)) (lf D (X.Fu u)) t₁.lin t₂.lin
     t₁.rep.2.2.1 t₂.rep.2.2.1 hl₁ hl₂ hι
 
 end Pf

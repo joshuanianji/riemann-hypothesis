@@ -51,14 +51,9 @@ theorem meas_mulP : Measurable (fun p : Formalism.QuantumDeterminants.Mt k r × 
     (cont_of.comp continuous_fst).matrix_mul (cont_of.comp continuous_snd)
   exact hc.measurable
 
-theorem sigmaFinite_of_b {U : Set (Formalism.FourierDecayAlt.B.Mat k r)} {μ : Measure (Formalism.QuantumDeterminants.Mt k r)}
-    (h : Formalism.FourierDecayAlt.B.IsHaarOn U μ) : SigmaFinite μ := by
-  haveI : IsFiniteMeasureOnCompacts μ := ⟨h.finite_compact⟩
-  infer_instance
-
 theorem haarOn_sk_of_b' {U : Set (Formalism.FourierDecayAlt.B.Mat k r)} {μ : Measure (Formalism.QuantumDeterminants.Mt k r)}
     (h : Formalism.FourierDecayAlt.B.IsHaarOn U μ) : Formalism.MainNotions.S.IsHaarOn U μ := by
-  exact ⟨sigmaFinite_of_b h, h.ne_zero, h.conc, h.left⟩
+  exact ⟨_root_.Formalism.FourierDecayAlt.P.B2x2.sfin h, h.ne_zero, h.conc, h.left⟩
 
 theorem det_unit_of_UH {g : Matrix (Fin (2 * r + k + 1)) (Fin (2 * r + k + 1)) ℂ}
     (hg : g ∈ Formalism.QuantumDeterminants.UH (Formalism.QuantumDeterminants.Hpk k r)) : IsUnit g.det := by
@@ -79,8 +74,8 @@ theorem muS_right {z : Fin (2 * r + k + 1) → ℂ} (hz : Formalism.QuantumDeter
     ∀ s ∈ Formalism.QuantumDeterminants.Sset k r z, (Formalism.MainNotions.S.muS μW μN).map (Formalism.FourierDecayAlt.B.rmulF s) = Formalism.MainNotions.S.muS μW μN := by
   intro s hs
   obtain ⟨h0, hh0, n0, hn0, rfl⟩ := hs
-  have := sigmaFinite_of_b hW
-  have := sigmaFinite_of_b hN
+  have := _root_.Formalism.FourierDecayAlt.P.B2x2.sfin hW
+  have := _root_.Formalism.FourierDecayAlt.P.B2x2.sfin hN
   have hd := det_unit_of_UH hh0.1
   have hinv0 := inv_mem_UW hh0
   have hNc : μN.map (Formalism.QuantumDeterminants.conjM h0⁻¹) = μN :=

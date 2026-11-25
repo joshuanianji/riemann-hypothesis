@@ -176,25 +176,10 @@ theorem dbar_sq_comp_eq {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V 
     rw [norm_mul, mul_pow, Complex.norm_real, Real.norm_eq_abs, sq_abs]
   · simp
 
-theorem continuous_of_smoothReal {M : Type*} [TopologicalSpace M] (n : ℕ) (z : M → V n)
-    (hz : IsLocalHomeomorph z) (e : M → ℝ) (he : SmoothR n z e) : Continuous e := by
-  rw [continuous_iff_continuousAt]
-  intro x
-  obtain ⟨c, hx, hzc⟩ := hz x
-  have hc : IsChart n z c := fun y _ => by rw [hzc]
-  have hg := (he c hc).continuousOn
-  have h1 : ContinuousAt (((fun y => (e y : ℂ)) ∘ c.symm) ∘ c) x :=
-    (hg.continuousAt (c.open_target.mem_nhds (c.map_source hx))).comp (c.continuousAt hx)
-  have h2 : ((fun y => (e y : ℂ)) ∘ c.symm) ∘ c =ᶠ[𝓝 x] fun y => (e y : ℂ) := by
-    filter_upwards [c.open_source.mem_nhds hx] with y hy
-    simp [c.left_inv hy]
-  have h3 := Complex.continuous_re.continuousAt.comp (h1.congr h2)
-  simpa [Function.comp_def] using h3
-
 theorem psi (n : ℕ) (M : Type*) [TopologicalSpace M] [T2Space M]
     [SecondCountableTopology M] [MeasurableSpace M] [BorelSpace M] : PsiStatement n M := by
   intro z hz e a he hcomp
-  have hec : Continuous e := continuous_of_smoothReal n z hz e he
+  have hec : Continuous e := _root_.ReciprocityTheory.L2DbarEstimates.F.gm_cont_of_smoothR n z hz e he
   obtain ⟨C, hC⟩ := deriv_smoothTransition_bounded
   set D := dbarSq n z (fun y => (e y : ℂ)) with hD
   have hDs : SmoothR n z D := smoothReal_dbar_sq n z e he

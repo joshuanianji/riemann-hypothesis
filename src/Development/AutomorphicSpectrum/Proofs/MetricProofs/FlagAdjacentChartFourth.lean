@@ -32,10 +32,6 @@ theorem minor_self_of_lowerUni {X : Matrix (Fin N) (Fin N) ℂ} (hX : IsLowerUni
     hX.2 _ _ ((C.orderEmbOfFin rfl).strictMono (show a < b from e))]
   exact Finset.prod_eq_one fun a _ => hX.1 _
 
-theorem minor_insert_of_lowerUni {X : Matrix (Fin N) (Fin N) ℂ} (hX : IsLowerUni X) {C : Finset (Fin N)} {a b : Fin N}
-    (hb : b ∈ C) (htop : ∀ c ∈ C, c ≤ b) (hab : b < a) : minorIJ X (insert a (C.erase b)) C = X a b := by
-  apply _root_.GlobalTheory.CompanionTheory.Ar.PB.WMan.LowMinor.minorIJ_insert_erase_of_isLowerUni <;> assumption
-
 theorem mul_elem_apply (L : Matrix (Fin N) (Fin N) ℂ) (ca cb : Fin N) (t : ℂ) (a b : Fin N) :
     (L * (1 + Matrix.single cb ca t)) a b = L a b + if b = ca then L a cb * t else 0 := by
   intros
@@ -86,15 +82,6 @@ theorem stepOf_top (hj : j ≤ N) (c d : Fin N) (hd : d ∈ stepCols N j (stepOf
   simp only [stepCols, Finset.mem_filter, Finset.mem_univ, true_and] at hd
   rw [Fin.le_def]
   split_ifs at hv hd <;> omega
-
-theorem stepOf_proper (hj : j ≤ N) {a b : Fin N} (hlt : b < a) (hblk : ((a : ℕ) < N - j ↔ (b : ℕ) < N - j)) :
-    IsProperStep N j (stepOf N j b) := by
-  have := a.2
-  have := b.2
-  have h : (b : ℕ) < a := hlt
-  have hv := stepOf_val N j b
-  simp only [IsProperStep]
-  split_ifs at hv <;> omega
 
 end Minors
 
@@ -168,7 +155,7 @@ theorem lowRead_eq {F : FrameData ι Ψ N M.Ω M.blk} (hF : M.IsFrame F) {zb : (
     (hz : ∀ k, M.blk (τ', stepOf N j b') = some k → ∀ m : ι k, z ⟨k, m⟩ =
       ∑ I, valAt M.x (F.u ⟨k, m⟩ I) zb * minorIJ (h τ' * X) I (stepCols N j (stepOf N j b'))) :
     lowRead M F zb h z τ' a' b' = X a' b' := by
-  have hpr := stepOf_proper M.j_le hlt hblk
+  have hpr := _root_.GlobalTheory.CompanionTheory.Ar.PB.WMan.LowRead.isProperStep_stepOf M.j_le hlt hblk
   obtain ⟨k, hk⟩ : ∃ k, M.blk (τ', stepOf N j b') = some k := by
     rcases e : M.blk (τ', stepOf N j b') with _ | k
     · exact absurd hpr ((M.blk_none _).1 e)
@@ -180,7 +167,7 @@ theorem lowRead_eq {F : FrameData ι Ψ N M.Ω M.blk} (hF : M.IsFrame F) {zb : (
   rw [hk]
   show twMinor M F zb (stepOf N j b') k (h τ')⁻¹ z _ / twMinor M F zb (stepOf N j b') k (h τ')⁻¹ z _ = _
   rw [e1, e1, minor_self_of_lowerUni hX, div_one]
-  exact minor_insert_of_lowerUni hX (stepOf_mem M.j_le b') (stepOf_top M.j_le b') hlt
+  exact _root_.GlobalTheory.CompanionTheory.Ar.PB.WMan.LowMinor.minorIJ_insert_erase_of_isLowerUni hX (stepOf_mem M.j_le b') (stepOf_top M.j_le b') hlt
 
 end Flag
 

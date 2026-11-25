@@ -585,15 +585,6 @@ open MeasureTheory Formalism.BasicNotions.TH GlobalTheory.RealLift GlobalTheory.
 
 noncomputable section
 
-theorem GlobalTheory.HoweD.exists_osc : ∀ (ι l : Type) [Fintype ι] [DecidableEq ι] [Fintype l] [DecidableEq l] (P Q R S : ι → ℕ)
-    (φ : (∀ w : ι, Matrix (Ix (P w) (Q w)) (Ix (R w) (S w)) ℂ) ≃ₗ[ℝ] (l ⊕ l → ℝ)),
-    (∀ c c', sympl (φ c) (φ c') = 2 * (∑ w, ∑ a, ∑ b, lineSign a b * c w a b * star (c' w a b)).im) →
-    (∀ v : L2 l, Continuous fun w : l ⊕ l → ℝ => rho w v) →
-    ∀ (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] (k : G →* (∀ w : ι, Mat (R w) (S w))), Continuous k →
-    (∀ g w, (k g w)ᴴ * Jm (R w) (S w) * k g w = Jm (R w) (S w)) →
-    ∃ ω : G →* (L2 l ≃ₗᵢ[ℂ] L2 l), (∀ v, Continuous fun g => ω g v) ∧
-      ∀ g c v, ω g (rho (φ c) v) = rho (φ fun w => c w * (k g w)ᵀ) (ω g v) :=
-  GlobalTheory.SchrodOsc.exists_osc_dep
 end -- clump:auto
 end -- clump:auto
 end -- clump:auto
@@ -612,15 +603,6 @@ noncomputable section
 
 namespace GlobalTheory.ColActionD
 
-theorem exists_symplectic_hom_of_unitary_dep : ∀ (ι l : Type) [Fintype ι] [DecidableEq ι] [Fintype l] [DecidableEq l] (P Q R S : ι → ℕ)
-    (φ : (∀ w : ι, Matrix (Ix (P w) (Q w)) (Ix (R w) (S w)) ℂ) ≃ₗ[ℝ] (l ⊕ l → ℝ)),
-    (∀ c c', sympl (φ c) (φ c') = 2 * (∑ w, ∑ a, ∑ b, lineSign a b * c w a b * star (c' w a b)).im) →
-    ∀ (G : Type) [Group G] [TopologicalSpace G] (k : G →* (∀ w : ι, Mat (R w) (S w))), Continuous k →
-    (∀ g w, (k g w)ᴴ * Jm (R w) (S w) * k g w = Jm (R w) (S w)) →
-    ∃ s : G →* Matrix.symplecticGroup l ℝ, Continuous s ∧
-      ∀ g c, (s g : Matrix (l ⊕ l) (l ⊕ l) ℝ) *ᵥ φ c = φ fun w => c w * (k g w)ᵀ :=
-  GlobalTheory.ColAction.exists_symplectic_hom_of_unitary_dep
-
 end GlobalTheory.ColActionD
 end -- clump:auto
 end -- clump:auto
@@ -637,14 +619,6 @@ open MeasureTheory Formalism.BasicNotions.TH GlobalTheory.RealLift GlobalTheory.
 open GlobalTheory.HoweD
 
 namespace GlobalTheory.HoweD.SpLieD
-
-theorem exists_sp_rightActD : ∀ (ι l : Type) [Fintype ι] [DecidableEq ι] [Fintype l] [DecidableEq l] (P Q R S : ι → ℕ)
-    (φ : (∀ w : ι, Matrix (Ix (P w) (Q w)) (Ix (R w) (S w)) ℂ) ≃ₗ[ℝ] (l ⊕ l → ℝ)),
-    (∀ c c', sympl (φ c) (φ c') = 2 * (∑ w, ∑ a, ∑ b, lineSign a b * c w a b * star (c' w a b)).im) →
-    ∀ Y : ∀ w : ι, Mat (R w) (S w), (∀ w, Y w ∈ upq (R w) (S w)) →
-    ∃ Z ∈ LieAlgebra.Symplectic.sp l ℝ, (∀ c, Z *ᵥ φ c = φ fun w => c w * (Y w)ᵀ) ∧
-      ∀ (t : ℝ) c, NormedSpace.exp (t • Z) *ᵥ φ c = φ fun w => c w * (NormedSpace.exp (t • Y w))ᵀ :=
-  GlobalTheory.RealLift.SpLie.exists_sp_rightAct_dep
 
 end GlobalTheory.HoweD.SpLieD
 end -- clump:auto
@@ -718,8 +692,8 @@ theorem archRepD :
   obtain ⟨n, θ, φ, φ₀, hp, hq, hφ, hφu⟩ := _root_.GlobalTheory.ArchCoordsD.exists_coords F E σ α β κ P Q R S τ JA JB d a b A C hCM hFr
   obtain ⟨k, hkc, hkC, hkJ, hcan⟩ := _root_.GlobalTheory.RealLiftCompD.exists_compD F E σ β R S τ JB b C hCM hFr.2.2
   haveI : IsTopologicalRing (AE F E) := IsModuleTopology.isTopologicalRing (AF F) _
-  obtain ⟨ω, hωc, hωi⟩ := _root_.GlobalTheory.HoweD.exists_osc _ _ P Q R S φ hφ (_root_.GlobalTheory.RealWeil.continuous_rho _) (UG (cA σ) JB) k hkc hkJ
-  obtain ⟨s, hsc, hsφ⟩ := _root_.GlobalTheory.ColActionD.exists_symplectic_hom_of_unitary_dep _ _ P Q R S φ hφ (UG (cA σ) JB) k hkc hkJ
+  obtain ⟨ω, hωc, hωi⟩ := _root_.GlobalTheory.SchrodOsc.exists_osc_dep _ _ P Q R S φ hφ (_root_.GlobalTheory.RealWeil.continuous_rho _) (UG (cA σ) JB) k hkc hkJ
+  obtain ⟨s, hsc, hsφ⟩ := _root_.GlobalTheory.ColAction.exists_symplectic_hom_of_unitary_dep _ _ P Q R S φ hφ (UG (cA σ) JB) k hkc hkJ
   obtain ⟨ρ, η, hη1, hη2, hη3, hρi, hρu, hρc, hρd⟩ :=
     realRep _root_.CompanionTheory.ThKR.realMetaplecticRepresentation_holds s hsc ω hωc fun g w v => by
       obtain ⟨c, rfl⟩ := φ.surjective w
@@ -794,7 +768,7 @@ theorem archRepD :
       congr 2
       ext i j
       simp
-    obtain ⟨Z, hZ, hZφ, hZe⟩ := _root_.GlobalTheory.HoweD.SpLieD.exists_sp_rightActD _ _ P Q R S φ hφ Y hYu
+    obtain ⟨Z, hZ, hZφ, hZe⟩ := _root_.GlobalTheory.RealLift.SpLie.exists_sp_rightAct_dep _ _ P Q R S φ hφ Y hYu
     have hsZ : ∀ t : ℝ, (s (γ (Multiplicative.ofAdd t)) : Matrix (Fin n ⊕ Fin n) (Fin n ⊕ Fin n) ℝ) =
         NormedSpace.exp (t • Z) := fun t => Matrix.toLin'.injective (LinearMap.ext fun v => by
       obtain ⟨c, rfl⟩ := φ.surjective v

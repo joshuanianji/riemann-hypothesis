@@ -180,17 +180,6 @@ theorem shf_down {n : ℕ} (β : ℂ) (M : Fin n → ℤ) (i : Fin n) :
   simp [shf]
   ring_nf
 
-theorem sdec_shf {n : ℕ} (β : ℂ) {L : Fin n → ℤ} (hL : StrictAnti L) : SDec (shf β L) := by
-  intro a b hab
-  have h := hL hab
-  refine ⟨(L a - L b - 1).toNat, ?_⟩
-  simp only [shf]
-  have e : ((L a - L b - 1).toNat : ℤ) = L a - L b - 1 := Int.toNat_of_nonneg (by omega)
-  have e2 : (((L a - L b - 1).toNat : ℕ) : ℂ) = ((L a - L b - 1 : ℤ) : ℂ) := by exact_mod_cast e
-  rw [e2]
-  push_cast
-  ring
-
 section Cap
 
 variable {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
@@ -241,7 +230,7 @@ theorem sys_of (hSM : ExistsSingMax) (hCS : CapSing) (hSR : SubRel) (hR : RaiseN
     obtain ⟨ν, v, -, hv0, hHW, -⟩ := hSM V (n + 1) E H.gl ⊤ (fun _ _ _ _ => Submodule.mem_top) top_ne_bot
     have hvL : v ∈ CapSp E (shf β L) := mem_CapSp.mpr fun w => H.cap w v
     have hne : CapSp E (shf β L) ≠ ⊥ := fun e => hv0 (by rw [e] at hvL; simpa using hvL)
-    have hν := (hCS V (n + 1) E _ H.gl hne).2 (sdec_shf β H.anti) ν v hvL hv0 hHW
+    have hν := (hCS V (n + 1) E _ H.gl hne).2 (_root_.Formalism.FourierDecayAlt.P.HighestWeightPolynomials.sdec_shf β H.anti) ν v hvL hv0 hHW
     have hHW' : IsHW (subA E) (fun k => ν k.castSucc) v :=
       ⟨fun a => hHW.1 a.castSucc, fun a b hab => hHW.2 _ _ (Fin.castSucc_lt_castSucc_iff.mpr hab)⟩
     have hmem : v ∈ CapSp (subA E) (shf β fun j => L j.castSucc) := by
@@ -888,13 +877,6 @@ theorem coeffs (hPV : PolyVanish) (K : Module.End ℂ W) (A : ℕ → Module.End
   simp only [LinearMap.sum_apply, LinearMap.smul_apply, map_sub]
   rw [Finset.sum_sub_distrib, sub_self]
 
-theorem pow_mem (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G) (s : ℕ) : ∀ x ∈ G, (K ^ s) x ∈ G := by
-  apply _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.pow_mem <;> assumption
-
-theorem aeval_mem (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G) (q : ℂ[X]) :
-    ∀ x ∈ G, aeval K q x ∈ G := by
-  apply _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.aeval_mem <;> assumption
-
 theorem ch (hPV : PolyVanish) (G : Submodule ℂ W) (K : Module.End ℂ W) (hK : ∀ x ∈ G, K x ∈ G)
     (A : ℕ → Module.End ℂ W) (d : ℕ) (P : ℂ[X]) (hP : P.natDegree < d + 1)
     (h : ∀ x ∈ G, ∀ u : ℂ, (∑ s ∈ range d, u ^ s • A s) (u • x - K x) = P.eval u • x) :
@@ -905,7 +887,7 @@ theorem ch (hPV : PolyVanish) (G : Submodule ℂ W) (K : Module.End ℂ W) (hK :
       (if s = 0 then 0 else A (s - 1) ((K ^ s) x)) - (if s < d then A s (K ((K ^ s) x)) else 0) := by
     intro s hs
     rw [LinearMap.smul_apply]
-    exact (coeffs hPV K A d P hP _ (h _ (pow_mem G K hK s x hx)) s hs).symm
+    exact (coeffs hPV K A d P hP _ (h _ (_root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.pow_mem G K hK s x hx)) s hs).symm
   rw [Finset.sum_congr rfl h1, Finset.sum_sub_distrib, Finset.sum_range_succ', Finset.sum_range_succ (fun s => if s < d then _ else _),
     ite_eq_right (lt_irrefl d), ite_eq_left rfl, add_zero, add_zero, sub_eq_zero]
   refine Finset.sum_congr rfl (fun s hs => ?_)
@@ -931,13 +913,13 @@ theorem decomp (hPV : PolyVanish) (G : Submodule ℂ W) (K : Module.End ℂ W) (
     rw [Polynomial.eval_prod]
     simp
   have hch := ch hPV G K hK A (N + 1) (∏ j, (X - C (r j))) hP (by intro x hx u; rw [hev]; exact h x hx u)
-  refine ⟨fun i => aeval K (Lagrange.basis univ r i) x, fun i => aeval_mem G K hK _ x hx, ?_, ?_⟩
+  refine ⟨fun i => aeval K (Lagrange.basis univ r i) x, fun i => _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.aeval_mem G K hK _ x hx, ?_, ?_⟩
   · set_option synthInstance.maxHeartbeats 100000 in
       rw [← LinearMap.sum_apply, ← map_sum, Lagrange.sum_basis (hr.injOn) Finset.univ_nonempty,
         map_one, Module.End.one_apply]
   intro i u
   set φ := aeval K (Lagrange.basis univ r i) x with hφ
-  have hφG : φ ∈ G := aeval_mem G K hK _ x hx
+  have hφG : φ ∈ G := _root_.Formalism.FourierDecayAlt.P.CapelliAbstractCharacter.aeval_mem G K hK _ x hx
   have hKφ : K φ = r i • φ := by
     have h1 : aeval K ((X - C (r i)) * Lagrange.basis univ r i) x = 0 := by
       rw [basis_mul, map_mul, Module.End.mul_apply, hch x hx, map_zero]
@@ -1116,9 +1098,6 @@ theorem box_strictAnti {n : ℕ} {L : Fin (n + 1) → ℤ} {M : Fin n → ℤ} (
     have h2 := (h i.castSucc).1
     rw [Fin.succ_castSucc] at h2
     exact lt_of_le_of_lt h1 h2
-
-theorem sdec_shf {n : ℕ} (β : ℂ) {M : Fin n → ℤ} (h : StrictAnti M) : SDec (shf β M) := by
-  apply _root_.Formalism.FourierDecayAlt.P.HighestWeightPolynomials.sdec_shf <;> assumption
 
 variable {V : Type} [AddCommGroup V] [Module ℂ V]
 
@@ -1310,7 +1289,7 @@ theorem qr_irredCap_of : Qr.ExistsSingMax → Qr.CapSing → Qr.CapStab → Qr.S
   have hsup : (⨆ M : {M : Fin n → ℤ // Box L M}, CapSp (subA E) (shf β M.1)) = ⊤ := by
     rw [← (hDec V n E β L hyp).2, iSup_subtype]
   rw [iSup_split_single _ (⟨M, hM⟩ : {M : Fin n → ℤ // Box L M})] at hsup
-  refine StrictBoxOrder.core hESM hCS hSR hTW hDM hST hMO E hyp.gl hyp.irr (shf β M) (StrictBoxOrder.sdec_shf β (StrictBoxOrder.box_strictAnti hM))
+  refine StrictBoxOrder.core hESM hCS hSR hTW hDM hST hMO E hyp.gl hyp.irr (shf β M) (_root_.Formalism.FourierDecayAlt.P.HighestWeightPolynomials.sdec_shf β (StrictBoxOrder.box_strictAnti hM))
     (⨆ (j : {M : Fin n → ℤ // Box L M}) (_ : j ≠ ⟨M, hM⟩), CapSp (subA E) (shf β j.1)) ?_
     (hCSt V n (subA E) (shf β M) hgl').1 ?_ (hind ⟨M, hM⟩) hsup S' hS'le hS' hne
   · intro a b

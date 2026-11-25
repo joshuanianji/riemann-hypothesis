@@ -195,11 +195,6 @@ noncomputable section
 
 namespace GlobalTheory.SphJet.LowTau
 
-theorem exp_conj {n : ℕ} (A : Matrix (Fin n) (Fin n) ℂ) :
-    (NormedSpace.exp A).map star = NormedSpace.exp (A.map star) := by
-  have hc : ∀ B : Matrix (Fin n) (Fin n) ℂ, B.map star = Bᴴᵀ := fun B => by ext i j; simp
-  rw [hc, hc, ← Matrix.exp_conjTranspose, ← Matrix.exp_transpose]
-
 theorem inG_conj {n : ℕ} {ε : Fin n → Bool} {X : Matrix (Fin n) (Fin n) ℂ} (h : inG ε X) :
     inG ε (X.map star) := by
   unfold inG at h ⊢
@@ -275,7 +270,7 @@ theorem exists_tau : ∀ (n : ℕ) (ε : Fin n → Bool) (Λ : Fin n → ℝ) (H
     have hpt : ∀ t : ℝ, ((τ (NormedSpace.exp ((t : ℂ) • Y)) v : S) : H) =
         σ (NormedSpace.exp ((t : ℂ) • Y.map star)) v := by
       intro t
-      rw [hτσ _ (hexpK _ (hsm t)), exp_conj]
+      rw [hτσ _ (hexpK _ (hsm t)), _root_.GlobalTheory.Dec.FormF.exp_star]
       congr 3
       ext a b
       simp
@@ -725,42 +720,14 @@ open scoped InnerProductSpace ComplexOrder
 
 namespace GlobalTheory.PsiBound
 
-lemma det_exp_sq {n : ℕ} {ε : Fin n → Bool} {Y : Matrix (Fin n) (Fin n) ℂ} (h : inP ε Y) :
-    (NormedSpace.exp Y).det * (NormedSpace.exp Y).det = 1 := by
-  apply _root_.GlobalTheory.DecGapBound.det_exp_sq <;> assumption
-
-lemma muInt_cast {n : ℕ} {lam : Fin n → ℝ} (hlam : IsHCParam lam) (a : Fin n) :
-    (muInt lam a : ℝ) = lam a + Formalism.QuantumDeterminants.rhoStd n a := by
-  obtain ⟨m, hm⟩ := hlam.2 a
-  have : lam a + Formalism.QuantumDeterminants.rhoStd n a = ((m + n - 1 - (a : ℕ) : ℤ) : ℝ) := by
-    unfold Formalism.QuantumDeterminants.rhoStd; push_cast; linarith
-  unfold muInt
-  rw [this, Int.floor_intCast]
-
-lemma norm_Phi_le {n : ℕ} {ε : Fin n → Bool} {lam : Fin n → ℝ} {h : ℝ}
-    {X km : Matrix (Fin n) (Fin n) ℂ} (hlam : IsHCParam lam) (hgap : GapAtLeast ε lam h)
-    (hX : inP ε X) (hk : km ∈ Kset ε) :
-    ‖Phi lam (km⁻¹ * NormedSpace.exp X * km)‖ ≤ decHS h (rkR ε) (Real.sqrt (hs X)) := by
-  apply _root_.GlobalTheory.DecGapBound.norm_Phi_le <;> assumption
-
-lemma weighted_bound {α : Type*} [MeasurableSpace α] (μ : Measure α) (d : ℕ) (φ a b : α → ℂ)
-    (M U V : ℝ) (hM : 0 ≤ M) (hU : 0 ≤ U) (hV : 0 ≤ V) (hφ : ∀ x, ‖φ x‖ ≤ M)
-    (i1 : Integrable (fun x => ‖a x‖ ^ 2) μ) (i2 : Integrable (fun x => ‖b x‖ ^ 2) μ)
-    (ha : (d : ℝ) * ∫ x, ‖a x‖ ^ 2 ∂μ = V ^ 2) (hb : (d : ℝ) * ∫ x, ‖b x‖ ^ 2 ∂μ = U ^ 2) :
-    ‖(d : ℂ) * ∫ x, φ x * (a x * b x) ∂μ‖ ≤ M * U * V := by
-  apply _root_.GlobalTheory.DecGapBound.weighted_bound <;> assumption
-
 section Tau
 
 variable {n : ℕ} {ε : Fin n → Bool} {abelian₂ : Fin n → ℝ} {W : Type} [NormedAddCommGroup W]
   [InnerProductSpace ℂ W] {τ : Matrix (Fin n) (Fin n) ℂ → (W →L[ℂ] W)} {w : W}
 
-lemma isURepOn_of_isTau (h : IsTau ε abelian₂ τ w) : IsURepOn (Kset ε) τ := by
-  apply _root_.GlobalTheory.Dec.IsTau.isURepOn <;> assumption
-
 lemma schur_norm (h : IsTau ε abelian₂ τ w) (x : W) :
     (Module.finrank ℂ W : ℝ) * ∫ k : KG ε, ‖⟪x, τ (toMK k) w⟫_ℂ‖ ^ 2 ∂(muK ε) = ‖x‖ ^ 2 := by
-  have hU := isURepOn_of_isTau h
+  have hU := _root_.GlobalTheory.Dec.IsTau.isURepOn h
   obtain ⟨hW, -, -, -, hirr, hw, -⟩ := h
   haveI : IsProbabilityMeasure (muK ε) := (compact_haar_holds n ε).1
   obtain ⟨c, -, hc⟩ := avgSchur n ε W τ w hW hU hirr (by rintro rfl; simp at hw)
@@ -797,7 +764,7 @@ lemma ps_entry (h : IsTau ε abelian₂ τ w) (lam : Fin n → ℝ) {x : Matrix 
   haveI := FiniteDimensional.complete ℂ W
   have hk := toMK_cont ε
   have h1 : Continuous (fun k : KG ε => τ (toMK k) w) :=
-    ((isURepOn_of_isTau h).2.2 w).comp_continuous hk fun k => k.2
+    ((_root_.GlobalTheory.Dec.IsTau.isURepOn h).2.2 w).comp_continuous hk fun k => k.2
   have h2 : Continuous (fun k : KG ε => Phi lam ((toMK k)⁻¹ * x * toMK k)) := by
     have e : ∀ k : KG ε, (toMK k)⁻¹ = (toMK k)ᴴ := fun k => K_inv k.2
     simp only [e]
@@ -867,8 +834,8 @@ private lemma norm_inner_ps_exp_le_decHS_mul {n : ℕ} {ε : Fin n → Bool} {la
     simp at hn
   have hM : 0 ≤ decHS h (rkR ε) (Real.sqrt (hs X)) := (Real.exp_pos _).le
   rw [GlobalTheory.PsiBound.ps_entry hτ lam hP u y]
-  refine GlobalTheory.PsiBound.weighted_bound (muK ε) (Module.finrank ℂ W) _ _ _ _ _ _ hM (norm_nonneg u)
-    (norm_nonneg y) (fun k => GlobalTheory.PsiBound.norm_Phi_le hlam hgap hX ((mem_KG ε _).1 k.2))
+  refine _root_.GlobalTheory.DecGapBound.weighted_bound (muK ε) (Module.finrank ℂ W) _ _ _ _ _ _ hM (norm_nonneg u)
+    (norm_nonneg y) (fun k => _root_.GlobalTheory.DecGapBound.norm_Phi_le hlam hgap hX ((mem_KG ε _).1 k.2))
     (hint y) ?_ (GlobalTheory.PsiBound.schur_norm hτ y) ?_
   · simpa only [norm_inner_symm] using hint u
   · simpa only [norm_inner_symm] using GlobalTheory.PsiBound.schur_norm hτ u

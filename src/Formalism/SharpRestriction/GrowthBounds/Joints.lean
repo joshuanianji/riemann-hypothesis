@@ -196,64 +196,6 @@ theorem lattice_index_gives_localiser (D : Formalism.BasicNotions.D7)  (h : Form
 theorem rank_degree_bounds_give_localiser (D : Formalism.BasicNotions.D7) (CLa Ck Crk Cdeg : ℝ) (h : Formalism.MainNotions.SelectionLemmas.Conclusion2 D CLa Ck Crk Cdeg) :
     Formalism.MainNotions.SourceCleaning.admG2 D CLa Ck Crk Cdeg := h
 
-theorem integral_form_exponent_le_ceil (p a r n : ℕ) (hn : n + 1 ≤ r) (l : ℕ) (hl : l ≤ 8 * a) :
-    N0 (n + 1) * deF p (n + 1) l ≤ ⌈Formalism.MainNotions.flipOneThree.kappaOneExponent p a r⌉₊ := by
-  have hN0 : N0 (n + 1) ≤ r ^ 2 := by
-    unfold N0
-    calc (n + 1) * (n + 1 - 1) / 2 ≤ (n + 1) * (n + 1 - 1) := Nat.div_le_self _ _
-      _ ≤ r * r := Nat.mul_le_mul hn (by omega)
-      _ = r ^ 2 := (sq r).symm
-  have hde : deF p (n + 1) l ≤ Nat.log p (8 * a + r) := by
-    unfold deF
-    exact Nat.log_mono_right (by omega)
-  have hlog : (Nat.log p (8 * a + r) : ℝ) ≤ Real.logb p (8 * (a : ℝ) + r) := by
-    have := Real.natLog_le_logb (8 * a + r) p
-    push_cast at this
-    exact this
-  have h1 : ((N0 (n + 1) * deF p (n + 1) l : ℕ) : ℝ) ≤ Formalism.MainNotions.flipOneThree.kappaOneExponent p a r := by
-    unfold Formalism.MainNotions.flipOneThree.kappaOneExponent Formalism.MainNotions.flipOneThree.lgA
-    have hA : ((N0 (n + 1) : ℕ) : ℝ) ≤ (r : ℝ) ^ 2 := by exact_mod_cast hN0
-    have hB : ((deF p (n + 1) l : ℕ) : ℝ) ≤ Real.logb p (8 * (a : ℝ) + r) :=
-      (Nat.cast_le.mpr hde).trans hlog
-    have hB0 : (0 : ℝ) ≤ ((deF p (n + 1) l : ℕ) : ℝ) := Nat.cast_nonneg _
-    push_cast
-    have hmul := mul_le_mul hA hB hB0 (sq_nonneg (r : ℝ))
-    linarith
-  exact_mod_cast h1.trans (Nat.le_ceil _)
-
-theorem mq_top_of_irr {O : Type} [CommRing O] [IsDomain O] [IsDiscreteValuationRing O] {n : ℕ} [NeZero n]
-    {V : Type} [AddCommGroup V] [Module (KK O) V] [Module O V] [IsScalarTower O (KK O) V]
-    (E : GLOps n (KK O) V) (lam : Fin n → ℤ) (v : V) (hirr : IsIrrHW E lam v)
-    (M : Submodule O V) (hM : UZLattice (O := O) E M) (hv : v ∈ M) : MQ (K := KK O) M = ⊤ := by
-  have hE : ∀ a b, ∀ y ∈ MQ (K := KK O) M, E a b y ∈ MQ (K := KK O) M := by
-    intro a b y hy
-    induction hy using Submodule.span_induction with
-    | mem x hx =>
-      apply Submodule.subset_span
-      by_cases hab : a = b
-      · subst hab
-        have hg : binomE E a 1 ∈ UZgens E := Or.inr ⟨a, 1, rfl⟩
-        have := hM.1 _ hg x hx
-        simpa [binomE] using this
-      · have hg : divPowE E a b 1 ∈ UZgens E := Or.inl ⟨a, b, 1, hab, rfl⟩
-        have := hM.1 _ hg x hx
-        simpa [divPowE] using this
-    | zero => simp
-    | add x y _ _ hx hy => simpa using Submodule.add_mem _ hx hy
-    | smul c x _ hx => simpa using Submodule.smul_mem _ c hx
-  have hU : ∀ u ∈ Umon E, ∀ y ∈ MQ (K := KK O) M, u y ∈ MQ (K := KK O) M := by
-    intro u hu
-    induction hu using Submonoid.closure_induction with
-    | mem u hu =>
-      obtain ⟨⟨a, b⟩, rfl⟩ := hu
-      exact hE a b
-    | one => intro y hy; simpa using hy
-    | mul u w _ _ hu hw => intro y hy; simpa using hu _ (hw y hy)
-  rw [eq_top_iff, ← hirr.2.2.2]
-  apply Submodule.span_le.mpr
-  rintro x ⟨u, hu, rfl⟩
-  exact hU u hu v (Submodule.subset_span hv)
-
 theorem weight_condition_of_integral_form (D : Formalism.BasicNotions.D7) (X : Formalism.MainNotions.flipOneThree.Inst) (h : Formalism.MainNotions.CovariantDegrees.NablaDeltaComparisonField D) :
     Formalism.MainNotions.flipOneThree.adm2 D X := by
   apply _root_.Formalism.MainNotions.G.CountingStatementReduction.weight_condition_from_integral_form <;> assumption
@@ -1304,30 +1246,6 @@ theorem type_one_hypothesis_of_segments (D : D7) (L : SizeData₂ D) (X : Inst D
 section LogVal
 open Formalism.MainNotions.CovariantDegrees
 
-theorem padicGe_add {p : ℕ} [Fact p.Prime] {x y : ℚ} {c : ℝ} (hx : PadicGe p x c) (hy : PadicGe p y c) :
-    PadicGe p (x + y) c := by
-  unfold PadicGe at *
-  rcases hx with rfl | hx
-  · simpa using hy
-  rcases hy with rfl | hy
-  · simpa using (Or.inr hx : x = 0 ∨ c ≤ (padicValRat p x : ℝ))
-  by_cases hxy : x + y = 0
-  · exact Or.inl hxy
-  right
-  have h1 := padicValRat.min_le_padicValRat_add (p := p) hxy
-  have h2 : (min (padicValRat p x) (padicValRat p y) : ℝ) ≤ (padicValRat p (x + y) : ℝ) := by
-    exact_mod_cast h1
-  exact (le_min hx hy).trans (by simpa using h2)
-
-theorem padicGe_sum {p : ℕ} [Fact p.Prime] {ι : Type*} (s : Finset ι) (f : ι → ℚ) {c : ℝ}
-    (h : ∀ i ∈ s, PadicGe p (f i) c) : PadicGe p (∑ i ∈ s, f i) c := by
-  classical
-  revert h
-  refine Finset.induction_on s (fun _ => by simp [PadicGe]) ?_
-  intro a s ha ih h
-  rw [Finset.sum_insert ha]
-  exact padicGe_add (h a (Finset.mem_insert_self a s)) (ih fun i hi => h i (Finset.mem_insert_of_mem hi))
-
 theorem padicValNat_lt_of_lt_pow {p : ℕ} [hp : Fact p.Prime] {y t : ℕ} (hy : 1 ≤ y) (hlt : y < p ^ (t + 1)) :
     padicValNat p y ≤ t := by
   by_contra! hc
@@ -1339,7 +1257,7 @@ theorem logVal_clause1 (p : ℕ) (hp : p.Prime) (t s : ℕ) :
     PadicGe p (((p ^ (t + 1) : ℕ) : ℚ) ^ s * ∑ y ∈ Finset.Ico 1 (p ^ (t + 1)), ((y : ℚ) ^ s)⁻¹) s := by
   haveI := Fact.mk hp
   rw [Finset.mul_sum]
-  apply padicGe_sum
+  apply _root_.Formalism.MainNotions.G.GLWeightTheory.padicGe_sum
   intro y hy
   rw [Finset.mem_Ico] at hy
   have hy0 : (y : ℚ) ≠ 0 := by exact_mod_cast (by omega : y ≠ 0)

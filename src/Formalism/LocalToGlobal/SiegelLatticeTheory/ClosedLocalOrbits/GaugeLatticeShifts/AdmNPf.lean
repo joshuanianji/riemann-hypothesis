@@ -68,21 +68,6 @@ theorem crd_sum' {ι : Type} (t : Finset ι) (f : ι → (VS D).V) : X.crd (∑ 
 
   simp [Formalism.L2.SG.HidaSetting.HidaSetting.crd, crdOf, map_sum, Finset.sum_apply]
 
-theorem incl_sub' (x y : Fin X.B.I.n → X.B.I.E) : incl X.B.I (x - y) = incl X.B.I x - incl X.B.I y := by
-  funext i
-  simp [incl]
-
-theorem incl_smul' (c : X.B.I.E) (x : Fin X.B.I.n → X.B.I.E) :
-    incl X.B.I (c • x) = Formalism.UG.inclE (F := X.B.I.F) (Af X.B.I.F) c • incl X.B.I x := by
-  funext i
-  simp [incl]
-
-theorem incl_sum' {ι : Type} (t : Finset ι) (x : ι → Fin X.B.I.n → X.B.I.E) :
-    incl X.B.I (∑ j ∈ t, x j) = ∑ j ∈ t, incl X.B.I (x j) := by
-  funext i
-
-  simp [incl, map_sum, Finset.sum_apply]
-
 theorem ratLink_incl {x : X.B.I.GA} {γ : (VS D).V ≃ₗ[D.host.E] (VS D).V} (h : RatLink X x γ) (y : (VS D).V) :
     incl X.B.I (X.crd (γ y)) = X.B.I.fmat x.2 *ᵥ incl X.B.I (X.crd y) := by
   obtain ⟨M, -, -, hfm, hcrd⟩ := h
@@ -156,7 +141,7 @@ theorem norm_congruence_of_carrier (hTF : FrameTie X u u' F0 F0') (hM : Formalis
     erw [frame_mapLF hiso] at h1
     have e : X.B.I.fmat g1⁻¹ *ᵥ incl X.B.I (X.crd (p.1.2 (frame (lf D F0') c) -
         frameAct (frame (lf D F0)) ξ c)) = X.B.I.fmat κ *ᵥ Y' c - ∑ a, s a c • Y a := by
-      simp only [frameAct, crd_sub', crd_sum', crd_smul', incl_sub', incl_sum', incl_smul', Matrix.mulVec_sub,
+      simp only [frameAct, crd_sub', crd_sum', crd_smul', _root_.Formalism.L2.SG.Pf.Level.incl_sub, _root_.Formalism.L2.SG.Pf.Level.incl_sum, _root_.Formalism.L2.SG.Pf.Level.incl_smul, Matrix.mulVec_sub,
         mulVec_fsum, Matrix.mulVec_smul, ratLink_incl X hRL]
       congr 1
       simp only [hY', Matrix.mulVec_mulVec, hκ', ← fmat_mul]

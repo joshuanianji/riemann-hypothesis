@@ -116,24 +116,6 @@ section -- clump:auto
 open AlgebraicGeometry CategoryTheory CategoryTheory.Limits NumberField
 open ReciprocityTheory.ChartRestriction.G ReciprocityTheory.ChartRestriction.G.Semi ReciprocityTheory.ChartRestriction.G.Geo.Tor Formalism.L2.Pj Formalism.L2.Pj.QAt GlobalTheory.ArcQ GlobalTheory.Frames
 
-theorem _root_.GlobalTheory.T.isFramedPoint_of_arc_baseChange :
-    Out.Laws → Out.Laws2 →
-    ∀ (E : Type) [Field E] [NumberField E] [IsCMField E]
-      (H : Host E) (Dw : Datum H) (l : Level H) (Xo : Moduli Dw l) (c : Coeff l)
-      (O : Type) [CommRing O] (β : O →+* c.F) (Y : Model Xo c β)
-      (A : Type) [CommRing A] [IsDomain A] [IsLocalRing A] [IsNoetherianRing A]
-      (b : O →+* A) (a : ArcIn Dw l β A b) (χ : Sp (PowerSeries A) ⟶ Y.X) (W : Wit Y a χ)
-      (A' : Type) [CommRing A'] [IsDomain A'] [IsLocalRing A'] [IsNoetherianRing A']
-      (b' : O →+* A') (a' : ArcIn Dw l β A' b') (f : A →+* A')
-      (p : Out.IsPullDeg f a.D₀ a'.D₀) (W' : Wit Y a' (spMap (PowerSeries.map f) ≫ χ)),
-      Mono Y.j → InBC f a a' p → WitBC f p W W' →
-      ∀ (e : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → Out.GtPt a.D₀ (epsR A))
-        (e' : ∀ τ : E →+* ℂ, Fin (Dw.mult τ) → Out.GtPt a'.D₀ (epsR A')) th th',
-        (∀ τ k, GlobalTheory.ArcQ.LetBC p (e τ k) (e' τ k)) → ThBC p th th' →
-        ∀ (S : Type) [CommRing S] [Algebra c.F S] (ι' : PowerSeries A' →+* S) (y : FrPt Xo c S),
-          GlobalTheory.ArcQ.IsArcFr W e th (ι'.comp (PowerSeries.map f)) y →
-            GlobalTheory.ArcQ.IsArcFr W' e' th' ι' y :=
-  @GlobalTheory.ArcQ.isArcFr_witBC
 end -- clump:auto
 end -- clump:auto
 -- ===== end clump member: Development.AbelianVarietyTheory.Proofs.ThetaShiftProofs.IsFramedPointOfArcBaseChangeStatement =====
@@ -284,7 +266,7 @@ theorem exists_frPt_at (h1 : Out.Laws) (h2 : Out.Laws2) (hev : GlobalTheory.Reg.
   have hι : φ.toRingHom.comp (arcι Dw K₁) = (HahnSeries.ofPowerSeries ℤ ℂ).comp (PowerSeries.map ι) :=
     RingHom.ext fun g => evS_arcι ι hx g
   rw [hι] at a₀
-  have b₁ := GlobalTheory.T.isFramedPoint_of_arc_baseChange h1 h2 E H Dw l Xo c _ _ d.Y K₁ _ _ d.χ d.W ℂ b' a₁ ι p W₁ hY hp hW e₀ e₁ d.th th₁ he ht
+  have b₁ := _root_.GlobalTheory.ArcQ.isArcFr_witBC h1 h2 E H Dw l Xo c _ _ d.Y K₁ _ _ d.χ d.W ℂ b' a₁ ι p W₁ hY hp hW e₀ e₁ d.th th₁ he ht
     _ _ y₁ a₀
   have c₁ := ((_root_.GlobalTheory.Frames.frChg_calculus E H Dw l Xo c (ArcS Dw K₁)).2.2.1 _ φ _ _ _ _ _ _ hc hy₁).1 hz₁
   let g : ∀ τ : E →+* ℂ, Matrix (Fin (Dw.mult τ)) (Fin (Dw.mult τ)) ℂ := fun τ => Matrix.of fun i k => x ⟨τ, (i, k)⟩

@@ -69,7 +69,7 @@ theorem key_gen (hTF : FrameTie X u u' F0 F0') (hM : Formalism.L2.SG.NormCut.Mod
     have h1 := hM g1 Λ hlat _ (hξm c)
     have e : X.B.I.fmat g1⁻¹ *ᵥ incl X.B.I (X.crd (γ (frame (lf D F0') c) -
         frameAct (frame (lf D F0)) ξ c)) = X.B.I.fmat κ *ᵥ Y' c - ∑ a, s a c • Y a := by
-      simp only [frameAct, crd_sub', crd_sum', crd_smul', incl_sub', incl_sum', incl_smul', Matrix.mulVec_sub,
+      simp only [frameAct, crd_sub', crd_sum', crd_smul', _root_.Formalism.L2.SG.Pf.Level.incl_sub, _root_.Formalism.L2.SG.Pf.Level.incl_sum, _root_.Formalism.L2.SG.Pf.Level.incl_smul, Matrix.mulVec_sub,
         mulVec_fsum, Matrix.mulVec_smul, ratLink_incl X hRL]
       congr 1
       simp only [hY', Matrix.mulVec_mulVec, hκ', ← fmat_mul]

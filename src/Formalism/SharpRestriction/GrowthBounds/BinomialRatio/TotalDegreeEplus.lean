@@ -161,27 +161,6 @@ theorem totalDegree_chPol {K : Type*} [CommSemiring K] (LL : ChainLetters N) (y 
   rw [Finsupp.sum_fintype _ _ (fun _ => rfl), Fintype.sum_prod_type]
   exact le_of_eq (Finset.sum_congr rfl fun i _ => h i)
 
-theorem totalDegree_xi (t b : ℕ) (g : MvPolynomial (BVar N r t) (KK O)) (hg : g ∈ XiPolZ O N r t b) :
-    g.totalDegree ≤ b := by
-  classical
-  have hg1 : g ∈ MvPolynomial.restrictSupport (KK O)
-      {m | (∀ v ∈ m.support, ∃ c, v = xiVar N r t c) ∧ ∑ c, m (xiVar N r t c) = b} := hg.1
-  rw [MvPolynomial.mem_restrictSupport_iff] at hg1
-  unfold totalDegree
-  refine Finset.sup_le fun m hm => ?_
-  obtain ⟨h1, h2⟩ := hg1 (Finset.mem_coe.2 hm)
-  rw [← h2]
-  have hinj : Function.Injective (xiVar N r t) := by
-    intro c c' h
-    unfold xiVar at h
-    exact (Prod.mk.inj (Sum.inl.inj h)).2
-  rw [← Finset.sum_image (f := fun v => m v) (s := Finset.univ) (g := xiVar N r t) (fun _ _ _ _ h => hinj h)]
-  unfold Finsupp.sum
-  refine Finset.sum_le_sum_of_subset ?_
-  intro v hv
-  obtain ⟨c, rfl⟩ := h1 v hv
-  exact Finset.mem_image_of_mem _ (Finset.mem_univ c)
-
 def degBound (D : BlockData N) : ℕ :=
   (∑ i, D.LL.deg (D.letterAt (D.T.pos i)) * 2) + D.B * 2 + (∑ i, D.T.z i) + D.zPlus + (∑ a, D.LL.deg a) + D.B
 

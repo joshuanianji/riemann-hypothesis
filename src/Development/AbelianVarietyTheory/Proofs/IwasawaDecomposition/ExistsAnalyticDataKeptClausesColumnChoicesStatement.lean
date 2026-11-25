@@ -133,25 +133,6 @@ theorem plc_eq_of_natCast_mem {F : Type} [Field F] [NumberField F] (v : HeightOn
 section UnitConjugation
 open Formalism.BasicNotions.DV
 
-theorem additiveValuation_conjugatePlace_eq_star (D : D7) (w : D.what₂.places.Pl) (x : D.what₂.LL) :
-    vAdd (D.plEq (D.what₂.places.conj w)) x = vAdd (D.plEq w) (star x) := by
-  by_cases hx : x = 0
-  · subst hx; simp [vAdd]
-  · have h1 := D.conj_val w x
-    rw [D.val_eq _ x hx, D.val_eq _ (star x) (star_ne_zero.2 hx)] at h1
-    exact_mod_cast h1
-
-theorem mem_heightOneSpectrum_iff_additiveValuation_pos {K : Type} [Field K] [NumberField K] (w : HeightOneSpectrum (𝓞 K)) (x : 𝓞 K)
-    (hx : x ≠ 0) : x ∈ w.asIdeal ↔ 0 < vAdd w (x : K) := by
-  have hx' : w.valuation K (x : K) ≠ 0 := (map_ne_zero _).2 (by exact_mod_cast hx)
-  rw [← HeightOneSpectrum.valuation_lt_one_iff_mem (K := K)]
-  unfold vAdd
-  rw [neg_pos, ← WithZero.log_one, WithZero.log_lt_log hx' one_ne_zero]
-
-theorem plEq_conjPl (D : D7) (w : D.what₂.places.Pl) :
-    D.plEq (D.what₂.places.conj w) = Formalism.DivisionValues.conjPl (D.plEq w) := by
-  first | exact _root_.GlobalTheory.TypeLoss.plEq_conj | exact @_root_.GlobalTheory.TypeLoss.plEq_conj | apply _root_.GlobalTheory.TypeLoss.plEq_conj <;> assumption
-
 end UnitConjugation
 
 end GlobalTheory.Mem.R3
@@ -176,8 +157,8 @@ theorem GlobalTheory.Mem.R3.tupL_of_twisted : ∀ (X : Stages) (px : PreX X.B.to
     rw [muP_in w h]; exact ixOf_eq I rfl
   have hcc : ∀ w, X.B.places.conj (X.B.places.conj w) = w := fun w => by
     apply X.toD7.plEq.injective
-    have e1 := plEq_conjPl X.toD7 (X.toD7.what₂.places.conj w)
-    have e2 := plEq_conjPl X.toD7 w
+    have e1 := _root_.GlobalTheory.TypeLoss.plEq_conj X.toD7 (X.toD7.what₂.places.conj w)
+    have e2 := _root_.GlobalTheory.TypeLoss.plEq_conj X.toD7 w
     change X.toD7.plEq (X.toD7.what₂.places.conj (X.toD7.what₂.places.conj w)) = X.toD7.plEq w
     rw [e1, e2, Formalism.DivisionValues.ValuationRepresentative.conjPl_conjPl]
   have hconjIff : ∀ w, X.B.places.conj w ∈ Wt ↔ w ∈ Wt := fun w =>
@@ -246,7 +227,7 @@ theorem GlobalTheory.Mem.R3.tupL_of_twisted : ∀ (X : Stages) (px : PreX X.B.to
       exact (GlobalTheory.Mem.Top.TwFin.tw_fin X.B I.C T).2.1 _ h2
     · intro v
       have e : Formalism.DivisionValues.conjPl v = X.toD7.plEq (X.B.places.conj (X.toD7.plEq.symm v)) := by
-        have := plEq_conjPl X.toD7 (X.toD7.plEq.symm v)
+        have := _root_.GlobalTheory.TypeLoss.plEq_conj X.toD7 (X.toD7.plEq.symm v)
         rw [Equiv.apply_symm_apply] at this
         exact this.symm
       show muP (X.toD7.plEq.symm (Formalism.DivisionValues.conjPl v)) = muP (X.toD7.plEq.symm v)

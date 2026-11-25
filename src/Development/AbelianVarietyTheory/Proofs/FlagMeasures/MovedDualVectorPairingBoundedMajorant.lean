@@ -323,10 +323,6 @@ lemma esI_inj (k r : ℕ) : Function.Injective (esI k r) := by
   simp only [esI] at this
   exact Fin.ext (by omega)
 
-lemma XstJ_eq {k r j : ℕ} {v : Fin (2 * r + k + 1) → ℂ} (hv : v ∈ XstJ k r j) (i : Fin (2 * r + k + 1))
-    (hi : ∀ c : Fin r, c.val < j → i ≠ esI k r c) : v i = 0 := by
-  apply _root_.GlobalTheory.Amp.CommonStab.xst_coord <;> assumption
-
 lemma pluck_flag {k r n : ℕ} (hn : n ≤ r) (z : Fin (2 * r + k + 1) → ℂ) (hz : inWb k r z) (x : Mat k r)
     (hx : x ∈ GG k r) (R : ℝ) (hR : Sg k r z x ≤ R) (y : Fin n → Fin (2 * r + k + 1) → ℂ)
     (hy : ∀ a, eucl (y a) ≤ R) :
@@ -399,7 +395,7 @@ lemma inv_e {k r j : ℕ} (hj : j ≤ r) {g : Mat k r} (hg : g ∈ GG k r) (a b 
         hc (Fin.castLE_injective hj (esI_inj k r h))
       simp [h0, bvec, Pi.single_eq_of_ne this]
   · push Not at hi
-    rw [XstJ_eq hX i fun c hc => hi ⟨c.val, hc⟩]
+    rw [_root_.GlobalTheory.Amp.CommonStab.xst_coord hX i fun c hc => hi ⟨c.val, hc⟩]
     simp [bvec, Pi.single_eq_of_ne (hi b)]
 
 lemma sEl_mem (k r j : ℕ) (β : Fin r → ℕ) (q : PSec k r j × (UToff β → ℂ)) : sEl k r j β q ∈ Nset k r :=

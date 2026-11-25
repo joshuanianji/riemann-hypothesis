@@ -443,10 +443,6 @@ noncomputable section
 
 variable {E W : Type} [Field E]
 
-lemma psd_sum_nonneg {α : Type} (Y : Finset α) (k g : α → α → ℂ) (hk : PSDOn Y k)
-    (hg : PSDOn Y g) : 0 ≤ (∑ p ∈ Y, ∑ q ∈ Y, k p q * g p q).re := by
-  apply _root_.Formalism.FourierDecayAlt.P.BaseGramNonnegativity.sum_re_nonneg <;> assumption
-
 lemma psd_comp {α β : Type} (Y : Finset α) (Z : Finset β) (φ : α → β) (hφ : ∀ a ∈ Y, φ a ∈ Z)
     (k : β → β → ℂ) (hk : PSDOn Z k) : PSDOn Y (fun a b => k (φ a) (φ b)) :=
   Matrix.PosSemidef.submatrix hk (fun a : Y => (⟨φ a, hφ a a.2⟩ : Z))
@@ -565,7 +561,7 @@ lemma diag_nonneg (D : Data E W) (hG : D.GramPSD) (hK : D.KernelPSD) (hW : D.Wor
   unfold Data.Nst
   rw [Complex.div_ofReal_re]
   refine div_nonneg ?_ (hW w).le
-  exact psd_sum_nonneg Y _ (fun h h' => D.gram ε i w (join h s t) (join h' s t))
+  exact _root_.Formalism.FourierDecayAlt.P.BaseGramNonnegativity.sum_re_nonneg Y _ (fun h h' => D.gram ε i w (join h s t) (join h' s t))
     (psd_comp Y (Y.image fun h => join h s t) (fun h => join h s t)
       (fun a ha => mem_image_of_mem _ ha) _ (hK.1 i _))
     (psd_comp Y (Y.image fun h => join h s t) (fun h => join h s t)
@@ -763,16 +759,12 @@ open Finset Formalism.FourierDecayAlt.TB Formalism.FourierDecayAlt.TB.Data
 
 open scoped ComplexOrder
 
-theorem form_nonneg {α : Type} (Y : Finset α) (k g : α → α → ℂ) (hk : PSDOn Y k)
-    (hg : PSDOn Y g) : 0 ≤ (∑ a ∈ Y, ∑ b ∈ Y, k a b * g a b).re := by
-  apply _root_.Formalism.FourierDecayAlt.P.BlockStartPoints.psd_sum_nonneg <;> assumption
-
 theorem form_dom {α ι : Type} (Y : Finset α) (R : Finset ι) (c : ℝ) (k g : α → α → ℂ)
     (Th : ι → α → α → ℂ)
     (h : PSDOn Y (fun a b => (c : ℂ) * k a b - ∑ t ∈ R, Th t a b)) (hg : PSDOn Y g) :
     ∑ t ∈ R, (∑ a ∈ Y, ∑ b ∈ Y, Th t a b * g a b).re ≤
       c * (∑ a ∈ Y, ∑ b ∈ Y, k a b * g a b).re := by
-  have H := form_nonneg Y _ g h hg
+  have H := _root_.Formalism.FourierDecayAlt.P.BaseGramNonnegativity.sum_re_nonneg Y _ g h hg
   have e : ∑ a ∈ Y, ∑ b ∈ Y, ((c : ℂ) * k a b - ∑ t ∈ R, Th t a b) * g a b =
       (c : ℂ) * ∑ a ∈ Y, ∑ b ∈ Y, k a b * g a b -
         ∑ t ∈ R, ∑ a ∈ Y, ∑ b ∈ Y, Th t a b * g a b := by
@@ -796,10 +788,6 @@ theorem prob_nonneg {α : Type} (S : Finset α) (θ g : α → ℝ) (hθ : IsPro
   Finset.sum_nonneg fun a ha => mul_nonneg (hθ.1 a) (hg a ha)
 
 variable {E W : Type} [Field E] (D : Data E W)
-
-theorem baseGram_nonneg (hG : D.GramPSD) (hW : D.WordsPos) {ε : ℝ} (hε : 0 < ε) (k : ℕ) (w : W)
-    (Y : Finset (Pt E)) (κ : Pt E → Pt E → ℂ) (hκ : PSDOn Y κ) : 0 ≤ D.N0 ε k w Y κ :=
-  div_nonneg (form_nonneg Y κ _ hκ (hG ε hε k w Y)) (hW w).le
 
 theorem sum_baseGram_le (hG : D.GramPSD) (hW : D.WordsPos) {ε : ℝ} (hε : 0 < ε) (k : ℕ) (w : W)
     (Y : Finset (Pt E)) (R : Finset E) (c : ℝ) (κ : Pt E → Pt E → ℂ)
@@ -875,7 +863,7 @@ theorem singleBlockStep : Formalism.FourierDecayAlt.TB.OneStep := by
   set g : Finset (Fin D.f) → E → ℝ := fun A t₀ => ∑ w' ∈ D.Wb (D.cnt w + D.K),
     θ A w' * D.N0 ε (i - 1) w' (T.X (i - 1)) (D.Th i 1 t₀) with hg
   have hg0 : ∀ A t₀, 0 ≤ g A t₀ := fun A t₀ =>
-    prob_nonneg _ _ _ (hθ A) fun w' _ => baseGram_nonneg D hG hW hε _ _ _ _ (hK.2 i 1 t₀ _)
+    prob_nonneg _ _ _ (hθ A) fun w' _ => _root_.Formalism.FourierDecayAlt.P.BaseGramNonnegativity.baseGram_nonneg D hG hW hε _ _ _ _ (hK.2 i 1 t₀ _)
   have hstep : ∀ t₀ ∈ R, ∑ t ∈ (T.Sg i 1).filter (fun t => t - t₀ ∈ D.La i 1),
       (D.Nst ε i 1 w (T.X (i - 1)) (D.Th i 1 t₀) t t).re ≤
         D.N0 ε (i - 1) w (T.X (i - 1)) (D.Th i 1 t₀) + ep * ∑ A, g A t₀ := by
@@ -914,7 +902,7 @@ theorem singleBlockStep : Formalism.FourierDecayAlt.TB.OneStep := by
         rw [Finset.mem_filter] at ht
         exact ⟨fun h0 => T.zero_not_mem _ _ (h0 ▸ ht.1), ht.2⟩)
     rw [h0, Complex.norm_real, Real.norm_eq_abs,
-      abs_of_nonneg (baseGram_nonneg D hG hW hε _ _ _ _ hpsd)] at hp
+      abs_of_nonneg (_root_.Formalism.FourierDecayAlt.P.BaseGramNonnegativity.baseGram_nonneg D hG hW hε _ _ _ _ hpsd)] at hp
     exact hp
   have hsumG : ∑ t₀ ∈ R, ∑ A, g A t₀ ≤ 2 ^ D.f * ((1 + D.e i) * M) := by
     rw [Finset.sum_comm]
@@ -989,10 +977,6 @@ theorem form_ind {α : Type} (Y A : Finset α) (hA : A ⊆ Y) (k : α → α →
   simp only [h1]
   exact sum_mul_ind Y A hA (fun p => ∑ q ∈ A, k p q)
 
-theorem psd_mul {α : Type} {Y : Finset α} {k₁ k₂ : α → α → ℂ} (h₁ : PSDOn Y k₁) (h₂ : PSDOn Y k₂) :
-    PSDOn Y (fun p q => k₁ p q * k₂ p q) :=
-  Matrix.PosSemidef.hadamard h₁ h₂
-
 theorem psd_pull {α β : Type} {Y : Finset α} (g : α → β) {k : β → β → ℂ}
     (h : PSDOn (Y.image g) k) : PSDOn Y (fun p q => k (g p) (g q)) :=
   Matrix.PosSemidef.submatrix h (fun p : Y => (⟨g p, Finset.mem_image_of_mem g p.2⟩ : Y.image g))
@@ -1044,7 +1028,7 @@ theorem Nst_nonneg (D : Data E W) (hG : D.GramPSD) (hW : D.WordsPos) {ε : ℝ} 
     0 ≤ (D.Nst ε i s w Y κ t t).re := by
   rw [Nst_re]
   refine div_nonneg ?_ (hW w).le
-  exact psd_sum_nonneg (psd_mul hκ (psd_pull (fun h => join h s t) (hG ε hε i w _)))
+  exact psd_sum_nonneg (_root_.Formalism.FourierDecayAlt.P.Jx7.psd_mul hκ (psd_pull (fun h => join h s t) (hG ε hε i w _)))
 
 theorem Nst_mono (D : Data E W) (hG : D.GramPSD) (hW : D.WordsPos) {ε : ℝ} (hε : 0 < ε)
     (i s : ℕ) (w : W) (Y : Finset (Pt E)) {κ₁ κ₂ : Pt E → Pt E → ℂ}
@@ -1069,7 +1053,7 @@ open Classical in
 theorem splitByLastSize : Formalism.FourierDecayAlt.TB.SplitBySize := by
   intro E W _ D hG hK T ε hε i hi w
   have hM : PSDOn (T.X i) (fun p q => D.Kr i p q * D.gram ε i w p q) :=
-    psd_mul (hK.1 i _) (hG ε hε i w _)
+    _root_.Formalism.FourierDecayAlt.P.Jx7.psd_mul (hK.1 i _) (hG ε hε i w _)
   have h := sqrt_form_sum_le _ hM (Icc 1 i) (fun s => ind (T.X i) (Xs T i s))
   have h2 : ∀ s, Xs T i s ⊆ T.X i := fun s => Finset.filter_subset _ _
   rw [sum_ind_Xs T hi, form_ind (T.X i) (T.X i) (Finset.Subset.refl _)
@@ -1198,10 +1182,6 @@ theorem psd_congr {α : Type} {Y : Finset α} {k k' : α → α → ℂ}
 theorem psd_zero {α : Type} (Y : Finset α) : PSDOn Y (fun _ _ => (0 : ℂ)) := by
   apply _root_.Formalism.FourierDecayAlt.P.Jx7.psd_zero <;> assumption
 
-theorem psd_add {α : Type} {Y : Finset α} {k k' : α → α → ℂ} (h : PSDOn Y k) (h' : PSDOn Y k') :
-    PSDOn Y (fun x y => k x y + k' x y) := by
-  apply _root_.Formalism.FourierDecayAlt.P.Jx7.psd_add <;> assumption
-
 private theorem sum_attach_ite_eq {α : Type} (X : Finset α) (a : α) (F : α → ℂ) :
     (∑ j ∈ X.attach, if (j : α) = a then F j else 0) = if a ∈ X then F a else 0 := by
   rw [Finset.sum_attach (s := X) (f := fun j => if j = a then F j else 0)]
@@ -1249,7 +1229,7 @@ theorem majorantPSD : MajorantPSD := by
     convert this using 1
     ext x y
     rfl
-  refine psd_congr ?_ (psd_add h1 h2)
+  refine psd_congr ?_ (_root_.Formalism.FourierDecayAlt.P.Jx7.psd_add h1 h2)
   intro x _ y _
   exact sub_add_cancel _ _
 
@@ -1648,7 +1628,7 @@ theorem t_DensSize : DensSize := by
 theorem t_SumBoundMax : SumBoundMax := by
   intro α Y k m sd hk h
   have h2 := B1.psd_smul (max sd 1 - sd) (by linarith [le_max_left sd 1]) hk
-  refine B1.psd_congr (fun x _ y _ => ?_) (B1.psd_add h h2)
+  refine B1.psd_congr (fun x _ y _ => ?_) (_root_.Formalism.FourierDecayAlt.P.Jx7.psd_add h h2)
   push_cast
   ring
 

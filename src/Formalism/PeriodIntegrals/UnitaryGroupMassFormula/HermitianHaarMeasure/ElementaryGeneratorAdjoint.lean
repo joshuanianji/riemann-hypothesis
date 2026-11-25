@@ -67,10 +67,6 @@ lemma exp_mem_uh {Y : Mx k r} (hY : Yᴴ * Hpk k r + Hpk k r * Y = 0) :
   rw [hexp, Matrix.mul_assoc (Hpk k r * NormedSpace.exp (-Y)) (Hpk k r) (Hpk k r), WeylGroupFacts.hpk_sq,
     Matrix.mul_one, Matrix.mul_assoc, hc, Matrix.mul_one]
 
-lemma glev_mul_exp {i : Fin (r + 1)} {g X : Mx k r} (hg : g ∈ Glev k r i) (hX : inLieLev k r i X)
-    (t : ℝ) : g * NormedSpace.exp ((t : ℂ) • X) ∈ Glev k r i := by
-  apply _root_.Formalism.FourierDecayAlt.P.Qx2.curve_lev <;> assumption
-
 lemma rd_ext {i : Fin (r + 1)} {f : Mx k r → ℂ} (hf : SmoothLev k r i Set.univ f) {g : Mx k r}
     (hg : g ∈ Glev k r i) : ∃ L : Mx k r →L[ℝ] ℂ, ∀ X, inLieLev k r i X → RdV X f g = L (g * X) := by
   obtain ⟨U, F, hU, hgU, hF, hfF⟩ := hf g ⟨hg, Set.mem_univ _⟩
@@ -89,7 +85,7 @@ lemma rd_ext {i : Fin (r + 1)} {f : Mx k r → ℂ} (hf : SmoothLev k r i Set.un
     have hmem : ∀ᶠ t : ℝ in 𝓝 0, g * NormedSpace.exp ((t : ℂ) • X) ∈ U :=
       hγ.continuousAt.preimage_mem_nhds (by rw [hγ0]; exact hU.mem_nhds hgU)
     filter_upwards [hmem] with t ht
-    exact hfF _ ht (glev_mul_exp hg hX t)
+    exact hfF _ ht (_root_.Formalism.FourierDecayAlt.P.Qx2.curve_lev hg hX t)
   rw [hev.deriv_eq]
   exact hcomp.deriv
 
@@ -165,14 +161,6 @@ lemma supp_hpart2 {i : Fin (r + 1)} {W : Mx k r} (hW : SuppV i W) : SuppV i (hpa
   unfold hpart2
   rw [hpk_inv]
   exact supp_smul (supp_add hW (supp_conj hW)) _
-
-lemma inU_hpart1 (W : Mx k r) :
-    (hpart1 (Hpk k r) W)ᴴ * Hpk k r + Hpk k r * hpart1 (Hpk k r) W = 0 := by
-  apply _root_.Formalism.FourierDecayAlt.P.Qx2.hpart1_lie <;> assumption
-
-lemma inU_hpart2 (W : Mx k r) :
-    (hpart2 (Hpk k r) W)ᴴ * Hpk k r + Hpk k r * hpart2 (Hpk k r) W = 0 := by
-  apply _root_.Formalism.FourierDecayAlt.P.Qx2.hpart2_lie <;> assumption
 
 lemma lie_of {i : Fin (r + 1)} {X : Mx k r} (hU : Xᴴ * Hpk k r + Hpk k r * X = 0) (hS : SuppV i X) :
     inLieLev k r i X := by
@@ -338,7 +326,7 @@ lemma conj_single_expand (i : Fin (r + 1)) (a b : Fin (mdim k r i)) :
 lemma ec_phi {i : Fin (r + 1)} {L : Mx k r →L[ℝ] ℂ} {f : Mx k r → ℂ} {g : Mx k r}
     (hL : ∀ X, inLieLev k r i X → RdV X f g = L (g * X)) {W : Mx k r} (hW : SuppV i W) :
     RdV (hpart1 (Hpk k r) W) f g + Complex.I • RdV (hpart2 (Hpk k r) W) f g = phiL L g W := by
-  rw [hL _ (lie_of (inU_hpart1 W) (supp_hpart1 hW)), hL _ (lie_of (inU_hpart2 W) (supp_hpart2 hW)),
+  rw [hL _ (lie_of (_root_.Formalism.FourierDecayAlt.P.Qx2.hpart1_lie W) (supp_hpart1 hW)), hL _ (lie_of (_root_.Formalism.FourierDecayAlt.P.Qx2.hpart2_lie W) (supp_hpart2 hW)),
     smul_eq_mul]
   rfl
 
@@ -365,9 +353,9 @@ theorem elementary_generator_adjoint : EabAdjFrom := by
   intro hRd _hP hT hI k r i μ hμ a b f₁ f₂ h₁ h₂
   set Z : Mx k r := Matrix.single (posL k r i a) (posL k r i b) (1 : ℂ) with hZ
   have hX1 : inLieLev k r i (hpart1 (Hpk k r) Z) :=
-    lie_of (inU_hpart1 Z) (supp_hpart1 (supp_single i a b))
+    lie_of (_root_.Formalism.FourierDecayAlt.P.Qx2.hpart1_lie Z) (supp_hpart1 (supp_single i a b))
   have hX2 : inLieLev k r i (hpart2 (Hpk k r) Z) :=
-    lie_of (inU_hpart2 Z) (supp_hpart2 (supp_single i a b))
+    lie_of (_root_.Formalism.FourierDecayAlt.P.Qx2.hpart2_lie Z) (supp_hpart2 (supp_single i a b))
   set Ψ : (Mx k r → ℂ) → Mx k r → ℂ := fun f g =>
     ∑ c, ∑ d, (Hm k r i c b * Hm k r i a d) • EH k r (posL k r i c) (posL k r i d) f g with hΨ
   have hE : ∀ f g, EH k r (posL k r i a) (posL k r i b) f g =

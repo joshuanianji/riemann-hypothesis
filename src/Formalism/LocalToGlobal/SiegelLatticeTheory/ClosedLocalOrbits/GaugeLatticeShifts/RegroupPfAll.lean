@@ -555,7 +555,7 @@ theorem frame_congruence_holds : FrameCongC := by
 
   have e : X.B.I.fmat g1⁻¹ *ᵥ incl X.B.I (X.crd (σ (frame (lf D (X.Fu u')) b) -
       frameAct (frame (lf D (X.Fu u))) ξ b)) = X.B.I.fmat κ *ᵥ Yv' b - ∑ a, s (ξ a b : D.host.E) • Yv a := by
-    simp only [frameAct, crd_sub', crd_sum', crd_smul', incl_sub', incl_sum', incl_smul', Matrix.mulVec_sub,
+    simp only [frameAct, crd_sub', crd_sum', crd_smul', _root_.Formalism.L2.SG.Pf.Level.incl_sub, _root_.Formalism.L2.SG.Pf.Level.incl_sum, _root_.Formalism.L2.SG.Pf.Level.incl_smul, Matrix.mulVec_sub,
       mulVec_fsum, Matrix.mulVec_smul, ratLink_incl X hRL]
     congr 1
     simp only [hY', Matrix.mulVec_mulVec, hκ', ← fmat_mul]
@@ -621,7 +621,7 @@ theorem reduction_mod_g_holds : ModGOfAtC := by
     | smul t a _ ha => rw [smul_comm]; exact Submodule.smul_mem _ t ha
   set w : (VS D).V := (X.ιE (q * c)) • v with hwdef
   have hwΛ : w ∈ Λ := by
-    rw [hΛ, hwdef, Formalism.L2.SG.NormCut.crd_smul' X, Formalism.L2.SG.NormCut.incl_smul' X, mulVec_smul,
+    rw [hΛ, hwdef, Formalism.L2.SG.NormCut.crd_smul' X, _root_.Formalism.L2.SG.Pf.Level.incl_smul X, mulVec_smul,
       RingEquiv.symm_apply_apply, map_mul, map_natCast, mul_smul]
     exact key _ hcv
   intro P hgP

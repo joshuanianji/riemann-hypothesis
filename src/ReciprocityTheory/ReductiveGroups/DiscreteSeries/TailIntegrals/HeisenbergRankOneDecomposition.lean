@@ -330,17 +330,6 @@ theorem first_basis_middle_zero (k r' : ℕ) (j : Fin (2 * r' + k + 1)) : e0 k r
   rw [goodRowsProjector_apply_eq_sum]
   exact ite_eq_right (by simp only [mp]; omega)
 
-theorem ea_phiV_app {k r : ℕ} (b : Fin (r + 1)) (i : Fin (2 * r + k + 1)) :
-    phiV k r b i = if b.val < r then (if i.val = 2 * r + k - b.val then 1 else 0) else
-      ((Real.sqrt 2)⁻¹ : ℂ) * ((if i.val = r then 1 else 0) + (if i.val = r + k then 1 else 0)) := by
-  simp only [phiV]
-  by_cases h1 : b.val < r
-  · rw [dite_eq_left h1, ite_eq_left h1]
-    simp only [bvec, Pi.single_apply, esI, Fin.ext_iff]
-  · rw [dite_eq_right h1, ite_eq_right h1]
-    simp only [epsV, bvec, Pi.smul_apply, Pi.add_apply, smul_eq_mul, Pi.single_apply, wI, Fin.ext_iff,
-      Fin.val_zero, Fin.val_last, Nat.add_zero]
-
 theorem ea_phiV'_app {k r : ℕ} (hk : 1 ≤ k) (b : Fin (r + 1)) (i : Fin (2 * r + k + 1)) :
     phiV' k r b i = if b.val < r then (if i.val = b.val then 1 else 0) else
       ((Real.sqrt 2)⁻¹ : ℂ) * ((if i.val = r then 1 else 0) - (if i.val = r + k then 1 else 0)) := by

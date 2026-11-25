@@ -112,9 +112,6 @@ theorem op_neg_f (s : Sym m n) (f : PX m n) : op s (-f) = -op s f := by
 theorem op_sub_f (s : Sym m n) (f g : PX m n) : op s (f - g) = op s f - op s g := by
   simp [op_eq_opL]
 
-theorem op_zero_f (s : Sym m n) : op s (0 : PX m n) = 0 := by
-  simp [op_eq_opL]
-
 theorem op_mul_X_inl (s : Sym m n) (k : Fin m × Fin n × Bool) (f : PX m n) :
     op (s * X (Sum.inl k)) f = X k * op s f := by
   apply _root_.PositivityTheory.Rg.Sw.LC.PolynomialDifferentialOperators.op_mul_inl <;> assumption
@@ -237,7 +234,7 @@ theorem symK_op (ε : Fin m → Bool) (i j : Fin n) (s : Sym m n) :
       have key : op (p * symK ε i j (X (Sum.inr k))) f =
           op p (KopL ε i j (pderiv k f)) - op p (pderiv k (KopL ε i j f)) := by
         rw [← op_sub_f, KopL_pderiv, symK_inr]
-        split_ifs <;> simp [mul_neg, op_neg, op_mul_X_inr, op_neg_f, op_zero_f, op_zero]
+        split_ifs <;> simp [mul_neg, op_neg, op_mul_X_inr, op_neg_f, _root_.PositivityTheory.Rg.Sw.LC.PolynomialDifferentialOperators.op_zero_f, op_zero]
       rw [key]
       abel
 

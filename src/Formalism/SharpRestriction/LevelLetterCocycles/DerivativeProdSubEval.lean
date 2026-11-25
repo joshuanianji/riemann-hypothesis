@@ -51,11 +51,6 @@ section SlopeTestRemainingChoices
 
 variable (W : LocWach PD LL O v n)
 
-theorem map_letA_smul_comm {T₁ T₂ : LocLat G Qp LL O} (F : LatHom T₁.L T₂.L) (a : LetA O n)
-    (x : W.DD T₁) : W.map F (a • x) = a • W.map F x := by
-  first
-  | exact LinearMap.map_smul_of_tower (W.map F) a x
-
 theorem map_gamma_comm {T₁ T₂ : LocLat G Qp LL O} (F : LatHom T₁.L T₂.L) (x : W.DD T₁) :
     W.map F (W.γ T₁ x) = W.γ T₂ (W.map F x) := by
   exact W.map_γ F W.gam x
@@ -64,10 +59,6 @@ theorem smul_eq_algebraMap_letA_smul (T : LocLat G Qp LL O) (c : O) (y : W.DD T)
     c • y = (algebraMap (LetA O n) W.EE (algebraMap O (LetA O n) c)) • y := by
   first
   | (rw [algebraMap_smul, algebraMap_smul])
-
-theorem gammaD_smul_letA (T : LocLat G Qp LL O) (g : W.Gam) (a : LetA O n) (x : W.DD T) :
-    W.γD T g (a • x) = W.γA g a • W.γD T g x := by
-  rw [← algebraMap_smul W.EE a x, W.γD_smul, W.γE_ext, algebraMap_smul] <;> rfl
 
 theorem letGamma_idempotent (g₀ : PowerSeries O →ₐ[O] PowerSeries O) (i : ZMod n) :
     letγ g₀ (letE i : LetA O n) = letE i := by
@@ -78,13 +69,9 @@ theorem letGamma_idempotent (g₀ : PowerSeries O →ₐ[O] PowerSeries O) (i : 
   · subst h; simp [letE]
   · simp [letE, h]
 
-theorem idempotent_mul_self' (i : ZMod n) : (letE i : LetA O n) * letE i = letE i := by
-  first
-  | (unfold letE; rw [← Pi.single_mul, mul_one])
-
 theorem gammaD_idempotent_smul' (T : LocLat G Qp LL O) (g : W.Gam) (i : ZMod n) (x : W.DD T) :
     W.γD T g ((letE i : LetA O n) • x) = (letE i : LetA O n) • W.γD T g x := by
-  rw [gammaD_smul_letA W T g (letE i) x]
+  rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear W T g (letE i) x]
   exact congrArg (· • W.γD T g x) (letGamma_idempotent (W.γ₀ g) i)
 
 theorem gammaA_q_of_mem_delta (hπΔ : W.π₀ ∈ W.AΔ) (δ : W.Gam) (hδ : δ ∈ W.DelF) :
@@ -151,7 +138,7 @@ theorem map_comm_derivation {T₁ T₂ : LocLat G Qp LL O} (F : LatHom T₁.L T�
     have h' := congrArg (fun t => ((u⁻¹ : W.EEˣ) : W.EE) • t) h
     simpa [smul_smul] using h'
   apply hinj
-  rw [← map_letA_smul_comm W F W.π₀ (dop₁ y), hd₁, hd₂, map_sub, map_gamma_comm W F y]
+  rw [← _root_.Formalism.MainNotions.LiftingTheory.wmap_map_smul W F W.π₀ (dop₁ y), hd₁, hd₂, map_sub, map_gamma_comm W F y]
 
 def invariantLetter (T : LocLat G Qp LL O) (i : ZMod n) : Submodule O (W.DD T) :=
   W.NΔ T ⊓ (W.Nl T i).restrictScalars O
@@ -164,7 +151,7 @@ theorem mem_invariantLetter_iff {T : LocLat G Qp LL O} {i : ZMod n} {x : W.DD T}
 theorem idempotent_smul_of_mem_letter {T : LocLat G Qp LL O} {i : ZMod n} {x : W.DD T} (h : x ∈ W.Nl T i) :
     (letE i : LetA O n) • x = x := by
   obtain ⟨y, hy, rfl⟩ := Submodule.mem_map.mp h
-  simp only [LinearMap.smul_apply, LinearMap.id_apply, smul_smul, idempotent_mul_self']
+  simp only [LinearMap.smul_apply, LinearMap.id_apply, smul_smul, _root_.Formalism.MainNotions.LiftingTheory.letter_idempotent_sq]
 
 theorem mem_letter_of_idempotent_smul {T : LocLat G Qp LL O} {i : ZMod n} {x : W.DD T} (hN : x ∈ W.N T)
     (h : (letE i : LetA O n) • x = x) : x ∈ W.Nl T i := by
@@ -236,7 +223,7 @@ theorem exists_invariant_preimage_average (hΔ : IsUnit ((W.DelF.card : ℕ) : O
     exact (W.γD_mul T₁ δ' a y₀).symm
   have hyΔ : ∀ δ' ∈ W.DelF, W.γD T₁ δ' (r • s) = r • s := by
     intro δ' hδ'
-    rw [gammaD_smul_letA W T₁ δ' r s, hsΔ δ' hδ', hr, AlgHom.commutes]
+    rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear W T₁ δ' r s, hsΔ δ' hδ', hr, AlgHom.commutes]
   have hyl : r • s ∈ W.Nl T₁ i := by
     refine mem_letter_of_idempotent_smul W hyN ?_
     rw [smul_comm, hs, Finset.smul_sum]
@@ -249,7 +236,7 @@ theorem exists_invariant_preimage_average (hΔ : IsUnit ((W.DelF.card : ℕ) : O
     intro δ hδ
     rw [hmγ, hF, ht δ hδ]
 
-  rw [map_letA_smul_comm W F r s, hs, map_sum, Finset.sum_congr rfl hterm, Finset.sum_const,
+  rw [_root_.Formalism.MainNotions.LiftingTheory.wmap_map_smul W F r s, hs, map_sum, Finset.sum_congr rfl hterm, Finset.sum_const,
   ← Nat.cast_smul_eq_nsmul (LetA O n), smul_smul, hr, ← map_natCast (algebraMap O (LetA O n)),
   ← map_mul, ← huc, Units.inv_mul, map_one, one_smul]
 
@@ -365,14 +352,6 @@ theorem sum_Ioc_zero_eq_factorial (y : ℕ) :
       (show ∀ {p a b : ℕ} [_root_.Fact (_root_.Nat.Prime p)], a ≠ 0 → b ≠ 0 → _root_.padicValNat p (a * b) = _root_.padicValNat p a + _root_.padicValNat p b from by simpa only [← _root_.Nat.padicValNat_def] using @_root_.Nat.multiplicity_mul) (by omega) (Nat.factorial_ne_zero n)]
     ring
 
-theorem padicValNat_factorial_le_div_sub_one (y : ℕ) :
-    ((padicValNat l y.factorial : ℕ) : ℝ) ≤ (y : ℝ) / ((l : ℝ) - 1) := by
-  apply _root_.Formalism.RepresentationBoundsCohomology.N2.SumVal.val_factorial_le <;> assumption
-
-theorem padicValNat_choose_le_logb' (k n : ℕ) :
-    ((padicValNat l (k.choose n) : ℕ) : ℝ) ≤ Real.logb l k := by
-  apply _root_.Formalism.RepresentationBoundsCohomology.N2.SumVal.val_choose_le <;> assumption
-
 theorem sum_Ioc_padicValNat_le_div_sub_one_add_logb (k0 k1 : ℕ) (h : k0 ≤ k1) :
     ((∑ m ∈ Ioc k0 k1, padicValNat l m : ℕ) : ℝ) ≤
       ((k1 - k0 : ℕ) : ℝ) / ((l : ℝ) - 1) + Real.logb l k1 := by
@@ -389,8 +368,8 @@ theorem sum_Ioc_padicValNat_le_div_sub_one_add_logb (k0 k1 : ℕ) (h : k0 ≤ k1
   have heq : ∑ m ∈ Ioc k0 k1, padicValNat l m
       = padicValNat l (k1.choose k0) + padicValNat l (k1 - k0).factorial := by omega
   rw [heq, Nat.cast_add]
-  have h2 := padicValNat_factorial_le_div_sub_one l (k1 - k0)
-  have h3 := padicValNat_choose_le_logb' l k1 k0
+  have h2 := _root_.Formalism.RepresentationBoundsCohomology.N2.Size.val_factorial_le_div l (k1 - k0)
+  have h3 := _root_.Formalism.RepresentationBoundsCohomology.N2.SumVal.val_choose_le l k1 k0
   linarith
 
 theorem sum_sub_eq_sum_Ioc (j0 : ℤ) (k0 k1 : ℕ) (T : Finset ℤ)
@@ -504,8 +483,8 @@ theorem sum_erase_add_sum_le (a b S η h : ℕ) (hb : 2 * a + η ≤ b) (hbh : b
     rw [eA, eB] at e3
     rw [e12]
     omega
-  have hR := padicValNat_factorial_le_div_sub_one l (a - 1 - p)
-  have hP := padicValNat_factorial_le_div_sub_one l (p + S + a)
+  have hR := _root_.Formalism.RepresentationBoundsCohomology.N2.Size.val_factorial_le_div l (a - 1 - p)
+  have hP := _root_.Formalism.RepresentationBoundsCohomology.N2.Size.val_factorial_le_div l (p + S + a)
   have hB := sum_Ioc_padicValNat_le_div_sub_one_add_logb l (b - p - η - a - 1) (b - p + η - 1) (by omega)
   have hx : (0:ℝ) < ((b - p + η - 1 : ℕ) : ℝ) := by
     have : 0 < b - p + η - 1 := by omega
@@ -561,11 +540,6 @@ variable {G : Type} [Group G] [TopologicalSpace G] {Qp K₀ K : Type} [Field Qp]
     [IsScalarTower K₀ K BdR] [IsScalarTower Qp K₀ BdR]
     {PD : PeriodData G Qp K₀ K B BdR} {LL O : Type} [Field LL] [Algebra Qp LL] [TopologicalSpace LL]
     [CommRing O] [Algebra O LL] {v : AddValuation LL (WithTop ℚ)} {n : ℕ}
-
-theorem derivative_prod_sub_eval {R : Type} [CommRing R] (S₀ : Finset ℤ) (c : ℤ → R) (a : ℤ)
-    (ha : a ∈ S₀) :
-    (derivative (∏ b ∈ S₀, (X - C (c b)))).eval (c a) = ∏ b ∈ S₀.erase a, (c a - c b) := by
-  apply _root_.Formalism.MainNotions.LiftingTheory.lag_deriv_eval <;> assumption
 
 theorem addValuation_prod (w : AddValuation LL (WithTop ℚ)) {ι : Type} (S₀ : Finset ι) (f : ι → LL) :
     w (∏ b ∈ S₀, f b) = ∑ b ∈ S₀, w (f b) := by
@@ -691,7 +665,7 @@ theorem lemGB_of [NeZero n] (W : LocWach PD LL O v n) (hQ : Formalism.MainNotion
   obtain ⟨y₀, hy₀, hy₀F⟩ := Submodule.mem_map.1 (hK x hxl)
   have htx : ∀ δ ∈ W.DelF, W.γD T₂ δ (Formalism.MainNotions.LiftingTheory.qp W ^ a • x) = Formalism.MainNotions.LiftingTheory.qp W ^ a • x := by
     intro δ hδ
-    rw [gammaD_smul_letA, map_pow, gammaA_q_of_mem_delta W hπΔ δ hδ, hxΔ δ hδ]
+    rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear, map_pow, gammaA_q_of_mem_delta W hπΔ δ hδ, hxΔ δ hδ]
   obtain ⟨y₂, hy₂N, hy₂F⟩ := exists_invariant_preimage_average W hΔ F i hy₀ htx hy₀F
   let qi : W.EE := ((hq.unit⁻¹ : W.EEˣ) : W.EE)
   have hqz : Formalism.MainNotions.LiftingTheory.qp W ^ a • (qi ^ a • y₂) = y₂ := by
@@ -701,7 +675,7 @@ theorem lemGB_of [NeZero n] (W : LocWach PD LL O v n) (hQ : Formalism.MainNotion
     have hqa : IsUnit (algebraMap (LetA O n) W.EE (Formalism.MainNotions.LiftingTheory.qp W ^ a)) := by
       rw [map_pow]; exact hq.pow a
     refine (hqa.smul_left_cancel).1 ?_
-    rw [algebraMap_smul, algebraMap_smul, ← map_letA_smul_comm, hqz, hy₂F]
+    rw [algebraMap_smul, algebraMap_smul, ← _root_.Formalism.MainNotions.LiftingTheory.wmap_map_smul, hqz, hy₂F]
   have hX : ∀ (τ : K →ₐ[Qp] LL) (u : ℤ) (j : ℕ), Formalism.MainNotions.LiftingTheory.Over W τ i → IsJumpV PD T₁.ρ τ u →
       1 ≤ j → j ≤ a → u + (j : ℤ) ∈ Finset.Icc ((b i : ℤ) + 1) ((b i : ℤ) + S + a) ∪
         Finset.Icc (1 - (η : ℤ)) ((η : ℤ) + a) := by
@@ -721,7 +695,7 @@ theorem lemGB_of [NeZero n] (W : LocWach PD LL O v n) (hQ : Formalism.MainNotion
   obtain ⟨y₁', hy₁', hy₁F'⟩ := Submodule.mem_map.1 (hK w hwl)
   have htw : ∀ δ ∈ W.DelF, W.γD T₂ δ (Formalism.MainNotions.LiftingTheory.qp W ^ a • w) = Formalism.MainNotions.LiftingTheory.qp W ^ a • w := by
     intro δ hδ
-    rw [gammaD_smul_letA, map_pow, gammaA_q_of_mem_delta W hπΔ δ hδ, hwΔ δ hδ]
+    rw [_root_.Formalism.MainNotions.LiftingTheory.gammaD_semilinear, map_pow, gammaA_q_of_mem_delta W hπΔ δ hδ, hwΔ δ hδ]
   obtain ⟨y₁, hy₁N, hy₁F⟩ := exists_invariant_preimage_average W hΔ F i hy₁' htw hy₁F'
 
   have hdis : Disjoint (Finset.Icc ((b i : ℤ) - a + 1) (b i : ℤ))
@@ -746,7 +720,7 @@ theorem lemGB_of [NeZero n] (W : LocWach PD LL O v n) (hQ : Formalism.MainNotion
           (X - C (cc b')))).eval (cc j₀))) ≤ ((⌊Bd⌋₊ : ℕ) : WithTop ℚ) := by
     intro j₀ hj₀
     have hj₀' := Finset.disjoint_left.1 hdis hj₀
-    rw [derivative_prod_sub_eval _ cc j₀ hj₀, eval_prod]
+    rw [_root_.Formalism.MainNotions.LiftingTheory.lag_deriv_eval _ cc j₀ hj₀, eval_prod]
     simp only [eval_sub, eval_X, eval_C]
     rw [map_prod (algebraMap O LL), map_prod (algebraMap O LL), addValuation_prod v, addValuation_prod v]
     have e2 : ∀ b' ∈ Finset.Icc ((b i : ℤ) + 1) ((b i : ℤ) + S + a) ∪

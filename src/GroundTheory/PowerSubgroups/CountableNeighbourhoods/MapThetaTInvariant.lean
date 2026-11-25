@@ -29,11 +29,6 @@ lemma countable_valueGroupWithZero : Countable (ValueGroupWithZero F) :=
 lemma sigmaCompactSpace : SigmaCompactSpace F :=
   _root_.GroundTheory.Automorphic.Measures.sigmaCompactSpace F
 
-lemma secondCountableTopology : SecondCountableTopology F := by
-  have := _root_.GroundTheory.Automorphic.Measures.sigmaCompactSpace F
-  have := _root_.GroundTheory.Automorphic.Measures.metrizableSpace F
-  infer_instance
-
 end LocalField
 
 section GeneralLinear
@@ -42,7 +37,7 @@ variable {F : Type*} [Field F] [ValuativeRel F] [TopologicalSpace F] [IsNonarchi
   {n : ℕ}
 
 lemma secondCountableTopology_GL : SecondCountableTopology (GL (Fin n) F) := by
-  have := secondCountableTopology F
+  have := _root_.GroundTheory.Automorphic.Measures.secondCountableTopology F
   have : SecondCountableTopology (Matrix (Fin n) (Fin n) F) :=
     inferInstanceAs (SecondCountableTopology (Fin n → Fin n → F))
   have : SecondCountableTopology (Matrix (Fin n) (Fin n) F)ᵐᵒᵖ :=

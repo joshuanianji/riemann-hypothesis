@@ -594,16 +594,8 @@ theorem latRow_of (h : LatRowLat X u) : LatRow X u := fun g Λ hΛ =>
 
 end R1
 
-theorem af_nontriv (F : Type) [Field F] [NumberField F] : Nontrivial (Af F) := by
-  obtain ⟨M, hM⟩ := Ideal.exists_maximal (𝓞 F)
-  let v : IsDedekindDomain.HeightOneSpectrum (𝓞 F) :=
-    ⟨M, hM.isPrime, Ring.ne_bot_of_isMaximal_of_not_isField hM (NumberField.RingOfIntegers.not_isField F)⟩
-  refine ⟨⟨0, 1, fun h => ?_⟩⟩
-  have h' : (0 : Af F) v = (1 : Af F) v := by rw [h]
-  exact zero_ne_one (α := v.adicCompletion F) h'
-
 theorem inclInj_holds {D : D7} (X : HidaSetting D) : InclInj X := by
-  haveI := af_nontriv X.B.I.F
+  haveI := _root_.Formalism.L2.SG.Pf.NormSteps.ColLatRepSPf.af_nontriv X.B.I.F
   exact Algebra.TensorProduct.includeLeft_injective (S := X.B.I.F) (algebraMap X.B.I.F (Af X.B.I.F)).injective
 
 theorem noCount {D : D7} (X : HidaSetting D) (u : D.what₂.Word) : NOCount X u := by

@@ -116,16 +116,6 @@ theorem hasDerivAt_entry {f : ℝ → Mat n} {f' : Mat n} {t : ℝ} :
   · intro h
     exact hasDerivAt_pi.2 fun i => hasDerivAt_pi.2 fun j => h i j
 
-theorem hasDerivAt_matmul {f g : ℝ → Mat n} {f' g' : Mat n} {t : ℝ} (hf : HasDerivAt f f' t) (hg : HasDerivAt g g' t) :
-    HasDerivAt (fun s => f s * g s) (f' * g t + f t * g') t := by
-  rw [hasDerivAt_entry] at *
-  intro i j
-  simp only [Matrix.mul_apply, Matrix.add_apply]
-  rw [← Finset.sum_add_distrib]
-  exact HasDerivAt.fun_sum fun k _ => by
-    have := (hf i k).mul (hg k j)
-    convert this using 1
-
 theorem hasDerivAt_conjTranspose {f : ℝ → Mat n} {f' : Mat n} {t : ℝ} (hf : HasDerivAt f f' t) :
     HasDerivAt (fun s => (f s)ᴴ) f'ᴴ t := by
   rw [hasDerivAt_entry] at *
@@ -146,14 +136,6 @@ theorem hasDerivAt_re_ofReal {z : ℝ → ℂ} {z' : ℂ} {t : ℝ} (hz : HasDer
 theorem isOpen_GLs : IsOpen (GLs n) :=
   isOpen_ne_fun (continuous_id.matrix_det) continuous_const
 
-theorem hasDerivAt_line (X : Mat n) : HasDerivAt (fun t : ℝ => (1 : Mat n) + t • X) X 0 := by
-  have h := ((hasDerivAt_id (0 : ℝ)).smul_const X).const_add (1 : Mat n)
-  rw [one_smul] at h
-  exact h
-
-theorem hasDerivAt_inv_line (X : Mat n) : HasDerivAt (fun t : ℝ => ((1 : Mat n) + t • X)⁻¹) (-X) 0 :=
-  _root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_lineInv X
-
 theorem hasDerivAt_entry' {ι : Type} [Fintype ι] {f : ℝ → Matrix ι ι ℂ} {f' : Matrix ι ι ℂ} {t : ℝ} :
     HasDerivAt f f' t ↔ ∀ i j, HasDerivAt (fun s => f s i j) (f' i j) t := by
   constructor
@@ -169,10 +151,10 @@ theorem hasDerivAt_Mt_curve (X : Mat n) (hX : X.IsHermitian) :
   rw [hasDerivAt_entry']
   intro r s
   simp only [Matrix.transpose_apply, Mt, cf_apply, Matrix.of_apply]
-  have hc := hasDerivAt_inv_line X
-  have hA := hasDerivAt_matmul hc (hasDerivAt_const (0 : ℝ) (hbM r))
-  have hB := hasDerivAt_matmul hA (hasDerivAt_conjTranspose hc)
-  have hP := hasDerivAt_matmul hB (hasDerivAt_const (0 : ℝ) (hbM s))
+  have hc := _root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_lineInv X
+  have hA := _root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_matmul hc (hasDerivAt_const (0 : ℝ) (hbM r))
+  have hB := _root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_matmul hA (hasDerivAt_conjTranspose hc)
+  have hP := _root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_matmul hB (hasDerivAt_const (0 : ℝ) (hbM s))
   have hR := hasDerivAt_re_ofReal (hasDerivAt_trace hP)
   convert hR using 1
   simp only [zero_smul, add_zero, inv_one, Matrix.mul_zero, Matrix.conjTranspose_one, Matrix.mul_one,
@@ -208,7 +190,7 @@ theorem wedgeDer_of (hG : GamDer) : WedgeDer := by
       intro X hX
       have h1 : HasDerivAt (fun t : ℝ => gamM (Mt (((1 : Mat n) + t • X)⁻¹))ᵀ)
           (fderiv ℝ (fun x : Mat n => gamM (Mt x⁻¹)ᵀ) 1 X) 0 :=
-        hd.hasFDerivAt.comp_hasDerivAt_of_eq (0 : ℝ) (hasDerivAt_line X) (by simp)
+        hd.hasFDerivAt.comp_hasDerivAt_of_eq (0 : ℝ) (_root_.PositivityTheory.RgBcC.LfSt.Kchain.KbCurve.hasDerivAt_line X) (by simp)
       have hg1 : (Mt ((1 : Mat n))⁻¹)ᵀ = 1 := by rw [inv_one, (mtLaws n).1, Matrix.transpose_one]
       have hgam : HasFDerivAt (gamM (n := n)) (fderiv ℂ (gamM (n := n)) 1) 1 :=
         (hC.differentiable (by simp) 1).hasFDerivAt

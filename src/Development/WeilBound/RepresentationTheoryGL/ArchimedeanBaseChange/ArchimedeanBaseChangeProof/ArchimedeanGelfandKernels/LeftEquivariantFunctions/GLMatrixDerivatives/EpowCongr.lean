@@ -28,26 +28,6 @@ section Ops
 
 variable {V : Type} [NormedAddCommGroup V] [NormedSpace ℂ V]
 
-theorem rd_congr {f f' : Mat n → V} (h : EqOn f f' (GLs n)) (X : Mat n) : EqOn (Rd X f) (Rd X f') (GLs n) := by
-  intro g hg
-  have he : f =ᶠ[nhds g] f' := Filter.eventually_of_mem ((isOpen_GLs n).mem_nhds hg) h
-  simp only [Rd, he.fderiv_eq]
-
-theorem eu_congr {f f' : Mat n → V} (h : EqOn f f' (GLs n)) (s : Bool) (a b : Fin n) :
-    EqOn (Eu s a b f) (Eu s a b f') (GLs n) := by
-  intro g hg
-  simp only [Eu, Pi.smul_apply, Pi.add_apply, rd_congr h _ hg]
-
-theorem epow_congr {f f' : Mat n → V} (h : EqOn f f' (GLs n)) (s : Bool) (m : ℕ) :
-    ∀ a b, EqOn (Epow s m a b f) (Epow s m a b f') (GLs n) := by
-  apply _root_.PositivityTheory.RgBcC.VC.KC.epow_congr <;> assumption
-
-theorem gel_congr {f f' : Mat n → V} (h : EqOn f f' (GLs n)) (s : Bool) (m : ℕ) :
-    EqOn (gel s m f) (gel s m f') (GLs n) := by
-  intro g hg
-  simp only [gel, Finset.sum_apply]
-  exact Finset.sum_congr rfl fun a _ => epow_congr h s m a a hg
-
 theorem rd_smooth {f : Mat n → V} (hf : ContDiffOn ℝ ∞ f (GLs n)) (X : Mat n) : ContDiffOn ℝ ∞ (Rd X f) (GLs n) :=
   GlobalTheory.CompanionTheory.RCalc.Rd_contDiffOn X hf
 
@@ -104,7 +84,7 @@ theorem zopDC : ZopDC := by
     obtain ⟨ihs, ihc⟩ := ih
     refine ⟨(hG n E.V E.V p.1 p.2 _ ihs).1, fun x hx => ?_⟩
     show gel p.1 p.2 (zOp w (DC ε Fr h)) x = DC ε Fr (gel p.1 p.2 (zOp w h)) x
-    rw [gel_congr (fun y hy => ihc y hy) p.1 p.2 hx]
+    rw [_root_.PositivityTheory.RgBcC.VC.KC.gel_congr (fun y hy => ihc y hy) p.1 p.2 hx]
     exact gel_DC hG hCx (zOp w h) ihs p.1 p.2 x hx
 
 end PositivityTheory.RgBcC.LfSt.ChainOf2
